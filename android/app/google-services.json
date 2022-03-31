@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "317736541557",
+    "project_id": "exam-ap",
+    "storage_bucket": "exam-ap.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317736541557:android:e7b43dd801559c5e24073c",
+        "android_client_info": {
+          "package_name": "edu.ap.examap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317736541557-qpp495ge15bsfbi4nnlg44mk6o7o3fk8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLsEo4s1xq9f356t3JN5myXkghAoJcElE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317736541557-qpp495ge15bsfbi4nnlg44mk6o7o3fk8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
