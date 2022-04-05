@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
-void main() {
+// Firebase imports
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Firebase options
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -11,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Firestore Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -102,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const AddUser(),
           ],
         ),
       ),
@@ -110,6 +120,32 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class AddUser extends StatelessWidget {
+  const AddUser({ Key? key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+
+    Future<void> addUser() {
+      return users.add({
+        'firstName': "Jef",
+        'lastName': "van der Avoirt",
+        'age': 19
+      })
+      .then((value) => print("User added"))
+      .catchError((error) => print("Failed to add user to the DB!"));
+    }
+
+    return TextButton(
+      onPressed: addUser,
+      child: const Text(
+        "Add user",
+      ),
     );
   }
 }
