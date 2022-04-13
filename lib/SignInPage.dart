@@ -13,30 +13,67 @@ class Signinpage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: Column(
-        children: [
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: "Email",
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Login als lector:',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 96,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                color: Colors.red,
+              ),
             ),
-          ),
-          TextField(
-            controller: passwordController,
-            decoration: const InputDecoration(
-              labelText: "Password",
+            SizedBox(
+              width: 1000,
+              child: TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.read<AuthenticationService>().signIn(
-                email: emailController.text.trim(), 
-                password: passwordController.text.trim()
-              );
-            }, 
-            child: const Text("Sign in"),
-          ),
-        ],
+            const SizedBox(height: 10,),
+            SizedBox(
+              width: 1000,
+              child: TextField(
+                controller: passwordController,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10,),
+            ElevatedButton(
+              onPressed: () {
+                context.read<AuthenticationService>().signIn(
+                  email: emailController.text.trim(), 
+                  password: passwordController.text.trim()
+                );
+              }, 
+              child: const Text("Log in"),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

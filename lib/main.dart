@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Firestore Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red,
         ),
         home: const AuthenticationWrapper(),
       ),
@@ -49,9 +49,9 @@ class AuthenticationWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    final firebaseUser = context.watch<User?>();
+    final adminUser = context.watch<User?>();
 
-    if(firebaseUser != null){
+    if(adminUser != null){
       return const AdminHomePage();
     }
 
