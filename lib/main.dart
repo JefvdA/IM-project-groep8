@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().onAuthStateChanged, 
+          create: (context) =>
+              context.read<AuthenticationService>().onAuthStateChanged,
           initialData: null,
         ),
       ],
@@ -45,13 +47,13 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({ Key? key }) : super(key: key);
+  const AuthenticationWrapper({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final adminUser = context.watch<User?>();
 
-    if(adminUser != null){
+    if (adminUser != null) {
       return const AdminHomePage();
     }
 
