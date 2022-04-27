@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Firestore Demo',
+        title: 'ExamAp',
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
@@ -57,6 +57,6 @@ class AuthenticationWrapper extends StatelessWidget {
       return const AdminHomePage();
     }
 
-    return Signinpage();
+    return const Signinpage();
   }
 }
