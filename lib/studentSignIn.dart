@@ -5,14 +5,14 @@ import 'package:examap/ExamPage.dart';
 import 'package:examap/test.dart';
 import 'package:flutter/material.dart';
 
-class StudentSignIn extends StatefulWidget {
-  const StudentSignIn({Key? key}) : super(key: key);
+class StudentSignInPage extends StatefulWidget {
+  const StudentSignInPage({Key? key}) : super(key: key);
 
   @override
-  State<StudentSignIn> createState() => _StudentSignInState();
+  State<StudentSignInPage> createState() => _StudentSignInPageState();
 }
 
-class _StudentSignInState extends State<StudentSignIn> {
+class _StudentSignInPageState extends State<StudentSignInPage> {
   // ignore: prefer_typing_uninitialized_variables
   var _selectedValue;
   var setDefaultValue = true;

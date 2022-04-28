@@ -40,7 +40,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _items = [
-    const StudentSignIn(),
+    const StudentSignInPage(),
     const Text(
       'AdminHomePage',
     ),
