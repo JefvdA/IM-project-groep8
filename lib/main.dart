@@ -1,3 +1,4 @@
+import 'package:examap/AdminSignInPage.dart';
 import 'package:examap/studentSignIn.dart';
 import 'package:flutter/material.dart';
 
@@ -41,9 +42,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _items = [
     const StudentSignInPage(),
-    const Text(
-      'AdminHomePage',
-    ),
+    const AdminSignInPage(),
   ];
   int _selectedIndex = 0;
 
@@ -58,7 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
           index: _selectedIndex,
           children: _items,
         ),
-        home: const AuthenticationWrapper(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [

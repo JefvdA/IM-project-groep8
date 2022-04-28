@@ -94,9 +94,6 @@ packages:
     version: "6.2.3"
   firebase_auth_web:
     dependency: "direct main"
-    version: "6.2.2"
-  firebase_auth_web:
-    dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
