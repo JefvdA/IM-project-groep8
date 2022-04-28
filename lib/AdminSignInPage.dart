@@ -21,9 +21,6 @@ class _AdminSignInPage extends State<AdminSignInPage> {
   Widget build(BuildContext context){
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Center(child: Text('Sign in')),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
