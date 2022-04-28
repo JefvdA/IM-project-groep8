@@ -1,12 +1,8 @@
-import 'package:examap/AdminHomePage.dart';
-import 'package:examap/AdminSignInPage.dart';
-import 'package:examap/authentication_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:examap/studentSignIn.dart';
 import 'package:flutter/material.dart';
 
 // Firebase imports
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
 
 // Firebase options
 import 'firebase_options.dart';
@@ -24,39 +20,65 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider<AuthenticationService>(
-          create: (_) => AuthenticationService(FirebaseAuth.instance),
-        ),
-        StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().onAuthStateChanged,
-          initialData: null,
-        ),
-      ],
-      child: MaterialApp(
-        title: 'ExamAp',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-        ),
-        home: const AuthenticationWrapper(),
+    return MaterialApp(
+      title: 'Flutter Firestore Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
       ),
+      home: const MyHomePage(title: "ExamAp"),
     );
   }
 }
 
-class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Widget> _items = [
+    const StudentSignInPage(),
+    const Text(
+      'AdminHomePage',
+    ),
+  ];
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final adminUser = context.watch<User?>();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _items,
+        ),
+        home: const AuthenticationWrapper(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Student',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.supervisor_account_rounded),
+            label: 'Lector',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onTap,
+      ),
+    );
+  }
 
-    if (adminUser != null) {
-      return const AdminHomePage();
-    }
-
-    return const AdminSignInPage();
+  void _onTap(int index) {
+    _selectedIndex = index;
+    setState(() {});
   }
 }
