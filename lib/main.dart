@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 // Firebase imports
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Firebase options
 import 'firebase_options.dart';
@@ -80,29 +79,5 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onTap(int index) {
     _selectedIndex = index;
     setState(() {});
-  }
-}
-
-class AddUser extends StatelessWidget {
-  const AddUser({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection("students");
-
-    Future<void> addUser() {
-      return users
-          .add({'name': "test", "s-nummer": "s123456"})
-          .then((value) => print("User added"))
-          .catchError((error) => print("Failed to add user to the DB!"));
-    }
-
-    return TextButton(
-      onPressed: addUser,
-      child: const Text(
-        "Add user",
-      ),
-    );
   }
 }
