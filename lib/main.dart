@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
           index: _selectedIndex,
           children: _items,
         ),
+        home: const AuthenticationWrapper(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
