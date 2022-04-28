@@ -1,5 +1,5 @@
 import 'package:examap/AdminHomePage.dart';
-import 'package:examap/SignInPage.dart';
+import 'package:examap/AdminSignInPage.dart';
 import 'package:examap/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +57,6 @@ class AuthenticationWrapper extends StatelessWidget {
       return const AdminHomePage();
     }
 
-    return const Signinpage();
+    return const AdminSignInPage();
   }
 }
