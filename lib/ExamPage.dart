@@ -1,16 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:examap/test.dart';
 import 'package:flutter/material.dart';
 
-class Exam extends StatefulWidget {
-  const Exam({Key? key}) : super(key: key);
+class ExamPage extends StatefulWidget {
+  const ExamPage({Key? key}) : super(key: key);
 
   @override
-  State<Exam> createState() => _ExamState();
+  State<ExamPage> createState() => _ExamPageState();
 }
 
-class _ExamState extends State<Exam> {
+class _ExamPageState extends State<ExamPage> {
   String user = LoggedIn.sNummer;
-  List<String> Questions = [
+  List<String> question = [
     "Wat is het beste framework ?",
     "Wat is de mooiste kleur ?",
     "Leg uit waarom dit de mooiste kleur is ?"
@@ -23,7 +25,7 @@ class _ExamState extends State<Exam> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(user),
-            for (var i in Questions)
+            for (var i in question)
               Column(
                 children: [Text(i)],
               )

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/Exam.dart';
+import 'package:examap/ExamPage.dart';
 import 'package:examap/test.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +13,7 @@ class StudentSignIn extends StatefulWidget {
 }
 
 class _StudentSignInState extends State<StudentSignIn> {
+  // ignore: prefer_typing_uninitialized_variables
   var _selectedValue;
   var setDefaultValue = true;
   var testing = "";
@@ -65,7 +66,7 @@ class _StudentSignInState extends State<StudentSignIn> {
                     x.setSNummer(_selectedValue);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Exam()),
+                      MaterialPageRoute(builder: (context) => const ExamPage()),
                     );
                   },
                   child: const Text("Log in")),
