@@ -2,17 +2,16 @@
 
 import 'package:examap/authentication_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class Signinpage extends StatefulWidget {
-  const Signinpage({ Key? key }) : super(key: key);
+class AdminSignInPage extends StatefulWidget {
+  const AdminSignInPage({ Key? key }) : super(key: key);
 
   @override
-  State<Signinpage> createState() => _SigninpageState();
+  State<AdminSignInPage> createState() => _AdminSignInPage();
 }
 
-class _SigninpageState extends State<Signinpage> {
+class _AdminSignInPage extends State<AdminSignInPage> {
   String _message = "";
 
   final TextEditingController emailController = TextEditingController();
