@@ -1,8 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/student.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +22,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Padding(
@@ -36,6 +35,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
             ),
           ),
           Center(
+            heightFactor: 1,
             child: Column(
               children: [
                 Container(
