@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/ExamPage.dart';
+import 'package:examap/Location.dart';
 import 'package:examap/test.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +67,7 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
                     x.setSNummer(_selectedValue);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ExamPage()),
+                      MaterialPageRoute(builder: (context) => const Location()),
                     );
                   },
                   child: const Text("Log in")),
