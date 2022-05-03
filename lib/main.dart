@@ -108,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onTap(int index) {
-    _selectedIndex = index;
-    setState(() {});
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }
