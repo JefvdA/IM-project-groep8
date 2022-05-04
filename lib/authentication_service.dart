@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationService {
