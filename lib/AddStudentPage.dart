@@ -14,7 +14,12 @@ class AddStudentPage extends StatefulWidget {
 }
 
 class _AddStudentPageState extends State<AddStudentPage> {
-  CollectionReference studentsCollection =
+  String _message = "";
+  TextStyle _messageStyle = const TextStyle(
+    color: Colors.green,
+  );
+
+  final CollectionReference studentsCollection =
       FirebaseFirestore.instance.collection('students');
 
   final TextEditingController csvController = TextEditingController();
@@ -56,6 +61,10 @@ class _AddStudentPageState extends State<AddStudentPage> {
                     ),
                   ),
                 ),
+                Text(
+                  _message,
+                  style: _messageStyle
+                ),
                 ElevatedButton(
                   onPressed: () {
                     _addStudents();
@@ -71,19 +80,45 @@ class _AddStudentPageState extends State<AddStudentPage> {
   }
 
   void _addStudents() {
+    // Read csv data from the text field.
     final String csv = csvController.text;
     final List<String> lines = csv.split("\n");
+    // Loop through each line of the csv data.
     for (var line in lines) {
-      final List<String> fields = line.split(",");
-      if (fields.length != 2) {
-        return;
+      try {
+        final List<String> fields = line.split(",");
+        // Get the student's name and sNummer.
+        final String name = fields[1];
+        final String sNummer = fields[0];
+
+        // Add the student to the database.
+        studentsCollection.add({
+          'name': name,
+          's-nummer': sNummer,
+        })
+        // Show a message if the students were added successfully.
+        // Reset the text field.
+        .then((value) => {
+          _styleMessage(const TextStyle(color: Colors.green)),
+          _showMessage("${lines.length} students added."),
+          csvController.text = ""
+        });
+      } catch (e) {
+        _styleMessage(const TextStyle(color: Colors.red));
+        _showMessage("Something went wrong, please check the data you provided!");
       }
-      final String name = fields[1];
-      final String sNummer = fields[0];
-      studentsCollection.add({
-        'name': name,
-        'sNummer': sNummer,
-      });
     }
+  }
+
+  void _showMessage(String message) {
+    setState(() {
+      _message = message;
+    });
+  }
+
+  void _styleMessage(TextStyle style){
+    setState(() {
+      _messageStyle = style;
+    });
   }
 }
