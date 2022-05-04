@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:examap/AddStudentPage.dart';
+import 'package:examap/ChangePasswordPage.dart';
 import 'package:flutter/material.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   final List<Widget> _items = [
     const AddStudentPage(),
-    const Text('Change password page comming soon...'),
+    const ChangePasswordPage(),
   ];
   int _selectedIndex = 0;
 
