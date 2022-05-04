@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationService {
@@ -17,6 +19,16 @@ class AuthenticationService {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return "Signed in";
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<String?> changePassword(String oldPassword, String newPassword) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(email: _firebaseAuth.currentUser!.email!, password: oldPassword);
+      _firebaseAuth.currentUser!.updatePassword(newPassword);
+      return "SUCCES";
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
