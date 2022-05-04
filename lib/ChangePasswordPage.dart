@@ -129,6 +129,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     }
 
     auth.changePassword(oldPassword, newPassword).then((String? response) {
+      print(response);
+      if(response == "Password should be at least 6 characters") {
+        print("TEST");
+      }
       if (response == "SUCCES") {
         setState(() {
           _message = "Password changed successfully";
@@ -139,6 +143,20 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         oldPasswordController.clear();
         newPasswordController.clear();
         confirmPasswordController.clear();
+      } else if(response == "Password should be at least 6 characters"){
+        setState(() {
+          _message = "Password should be at least 6 characters";
+          _messageStyle = const TextStyle(
+            color: Colors.red,
+          );
+        });
+      } else if(response == "The password is invalid or the user does not have a password."){
+        setState(() {
+          _message = "The old password is invalid";
+          _messageStyle = const TextStyle(
+            color: Colors.red,
+          );
+        });
       } else {
         setState(() {
           _message = "Password change failed";
