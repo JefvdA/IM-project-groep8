@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart' as l;
 import 'package:geolocator/geolocator.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -16,10 +17,6 @@ class Location extends StatefulWidget {
 class _LocationState extends State<Location> {
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
-
-  // Future<void> addStudent() {
-  //   return location.doc("s124392").set({"name": "test", "s-nummer": "s124392"});
-  // }
 
   Future<void> addLocation() {
     StreamSubscription<Position> positionStream =
@@ -36,7 +33,6 @@ class _LocationState extends State<Location> {
 
   @override
   Widget build(BuildContext context) {
-    //addStudent();
     addLocation();
     return Container(
       child: FutureBuilder<DocumentSnapshot>(
@@ -58,23 +54,19 @@ class _LocationState extends State<Location> {
                 data['lat'].toString() +
                 '/' +
                 data['lon'].toString());
-            return WebView(
-                initialUrl: 'https://www.openstreetmap.org/#map=14/' +
-                    data['lat'].toString() +
-                    '/' +
-                    data['lon'].toString());
+            l.MapController controller = l.MapController(
+              initMapWithUserPosition: false,
+              initPosition:
+                  l.GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
+            );
+            return l.OSMFlutter(
+              controller: controller,
+            );
           }
 
           return Text("loading");
         },
       ),
-      // child: WebView(
-      //     initialUrl:
-      //         'http://nominatim.openstreetmap.org/reverse?format=json&lat=' +
-      //             lat +
-      //             '&lon=' +
-      //             lng +
-      //             '&zoom=18&addressdetails='),
     );
   }
 }
