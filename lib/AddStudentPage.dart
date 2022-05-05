@@ -92,7 +92,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
         final String sNummer = fields[0];
 
         // Add the student to the database.
-        studentsCollection.add({
+        studentsCollection.doc(sNummer).set({
           'name': name,
           's-nummer': sNummer,
         })

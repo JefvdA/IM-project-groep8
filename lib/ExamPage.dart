@@ -19,18 +19,22 @@ class _ExamPageState extends State<ExamPage> {
   String user = LoggedIn.sNummer;
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
-
-  Future<void> addLocation() {
-    StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream().listen((Position? position) {
-      position == null
-          ? 'Unknown'
-          : location
-              .doc(LoggedIn.sNummer)
-              .update({"lat": position.latitude, "lon": position.longitude});
-    });
-    positionStream;
-    return location.doc(LoggedIn.sNummer).get();
+      askPermission() async{
+        LocationPermission permission = await Geolocator.requestPermission();
+        Position position = await Geolocator.getCurrentPosition();
+        await location
+          .doc(LoggedIn.sNummer)
+          .update({"lat": position.latitude, "lon": position.longitude});
+      }
+  
+    
+    getLocation() async {
+      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    }
+  Future<void> test() async {
+    location
+      .doc(LoggedIn.sNummer)
+      .update({"lat": 51.456, "lon": 5.485});
   }
   List<String> question = [
     "Wat is het beste framework ?",
@@ -39,7 +43,8 @@ class _ExamPageState extends State<ExamPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    addLocation();
+    askPermission();
+    //test();
     return Scaffold(
       body: Center(
         child: Column(

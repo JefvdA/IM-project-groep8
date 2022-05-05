@@ -37,10 +37,8 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
                       .collection('students')
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Container();
-                    }
-                    if (setDefaultValue) {
+                    if (snapshot.hasData) {
+                      if (setDefaultValue) {
                       _selectedValue = snapshot.data!.docs[0].get("s-nummer");
                     }
                     return DropdownButton(
@@ -60,6 +58,11 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
                         );
                       }).toList(),
                     );
+                    }
+                    else {
+                      return Container();
+                    }
+                    
                   }),
               ElevatedButton(
                   onPressed: () {
