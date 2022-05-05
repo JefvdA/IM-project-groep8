@@ -21,4 +21,14 @@ class AuthenticationService {
       return e.message;
     }
   }
+
+  Future<String?> changePassword(String oldPassword, String newPassword) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(email: _firebaseAuth.currentUser!.email!, password: oldPassword);
+      await _firebaseAuth.currentUser!.updatePassword(newPassword);
+      return "SUCCES";
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
+  }
 }

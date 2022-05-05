@@ -1,7 +1,11 @@
 // ignore_for_file: file_names
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/Location.dart';
 import 'package:examap/test.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ExamPage extends StatefulWidget {
   const ExamPage({Key? key}) : super(key: key);
@@ -88,8 +92,20 @@ class _ExamPageState extends State<ExamPage> {
   }
 
   final List<Item> _data = generateItems(3);
+  CollectionReference location =
+      FirebaseFirestore.instance.collection("students");
+      askPermission() async{
+        LocationPermission permission = await Geolocator.requestPermission();
+        Position position = await Geolocator.getCurrentPosition();
+        await location
+          .doc(LoggedIn.sNummer)
+          .update({"lat": position.latitude, "lon": position.longitude});
+      }
+  
+   
   @override
   Widget build(BuildContext context) {
+    askPermission();
     return Scaffold(
         appBar: AppBar(
           title: const Text('ExAmIn.ap'),
@@ -106,11 +122,6 @@ class _ExamPageState extends State<ExamPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /*Text(user),
-            for (var i in question)
-              Column(
-                children: [Text(i)],
-              ),*/
                 SingleChildScrollView(
                   child: Container(child: _build()),
                 )
@@ -255,6 +266,16 @@ class _ExamPageState extends State<ExamPage> {
                                   width: 1, color: Colors.redAccent))))
                 ],
               )),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Location()),
+                    );
+                  },
+                  child: const Text("Show Location")),
+          ],
         ),
         Step(
           title: const Text(

@@ -1,11 +1,15 @@
+import 'package:examap/AdminHomePage.dart';
 import 'package:examap/AdminSignInPage.dart';
 import 'package:examap/studentSignIn.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // Firebase imports
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 // Firebase options
+import 'authentication_service.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -21,13 +25,40 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Firestore Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
+    return MultiProvider(
+      providers: [
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        StreamProvider(
+          create: (context) =>
+              context.read<AuthenticationService>().onAuthStateChanged,
+          initialData: null,
+        ),
+      ],
+      child: MaterialApp(
+        title: 'ExamAp',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        home: const AuthenticationWrapper(),
       ),
-      home: const MyHomePage(title: "ExamAp"),
     );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final adminUser = context.watch<User?>();
+
+    if (adminUser != null) {
+      return const AdminHomePage();
+    }
+
+    return const MyHomePage(title: "ExamAp");
   }
 }
 
@@ -49,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -76,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onTap(int index) {
-    _selectedIndex = index;
-    setState(() {});
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }
