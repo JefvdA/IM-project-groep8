@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AdminSignInPage extends StatefulWidget {
-  const AdminSignInPage({ Key? key }) : super(key: key);
+  const AdminSignInPage({Key? key}) : super(key: key);
 
   @override
   State<AdminSignInPage> createState() => _AdminSignInPage();
@@ -18,20 +18,22 @@ class _AdminSignInPage extends State<AdminSignInPage> {
   final TextEditingController passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 32,),
+                const SizedBox(
+                  height: 75,
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2),
                   child: Image.asset(
                     'assets/images/logo.png',
                     width: 150,
@@ -41,14 +43,14 @@ class _AdminSignInPage extends State<AdminSignInPage> {
                   'Login als lector:',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 96,
+                    fontSize: 76,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Roboto',
                     color: Colors.red,
                   ),
                 ),
                 SizedBox(
-                  width: 1000,
+                  width: 550,
                   child: TextField(
                     controller: emailController,
                     decoration: const InputDecoration(
@@ -62,9 +64,9 @@ class _AdminSignInPage extends State<AdminSignInPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 10),
                 SizedBox(
-                  width: 1000,
+                  width: 550,
                   child: TextField(
                     controller: passwordController,
                     decoration: const InputDecoration(
@@ -78,23 +80,30 @@ class _AdminSignInPage extends State<AdminSignInPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                   onPressed: () async {
-                    context.read<AuthenticationService>().signIn(
-                      email: emailController.text.trim(), 
-                      password: passwordController.text.trim()
-                    ).then((value) => {
-                      if(value != "Signed in")
-                        _showMessage("This email / password is not correct, please try again.")
-                    });
-                  }, 
-                  child: const Text("Log in"),
+                    context
+                        .read<AuthenticationService>()
+                        .signIn(
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim())
+                        .then((value) => {
+                              if (value != "Signed in")
+                                _showMessage(
+                                    "This email / password is not correct, please try again.")
+                            });
+                  },
+                  child: const Icon(Icons.login_rounded, size: 40),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(200, 50),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   _message,
                   style: const TextStyle(
