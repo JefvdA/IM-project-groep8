@@ -129,10 +129,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     }
 
     auth.changePassword(oldPassword, newPassword).then((String? response) {
-      print(response);
-      if(response == "Password should be at least 6 characters") {
-        print("TEST");
-      }
       if (response == "SUCCES") {
         setState(() {
           _message = "Password changed successfully";
@@ -165,18 +161,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           );
         });
       }
-    });
-  }
-
-  void _showMessage(String message) {
-    setState(() {
-      _message = message;
-    });
-  }
-
-  void _styleMessage(TextStyle style){
-    setState(() {
-      _messageStyle = style;
     });
   }
 }
