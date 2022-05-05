@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-import 'package:examap/authentication_service.dart';
+import 'package:examap/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
