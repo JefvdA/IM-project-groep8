@@ -1,6 +1,6 @@
-import 'package:examap/AdminHomePage.dart';
-import 'package:examap/AdminSignInPage.dart';
-import 'package:examap/studentSignIn.dart';
+import 'package:examap/admin_home_page.dart';
+import 'package:examap/admin_signin_page.dart';
+import 'package:examap/student_signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

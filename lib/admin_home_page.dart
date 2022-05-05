@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:examap/AddStudentPage.dart';
-import 'package:examap/ChangePasswordPage.dart';
+import 'package:examap/add_student_page.dart';
+import 'package:examap/change_password_page.dart';
 import 'package:flutter/material.dart';
 
 class AdminHomePage extends StatefulWidget {

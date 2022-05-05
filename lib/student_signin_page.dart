@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/greeting.dart';
+import 'package:examap/exam_greeting_page.dart';
 import 'package:examap/current_user.dart';
 import 'package:flutter/material.dart';
 

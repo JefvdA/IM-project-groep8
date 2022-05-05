@@ -1,6 +1,6 @@
 // ignore_for_file: file_names
 
-import 'package:examap/ExamPage.dart';
+import 'package:examap/exam_page.dart';
 
 import 'package:flutter/material.dart';
 
