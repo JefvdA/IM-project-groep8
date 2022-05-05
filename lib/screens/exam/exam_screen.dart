@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/current_user.dart';
+import 'package:examap/current_student.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -37,7 +37,7 @@ class _ExamScreenState extends State<ExamScreen> {
   TextEditingController textarea = TextEditingController();
   TextEditingController textarea2 = TextEditingController();
 
-  String user = CurrentUser.sNummer;
+  String user = CurrentStudent.sNummer;
   List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
   //timer
   static const countdownDuration = Duration(hours: 3);
@@ -87,7 +87,7 @@ class _ExamScreenState extends State<ExamScreen> {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
     await location
-        .doc(CurrentUser.sNummer)
+        .doc(CurrentStudent.sNummer)
         .update({"lat": position.latitude, "lon": position.longitude});
   }
 

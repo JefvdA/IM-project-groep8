@@ -1,3 +1,3 @@
-class CurrentUser {
+class CurrentStudent {
   static String sNummer = "";
 }

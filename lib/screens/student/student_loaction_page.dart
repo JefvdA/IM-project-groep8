@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/current_user.dart';
+import 'package:examap/current_student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart' as l;
 
@@ -24,7 +24,7 @@ class _StudentLocationScreenState extends State<StudentLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: StudentLocationScreen.doc(CurrentUser.sNummer).get(),
+      future: StudentLocationScreen.doc(CurrentStudent.sNummer).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
