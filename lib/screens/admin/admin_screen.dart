@@ -34,11 +34,11 @@ class AdminScreenState extends State<AdminScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            label: 'Add student',
+            label: 'Studenten toevoegen',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.key),
-            label: 'Change password',
+            label: 'Wachtwoord wijzigen',
           ),
         ],
         currentIndex: _selectedIndex,
