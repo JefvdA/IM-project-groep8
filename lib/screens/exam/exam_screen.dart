@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/current_student.dart';
+import 'package:examap/repositories/current_student.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 

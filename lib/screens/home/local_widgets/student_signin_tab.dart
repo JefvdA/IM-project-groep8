@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/exam/exam_greeting_screen.dart';
-import 'package:examap/current_student.dart';
+import 'package:examap/repositories/current_student.dart';
 import 'package:flutter/material.dart';
 
 class StudentSignInTab extends StatefulWidget {

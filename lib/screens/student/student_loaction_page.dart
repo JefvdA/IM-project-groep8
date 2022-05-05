@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/current_student.dart';
+import 'package:examap/repositories/current_student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart' as l;
 
