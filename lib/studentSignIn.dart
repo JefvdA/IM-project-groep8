@@ -67,7 +67,7 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
                     x.setSNummer(_selectedValue);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Location()),
+                      MaterialPageRoute(builder: (context) => const ExamPage()),
                     );
                   },
                   child: const Text("Log in")),

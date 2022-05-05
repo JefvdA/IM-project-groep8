@@ -15,25 +15,15 @@ class Location extends StatefulWidget {
 }
 
 class _LocationState extends State<Location> {
-  CollectionReference location =
+    CollectionReference location =
       FirebaseFirestore.instance.collection("students");
 
-  Future<void> addLocation() {
-    StreamSubscription<Position> positionStream =
-        Geolocator.getPositionStream().listen((Position? position) {
-      position == null
-          ? 'Unknown'
-          : location
-              .doc(LoggedIn.sNummer)
-              .update({"lat": position.latitude, "lon": position.longitude});
-    });
-    positionStream;
-    return location.doc(LoggedIn.sNummer).get();
-  }
+      SetMarker(controller, lat, lon) async {
+        await controller.addMarker(l.GeoPoint(latitude: lat, longitude: lon),l.MarkerIcon(icon: Icon(Icons.abc)));
+      }
 
   @override
   Widget build(BuildContext context) {
-    addLocation();
     return Container(
       child: FutureBuilder<DocumentSnapshot>(
         future: location.doc(LoggedIn.sNummer).get(),
@@ -50,17 +40,19 @@ class _LocationState extends State<Location> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
-            print('https://www.openstreetmap.org/#map=14/' +
-                data['lat'].toString() +
-                '/' +
-                data['lon'].toString());
             l.MapController controller = l.MapController(
               initMapWithUserPosition: false,
               initPosition:
-                  l.GeoPoint(latitude: 47.4358055, longitude: 8.4737324),
+                  l.GeoPoint(latitude: data['lat'], longitude: data['lon']),
             );
+            SetMarker(controller, data['lat'], data['lon']);
             return l.OSMFlutter(
               controller: controller,
+              initZoom: 10,
+              userLocationMarker: l.UserLocationMaker(
+                personMarker: l.MarkerIcon(icon: Icon(Icons.person)),
+                directionArrowMarker: l.MarkerIcon(icon: Icon(Icons.arrow_forward)),
+              ),
             );
           }
 
