@@ -2,8 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/greeting.dart';
-import 'package:examap/ExamPage.dart';
-import 'package:examap/test.dart';
+import 'package:examap/current_user.dart';
 import 'package:flutter/material.dart';
 
 class StudentSignInPage extends StatefulWidget {
@@ -25,8 +24,7 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
 
     var elevatedButton = ElevatedButton(
       onPressed: () {
-        var x = LoggedIn();
-        x.setSNummer(_selectedValue);
+        CurrentUser.sNummer = _selectedValue;
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const GreetingPage()),

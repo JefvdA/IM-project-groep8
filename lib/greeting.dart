@@ -6,15 +6,6 @@ import 'package:flutter/material.dart';
 
 class GreetingPage extends StatefulWidget {
   const GreetingPage({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Firestore Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-    );
-  }
 
   @override
   State<GreetingPage> createState() => GreetingPageState();
