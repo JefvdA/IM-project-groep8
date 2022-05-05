@@ -4,16 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'services/authentication_service.dart';
+import 'package:examap/services/authentication_service.dart';
 
-class AddStudentPage extends StatefulWidget {
-  const AddStudentPage({Key? key}) : super(key: key);
+class AddStudentsTab extends StatefulWidget {
+  const AddStudentsTab({Key? key}) : super(key: key);
 
   @override
-  State<AddStudentPage> createState() => _AddStudentPageState();
+  State<AddStudentsTab> createState() => _AddStudentsTabState();
 }
 
-class _AddStudentPageState extends State<AddStudentPage> {
+class _AddStudentsTabState extends State<AddStudentsTab> {
   String _message = "";
   TextStyle _messageStyle = const TextStyle(
     color: Colors.green,
@@ -26,56 +26,53 @@ class _AddStudentPageState extends State<AddStudentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                context.read<AuthenticationService>().signOut();
-              },
-              child: const Text("Sign out"),
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<AuthenticationService>().signOut();
+            },
+            child: const Text("Sign out"),
           ),
-          Center(
-            heightFactor: 1,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(12),
-                  width: 1000,
-                  height: 300,
-                  child: TextField(
-                    maxLines: 10,
-                    controller: csvController,
-                    decoration: const InputDecoration(
-                      labelText: "CSV data for new students",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 2,
-                        ),
+        ),
+        Center(
+          heightFactor: 1,
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.all(12),
+                width: 1000,
+                height: 300,
+                child: TextField(
+                  maxLines: 10,
+                  controller: csvController,
+                  decoration: const InputDecoration(
+                    labelText: "CSV data for new students",
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        width: 2,
                       ),
                     ),
                   ),
                 ),
-                Text(
-                  _message,
-                  style: _messageStyle
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _addStudents();
-                  },
-                  child: const Text("Add students"),
-                ),
-              ],
-            ),
+              ),
+              Text(
+                _message,
+                style: _messageStyle
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _addStudents();
+                },
+                child: const Text("Add students"),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

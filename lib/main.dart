@@ -1,4 +1,4 @@
-import 'package:examap/admin_home_page.dart';
+import 'package:examap/screens/admin/admin_screen.dart';
 import 'package:examap/admin_signin_page.dart';
 import 'package:examap/student_signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,7 +55,7 @@ class AuthenticationWrapper extends StatelessWidget {
     final adminUser = context.watch<User?>();
 
     if (adminUser != null) {
-      return const AdminHomePage();
+      return const AdminScreen();
     }
 
     return const MyHomePage(title: "ExamAp");
