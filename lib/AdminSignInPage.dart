@@ -30,7 +30,7 @@ class _AdminSignInPage extends State<AdminSignInPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 200,
+                  height: 75,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(2),
@@ -64,9 +64,7 @@ class _AdminSignInPage extends State<AdminSignInPage> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: 550,
                   child: TextField(

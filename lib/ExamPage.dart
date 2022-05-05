@@ -210,7 +210,7 @@ class _ExamPageState extends State<ExamPage> {
         }
       },
       onStepContinue: () {
-        if (_index <= 0) {
+        if (_index >= 0) {
           setState(() {
             _index += 1;
           });
@@ -247,7 +247,7 @@ class _ExamPageState extends State<ExamPage> {
                   TextField(
                       controller: textarea,
                       keyboardType: TextInputType.multiline,
-                      maxLines: 4,
+                      maxLines: 1,
                       decoration: const InputDecoration(
                           hintText: "Geef je antwoord in...",
                           focusedBorder: OutlineInputBorder(
@@ -307,7 +307,7 @@ class _ExamPageState extends State<ExamPage> {
                   TextField(
                       controller: textarea2,
                       keyboardType: TextInputType.multiline,
-                      maxLines: 4,
+                      maxLines: 1,
                       decoration: const InputDecoration(
                           hintText: "Geef je antwoord in...",
                           focusedBorder: OutlineInputBorder(
@@ -327,7 +327,7 @@ class _ExamPageState extends State<ExamPage> {
         4,
         (int index) {
           return ChoiceChip(
-            label: Text('$colors'),
+            label: Text('${colors[index]}'),
             selected: _value == index,
             onSelected: (bool selected) {
               setState(() {
