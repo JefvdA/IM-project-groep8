@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:examap/screens/exam/exam_screen.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 
 import 'package:flutter/material.dart';
 
@@ -22,9 +23,7 @@ class GreetingScreenState extends State<GreetingScreen> {
     final _dropdownFormKey = GlobalKey<FormState>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ExAmIn.ap'),
-      ),
+      appBar: globalAppBar,
       body: Center(
         child: Form(
           key: _dropdownFormKey,

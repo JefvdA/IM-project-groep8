@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/repositories/current_student.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -95,9 +96,7 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget build(BuildContext context) {
     askPermission();
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('ExAmIn.ap'),
-        ),
+        appBar: globalAppBar,
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [

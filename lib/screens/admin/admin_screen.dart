@@ -2,6 +2,7 @@
 
 import 'package:examap/screens/admin/local_widgets/add_student_tab.dart';
 import 'package:examap/screens/admin/local_widgets/change_password_tab.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -22,9 +23,7 @@ class AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('ExamAp'),
-      ),
+      appBar: globalAppBar,
       body: Center(
         child: IndexedStack(
           index: _selectedIndex,

@@ -1,5 +1,6 @@
 import 'package:examap/screens/home/local_widgets/admin_signin_tab.dart';
 import 'package:examap/screens/home/local_widgets/student_signin_tab.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,9 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("ExamAp"),
-      ),
+      appBar: globalAppBar,
       body: Center(
         child: IndexedStack(
           index: _selectedIndex,
