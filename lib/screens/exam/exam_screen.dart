@@ -6,8 +6,8 @@ import 'package:examap/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class ExamPage extends StatefulWidget {
-  const ExamPage({Key? key}) : super(key: key);
+class ExamScreen extends StatefulWidget {
+  const ExamScreen({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Firestore Demo',
@@ -18,7 +18,7 @@ class ExamPage extends StatefulWidget {
   }
 
   @override
-  State<ExamPage> createState() => _ExamPageState();
+  State<ExamScreen> createState() => _ExamScreenState();
 }
 
 class Item {
@@ -33,7 +33,7 @@ class Item {
   bool isExpanded;
 }
 
-class _ExamPageState extends State<ExamPage> {
+class _ExamScreenState extends State<ExamScreen> {
   TextEditingController textarea = TextEditingController();
   TextEditingController textarea2 = TextEditingController();
 
@@ -83,15 +83,14 @@ class _ExamPageState extends State<ExamPage> {
 
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
-      askPermission() async{
-        await Geolocator.requestPermission();
-        Position position = await Geolocator.getCurrentPosition();
-        await location
-          .doc(CurrentUser.sNummer)
-          .update({"lat": position.latitude, "lon": position.longitude});
-      }
-  
-   
+  askPermission() async {
+    await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition();
+    await location
+        .doc(CurrentUser.sNummer)
+        .update({"lat": position.latitude, "lon": position.longitude});
+  }
+
   @override
   Widget build(BuildContext context) {
     askPermission();
@@ -216,8 +215,8 @@ class _ExamPageState extends State<ExamPage> {
                                   width: 1, color: Colors.redAccent))))
                 ],
               )),
-              ),
-              Step(
+        ),
+        Step(
           title: const Text(
             'Vraag2 : Multiple choice',
             style: TextStyle(
@@ -277,7 +276,7 @@ class _ExamPageState extends State<ExamPage> {
                 ],
               )),
         ),
-          ],
+      ],
     );
   }
 

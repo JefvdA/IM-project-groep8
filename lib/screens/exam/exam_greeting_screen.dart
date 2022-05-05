@@ -1,17 +1,17 @@
 // ignore_for_file: file_names
 
-import 'package:examap/exam_page.dart';
+import 'package:examap/screens/exam/exam_screen.dart';
 
 import 'package:flutter/material.dart';
 
-class GreetingPage extends StatefulWidget {
-  const GreetingPage({Key? key}) : super(key: key);
+class GreetingScreen extends StatefulWidget {
+  const GreetingScreen({Key? key}) : super(key: key);
 
   @override
-  State<GreetingPage> createState() => GreetingPageState();
+  State<GreetingScreen> createState() => GreetingScreenState();
 }
 
-class GreetingPageState extends State<GreetingPage> {
+class GreetingScreenState extends State<GreetingScreen> {
   // ignore: prefer_typing_uninitialized_variables
 
   var setDefaultValue = true;
@@ -57,7 +57,7 @@ class GreetingPageState extends State<GreetingPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ExamPage()),
+                    MaterialPageRoute(builder: (context) => const ExamScreen()),
                   );
                 },
                 child: const Icon(Icons.run_circle_rounded, size: 40),

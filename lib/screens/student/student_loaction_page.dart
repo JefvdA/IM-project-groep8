@@ -5,25 +5,26 @@ import 'package:examap/current_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart' as l;
 
-class Location extends StatefulWidget {
-  const Location({Key? key}) : super(key: key);
+class StudentLocationScreen extends StatefulWidget {
+  const StudentLocationScreen({Key? key}) : super(key: key);
 
   @override
-  State<Location> createState() => _LocationState();
+  State<StudentLocationScreen> createState() => _StudentLocationScreenState();
 }
 
-class _LocationState extends State<Location> {
-    CollectionReference location =
+class _StudentLocationScreenState extends State<StudentLocationScreen> {
+  CollectionReference StudentLocationScreen =
       FirebaseFirestore.instance.collection("students");
 
-      setMarker(controller, lat, lon) async {
-        await controller.addMarker(l.GeoPoint(latitude: lat, longitude: lon),const l.MarkerIcon(icon: Icon(Icons.abc)));
-      }
+  setMarker(controller, lat, lon) async {
+    await controller.addMarker(l.GeoPoint(latitude: lat, longitude: lon),
+        const l.MarkerIcon(icon: Icon(Icons.abc)));
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: location.doc(CurrentUser.sNummer).get(),
+      future: StudentLocationScreen.doc(CurrentUser.sNummer).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -48,7 +49,8 @@ class _LocationState extends State<Location> {
             initZoom: 10,
             userLocationMarker: l.UserLocationMaker(
               personMarker: const l.MarkerIcon(icon: Icon(Icons.person)),
-              directionArrowMarker: const l.MarkerIcon(icon: Icon(Icons.arrow_forward)),
+              directionArrowMarker:
+                  const l.MarkerIcon(icon: Icon(Icons.arrow_forward)),
             ),
           );
         }
