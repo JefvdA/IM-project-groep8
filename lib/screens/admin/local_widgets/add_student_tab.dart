@@ -59,10 +59,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                   ),
                 ),
               ),
-              Text(
-                _message,
-                style: _messageStyle
-              ),
+              Text(_message, style: _messageStyle),
               ElevatedButton(
                 onPressed: () {
                   _addStudents();
@@ -93,29 +90,27 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
           'name': name,
           's-nummer': sNummer,
         })
-        // Show a message if the students were added successfully.
-        // Reset the text field.
-        .then((value) => {
-          _styleMessage(const TextStyle(color: Colors.green)),
-          _showMessage("${lines.length} students added."),
-          csvController.text = ""
-        });
+            // Show a message if the students were added successfully.
+            // Reset the text field.
+            .then((value) => {
+                  setState(() {
+                    _message = "${lines.length} students added.";
+                    _messageStyle = const TextStyle(
+                      color: Colors.green,
+                    );
+                  }),
+                  csvController.text = ""
+                });
       } catch (e) {
-        _styleMessage(const TextStyle(color: Colors.red));
-        _showMessage("Something went wrong, please check the data you provided!");
+        // Show a message if the students were not added.
+        setState(() {
+          _message =
+              "Something went wrong, please check the data you provided!";
+          _messageStyle = const TextStyle(
+            color: Colors.red,
+          );
+        });
       }
     }
-  }
-
-  void _showMessage(String message) {
-    setState(() {
-      _message = message;
-    });
-  }
-
-  void _styleMessage(TextStyle style){
-    setState(() {
-      _messageStyle = style;
-    });
   }
 }
