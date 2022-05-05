@@ -12,6 +12,10 @@ class AdminSignInTab extends StatefulWidget {
 }
 
 class _AdminSignInTab extends State<AdminSignInTab> {
+  // For testing - no manual input everytime
+  String _adminEmail = "admin@ap.be";
+  String _adminPassword = "Admin123";
+
   String _message = "";
 
   final TextEditingController emailController = TextEditingController();
@@ -50,7 +54,9 @@ class _AdminSignInTab extends State<AdminSignInTab> {
               SizedBox(
                 width: 550,
                 child: TextField(
-                  controller: emailController,
+                  controller: emailController
+                    ..text =
+                        _adminEmail, // For testing - no manual input everytime
                   decoration: const InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(
@@ -66,7 +72,9 @@ class _AdminSignInTab extends State<AdminSignInTab> {
               SizedBox(
                 width: 550,
                 child: TextField(
-                  controller: passwordController,
+                  controller: passwordController
+                    ..text =
+                        _adminPassword, // For testing - no manual input everytime
                   decoration: const InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(
