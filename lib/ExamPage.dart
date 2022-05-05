@@ -267,17 +267,7 @@ class _ExamPageState extends State<ExamPage> {
                 ],
               )),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Location()),
-                    );
-                  },
-                  child: const Text("Show Location")),
-          ],
-        ),
-        Step(
+              Step(
           title: const Text(
             'Vraag2 : Multiple choice',
             style: TextStyle(
@@ -337,7 +327,7 @@ class _ExamPageState extends State<ExamPage> {
                 ],
               )),
         ),
-      ],
+          ],
     );
   }
 

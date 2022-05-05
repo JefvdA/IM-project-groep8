@@ -24,33 +24,6 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
   Widget build(BuildContext context) {
     final _dropdownFormKey = GlobalKey<FormState>();
 
-    var streamBuilder = StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('students').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container();
-          }
-          if (setDefaultValue) {
-            _selectedValue = snapshot.data!.docs[0].get("s-nummer");
-          }
-          return DropdownButton(
-            value: _selectedValue,
-            onChanged: (value) {
-              setState(() {
-                _selectedValue = value;
-                setDefaultValue = false;
-              });
-            },
-            items: snapshot.data!.docs.map((value) {
-              return DropdownMenuItem<String>(
-                value: value.get('s-nummer'),
-                child: Text(
-                  value.get('s-nummer'),
-                ),
-              );
-            }).toList(),
-          );
-        });
     var elevatedButton = ElevatedButton(
       onPressed: () {
         var x = LoggedIn();
@@ -92,8 +65,6 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
               ),
               const Text("Gebruik je s-nummer om in te loggen",
                   style: TextStyle(fontSize: 16)),
-              streamBuilder,
-              elevatedButton,
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('students')
@@ -126,16 +97,7 @@ class _StudentSignInPageState extends State<StudentSignInPage> {
                     }
                     
                   }),
-              ElevatedButton(
-                  onPressed: () {
-                    var x = LoggedIn();
-                    x.setSNummer(_selectedValue);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ExamPage()),
-                    );
-                  },
-                  child: const Text("Log in")),
+              elevatedButton,
             ],
           ),
         ),
