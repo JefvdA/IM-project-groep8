@@ -2,13 +2,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/Location.dart';
-import 'package:examap/test.dart';
+import 'package:examap/repositories/current_student.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class ExamPage extends StatefulWidget {
-  const ExamPage({Key? key}) : super(key: key);
+class ExamScreen extends StatefulWidget {
+  const ExamScreen({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Firestore Demo',
@@ -19,7 +19,7 @@ class ExamPage extends StatefulWidget {
   }
 
   @override
-  State<ExamPage> createState() => _ExamPageState();
+  State<ExamScreen> createState() => _ExamScreenState();
 }
 
 class Item {
@@ -34,20 +34,11 @@ class Item {
   bool isExpanded;
 }
 
-List<Item> generateItems(int numberOfItems) {
-  return List<Item>.generate(numberOfItems, (int index) {
-    return Item(
-      headerValue: 'Vraag $index',
-      expandedValue: 'Dit is vraag nr $index',
-    );
-  });
-}
-
-class _ExamPageState extends State<ExamPage> {
+class _ExamScreenState extends State<ExamScreen> {
   TextEditingController textarea = TextEditingController();
   TextEditingController textarea2 = TextEditingController();
 
-  String user = LoggedIn.sNummer;
+  String user = CurrentStudent.sNummer;
   List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
   //timer
   static const countdownDuration = Duration(hours: 3);
@@ -91,25 +82,21 @@ class _ExamPageState extends State<ExamPage> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  final List<Item> _data = generateItems(3);
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
-      askPermission() async{
-        LocationPermission permission = await Geolocator.requestPermission();
-        Position position = await Geolocator.getCurrentPosition();
-        await location
-          .doc(LoggedIn.sNummer)
-          .update({"lat": position.latitude, "lon": position.longitude});
-      }
-  
-   
+  askPermission() async {
+    await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition();
+    await location
+        .doc(CurrentStudent.sNummer)
+        .update({"lat": position.latitude, "lon": position.longitude});
+  }
+
   @override
   Widget build(BuildContext context) {
     askPermission();
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('ExAmIn.ap'),
-        ),
+        appBar: globalAppBar,
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -170,45 +157,6 @@ class _ExamPageState extends State<ExamPage> {
         ],
       );
 
-//1
-  Widget _buildPanel() {
-    return ExpansionPanelList(
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          _data[index].isExpanded = !isExpanded;
-        });
-      },
-      children: _data.map<ExpansionPanel>((Item item) {
-        return ExpansionPanel(
-          headerBuilder: (BuildContext context, bool isExpanded) {
-            return ListTile(
-              title: Text(
-                item.headerValue,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                  color: Colors.red,
-                  fontSize: 16,
-                ),
-              ),
-            );
-          },
-          body: ListTile(
-              title: Text(item.expandedValue),
-              subtitle: const Text('submit...'),
-              trailing: const Icon(Icons.question_answer_rounded),
-              onTap: () {
-                setState(() {
-                  _data.removeWhere((Item currentItem) => item == currentItem);
-                });
-              }),
-          isExpanded: item.isExpanded,
-        );
-      }).toList(),
-    );
-  }
-
-//2
   int _index = 0;
   Widget _build() {
     return Stepper(
@@ -266,8 +214,8 @@ class _ExamPageState extends State<ExamPage> {
                                   width: 1, color: Colors.redAccent))))
                 ],
               )),
-              ),
-              Step(
+        ),
+        Step(
           title: const Text(
             'Vraag2 : Multiple choice',
             style: TextStyle(
@@ -327,7 +275,7 @@ class _ExamPageState extends State<ExamPage> {
                 ],
               )),
         ),
-          ],
+      ],
     );
   }
 
@@ -338,7 +286,7 @@ class _ExamPageState extends State<ExamPage> {
         4,
         (int index) {
           return ChoiceChip(
-            label: Text('${colors[index]}'),
+            label: Text(colors[index]),
             selected: _value == index,
             onSelected: (bool selected) {
               setState(() {

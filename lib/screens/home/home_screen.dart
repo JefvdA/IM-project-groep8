@@ -1,20 +1,19 @@
-// ignore_for_file: file_names
-
-import 'package:examap/AddStudentPage.dart';
-import 'package:examap/ChangePasswordPage.dart';
+import 'package:examap/screens/home/local_widgets/admin_signin_tab.dart';
+import 'package:examap/screens/home/local_widgets/student_signin_tab.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
-class AdminHomePage extends StatefulWidget {
-  const AdminHomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<AdminHomePage> createState() => _AdminHomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _AdminHomePageState extends State<AdminHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _items = [
-    const AddStudentPage(),
-    const ChangePasswordPage(),
+    const StudentSignInTab(),
+    const AdminSignInTab(),
   ];
   int _selectedIndex = 0;
 
@@ -22,9 +21,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('ExamAp'),
-      ),
+      appBar: globalAppBar,
       body: Center(
         child: IndexedStack(
           index: _selectedIndex,
@@ -35,11 +32,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            label: 'Add student',
+            label: 'Student',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.key),
-            label: 'Change password',
+            icon: Icon(Icons.supervisor_account_rounded),
+            label: 'Lector',
           ),
         ],
         currentIndex: _selectedIndex,

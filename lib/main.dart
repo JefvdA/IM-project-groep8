@@ -1,6 +1,4 @@
-import 'package:examap/AdminHomePage.dart';
-import 'package:examap/AdminSignInPage.dart';
-import 'package:examap/studentSignIn.dart';
+import 'package:examap/widgets/authentication_wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 // Firebase options
-import 'authentication_service.dart';
+import 'services/authentication_service.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -44,72 +42,5 @@ class MyApp extends StatelessWidget {
         home: const AuthenticationWrapper(),
       ),
     );
-  }
-}
-
-class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final adminUser = context.watch<User?>();
-
-    if (adminUser != null) {
-      return const AdminHomePage();
-    }
-
-    return const MyHomePage(title: "ExamAp");
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final List<Widget> _items = [
-    const StudentSignInPage(),
-    const AdminSignInPage(),
-  ];
-  int _selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: IndexedStack(
-          index: _selectedIndex,
-          children: _items,
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Student',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.supervisor_account_rounded),
-            label: 'Lector',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onTap,
-      ),
-    );
-  }
-
-  void _onTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }
