@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:examap/services/authentication_service.dart';
 
 class ChangePasswordTab extends StatefulWidget {
-  const ChangePasswordTab({ Key? key }) : super(key: key);
+  const ChangePasswordTab({Key? key}) : super(key: key);
 
   @override
   State<ChangePasswordTab> createState() => _ChangePasswordTabState();
@@ -20,8 +20,9 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
 
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,7 +33,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
             onPressed: () {
               context.read<AuthenticationService>().signOut();
             },
-            child: const Text("Sign out"),
+            child: const Text("Uitloggen"),
           ),
         ),
         Center(
@@ -46,7 +47,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: oldPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Old password",
+                    labelText: "Oude wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -64,7 +65,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: newPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "New password",
+                    labelText: "Nieuwe wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -82,7 +83,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: confirmPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Confirm new password",
+                    labelText: "Bevestig nieuwe wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -96,12 +97,9 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                 onPressed: () {
                   _changePassword();
                 },
-                child: const Text("Change password"),
+                child: const Text("Verander wachtwoord"),
               ),
-              Text(
-                _message,
-                style: _messageStyle
-              ),
+              Text(_message, style: _messageStyle),
             ],
           ),
         )
@@ -136,14 +134,15 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
         oldPasswordController.clear();
         newPasswordController.clear();
         confirmPasswordController.clear();
-      } else if(response == "Password should be at least 6 characters"){
+      } else if (response == "Password should be at least 6 characters") {
         setState(() {
           _message = "Password should be at least 6 characters";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );
         });
-      } else if(response == "The password is invalid or the user does not have a password."){
+      } else if (response ==
+          "The password is invalid or the user does not have a password.") {
         setState(() {
           _message = "The old password is invalid";
           _messageStyle = const TextStyle(
