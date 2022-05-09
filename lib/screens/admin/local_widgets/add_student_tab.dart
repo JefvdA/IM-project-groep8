@@ -3,8 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:examap/repositories/current_student.dart';
 import 'package:examap/services/authentication_service.dart';
+
+import '../../exam/exam_greeting_screen.dart';
+import '../../exam/exam_screen.dart';
+import '../../student/student_List.dart';
 
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
@@ -12,6 +16,10 @@ class AddStudentsTab extends StatefulWidget {
   @override
   State<AddStudentsTab> createState() => _AddStudentsTabState();
 }
+
+var _selectedValue;
+var setDefaultValue = true;
+var testing = "";
 
 class _AddStudentsTabState extends State<AddStudentsTab> {
   String _message = "";
@@ -27,6 +35,8 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      //mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -34,7 +44,13 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
             onPressed: () {
               context.read<AuthenticationService>().signOut();
             },
-            child: const Text("Sign out"),
+            child: const Text(
+              "Sign out",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         Center(
@@ -44,7 +60,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               Container(
                 margin: const EdgeInsets.all(12),
                 width: 1000,
-                height: 300,
+                height: 200,
                 child: TextField(
                   maxLines: 10,
                   controller: csvController,
@@ -64,7 +80,18 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                 onPressed: () {
                   _addStudents();
                 },
-                child: const Text("Add students"),
+                child: const Text("Add students \u{2795}"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _addStudents();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ListStudent()),
+                  );
+                },
+                child: const Text("Show list"),
               ),
             ],
           ),

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:examap/services/authentication_service.dart';
 
 class ChangePasswordTab extends StatefulWidget {
-  const ChangePasswordTab({ Key? key }) : super(key: key);
+  const ChangePasswordTab({Key? key}) : super(key: key);
 
   @override
   State<ChangePasswordTab> createState() => _ChangePasswordTabState();
@@ -20,11 +20,14 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
 
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -32,14 +35,20 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
             onPressed: () {
               context.read<AuthenticationService>().signOut();
             },
-            child: const Text("Sign out"),
+            child: const Text(
+              "Sign out",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         Center(
           child: Column(
             children: [
               Container(
-                margin: const EdgeInsets.all(12),
+                margin: const EdgeInsets.all(8),
                 width: 400,
                 height: 30,
                 child: TextField(
@@ -49,7 +58,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                     labelText: "Old password",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.grey,
                         width: 2,
                       ),
                     ),
@@ -67,7 +76,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                     labelText: "New password",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.grey,
                         width: 2,
                       ),
                     ),
@@ -85,7 +94,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                     labelText: "Confirm new password",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.grey,
                         width: 2,
                       ),
                     ),
@@ -96,12 +105,15 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                 onPressed: () {
                   _changePassword();
                 },
-                child: const Text("Change password"),
+                child: const Text(
+                  "Change password",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              Text(
-                _message,
-                style: _messageStyle
-              ),
+              Text(_message, style: _messageStyle),
             ],
           ),
         )
@@ -136,14 +148,15 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
         oldPasswordController.clear();
         newPasswordController.clear();
         confirmPasswordController.clear();
-      } else if(response == "Password should be at least 6 characters"){
+      } else if (response == "Password should be at least 6 characters") {
         setState(() {
           _message = "Password should be at least 6 characters";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );
         });
-      } else if(response == "The password is invalid or the user does not have a password."){
+      } else if (response ==
+          "The password is invalid or the user does not have a password.") {
         setState(() {
           _message = "The old password is invalid";
           _messageStyle = const TextStyle(
