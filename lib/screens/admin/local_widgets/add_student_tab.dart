@@ -8,7 +8,7 @@ import 'package:csv/csv.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:examap/services/authentication_service.dart';
-import 'package:examap/screens/student_list/student_List.dart';
+import 'package:examap/screens/student_list/student_list_screen.dart';
 
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
@@ -92,7 +92,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>
-                          const ListStudent(),
+                          const StudentListScreen(),
                       transitionDuration: Duration.zero,
                       reverseTransitionDuration: Duration.zero,
                     ),
