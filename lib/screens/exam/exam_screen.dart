@@ -40,6 +40,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   String user = CurrentStudent.sNummer;
   List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
+
   //timer
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
@@ -84,6 +85,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
+
   askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
@@ -96,26 +98,32 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget build(BuildContext context) {
     askPermission();
     return Scaffold(
-        appBar: globalAppBar,
-        body: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          buildTime(),
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 204, 202, 202),
+      appBar: globalAppBar,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildTime(),
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 204, 202, 202),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      child: _build(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SingleChildScrollView(
-                  child: Container(child: _build()),
-                )
-              ],
-            ),
-          ),
-        ])));
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildTime() {
@@ -160,6 +168,20 @@ class _ExamScreenState extends State<ExamScreen> {
   int _index = 0;
   Widget _build() {
     return Stepper(
+      // controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
+      //   return Row(
+      //     children: <Widget>[
+      //       TextButton(
+      //         onPressed: controlsDetails.onStepContinue,
+      //         child: const Text('NEXT'),
+      //       ),
+      //       TextButton(
+      //         onPressed: controlsDetails.onStepCancel,
+      //         child: const Text('PREVIOUS'),
+      //       ),
+      //     ],
+      //   );
+      // },
       currentStep: _index,
       onStepCancel: () {
         if (_index > 0) {
@@ -195,28 +217,34 @@ class _ExamScreenState extends State<ExamScreen> {
             ),
           ),
           content: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const Text(
-                    'Wat is het beste framework ?',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontFamily: 'Roboto',
-                      color: Colors.black,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Text(
+                  'Wat is het beste framework ?',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
+                  ),
+                ),
+                TextField(
+                  controller: textarea,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    hintText: "Geef je antwoord in...",
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.redAccent,
+                      ),
                     ),
                   ),
-                  TextField(
-                      controller: textarea,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                          hintText: "Geef je antwoord in...",
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.redAccent))))
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
         ),
         Step(
           title: const Text(
@@ -229,20 +257,21 @@ class _ExamScreenState extends State<ExamScreen> {
             ),
           ),
           content: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const Text(
-                    'Wat is de mooiste kleur ?',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontFamily: 'Roboto',
-                      color: Colors.black,
-                    ),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Text(
+                  'Wat is de mooiste kleur ?',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
                   ),
-                  _choiceBuild()
-                ],
-              )),
+                ),
+                _choiceBuild()
+              ],
+            ),
+          ),
         ),
         Step(
           title: const Text(
@@ -255,28 +284,34 @@ class _ExamScreenState extends State<ExamScreen> {
             ),
           ),
           content: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const Text(
-                    'Hoe scrhrijf jr irts naar je console in C# ?',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontFamily: 'Roboto',
-                      color: Colors.black,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Text(
+                  'Hoe scrhrijf je iets naar je console in C# ?',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
+                  ),
+                ),
+                TextField(
+                  controller: textarea2,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    hintText: "Geef je antwoord in...",
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.redAccent,
+                      ),
                     ),
                   ),
-                  TextField(
-                      controller: textarea2,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                          hintText: "Geef je antwoord in...",
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.redAccent))))
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
