@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/repositories/current_student.dart';
+import 'package:examap/screens/home/home_screen.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -108,6 +109,21 @@ class _ExamScreenState extends State<ExamScreen> {
                     child: Container(
                       child: _build(),
                     ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const HomeScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: const Text("Examen indienen"),
                   ),
                 ],
               ),
