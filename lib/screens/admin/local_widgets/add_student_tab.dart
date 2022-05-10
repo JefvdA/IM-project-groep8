@@ -8,7 +8,7 @@ import 'package:examap/services/authentication_service.dart';
 
 import '../../exam/exam_greeting_screen.dart';
 import '../../exam/exam_screen.dart';
-import '../../student/student_List.dart';
+import '../../student_list/student_List.dart';
 
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
@@ -19,7 +19,6 @@ class AddStudentsTab extends StatefulWidget {
 
 var _selectedValue;
 var setDefaultValue = true;
-var testing = "";
 
 class _AddStudentsTabState extends State<AddStudentsTab> {
   String _message = "";
@@ -84,7 +83,6 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _addStudents();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
