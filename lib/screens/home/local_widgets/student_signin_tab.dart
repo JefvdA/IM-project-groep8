@@ -25,7 +25,7 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
     var elevatedButton = ElevatedButton(
       onPressed: () {
         CurrentStudent.sNummer = _selectedValue;
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation1, animation2) =>
@@ -33,6 +33,7 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
             transitionDuration: Duration.zero,
             reverseTransitionDuration: Duration.zero,
           ),
+          (Route<dynamic> route) => false,
         );
       },
       child: const Icon(Icons.login_rounded, size: 40),

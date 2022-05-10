@@ -53,7 +53,7 @@ class GreetingScreenState extends State<GreetingScreen> {
                   style: TextStyle(fontSize: 20)),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>
@@ -61,6 +61,7 @@ class GreetingScreenState extends State<GreetingScreen> {
                       transitionDuration: Duration.zero,
                       reverseTransitionDuration: Duration.zero,
                     ),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: const Icon(Icons.run_circle_rounded, size: 40),
