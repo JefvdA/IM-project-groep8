@@ -1,14 +1,14 @@
 // ignore_for_file: file_names
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:examap/repositories/current_student.dart';
-import 'package:examap/services/authentication_service.dart';
+import 'package:csv/csv.dart';
 
-import '../../exam/exam_greeting_screen.dart';
-import '../../exam/exam_screen.dart';
-import '../../student_list/student_List.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:examap/services/authentication_service.dart';
+import 'package:examap/screens/student_list/student_List.dart';
 
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
@@ -17,7 +17,6 @@ class AddStudentsTab extends StatefulWidget {
   State<AddStudentsTab> createState() => _AddStudentsTabState();
 }
 
-var _selectedValue;
 var setDefaultValue = true;
 
 class _AddStudentsTabState extends State<AddStudentsTab> {
@@ -83,10 +82,20 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  _loadCsv();
+                },
+                child: const Text("Load students from csv"),
+              ),
+              ElevatedButton(
+                onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const ListStudent()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const ListStudent(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
                   );
                 },
                 child: const Text("Show list"),
@@ -137,5 +146,10 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
         });
       }
     }
+  }
+
+  Future<void> _loadCsv() async {
+    final _rawData = await rootBundle.loadString("Students.csv");
+    csvController.text = _rawData;
   }
 }
