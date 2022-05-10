@@ -168,20 +168,20 @@ class _ExamScreenState extends State<ExamScreen> {
   int _index = 0;
   Widget _build() {
     return Stepper(
-      // controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
-      //   return Row(
-      //     children: <Widget>[
-      //       TextButton(
-      //         onPressed: controlsDetails.onStepContinue,
-      //         child: const Text('NEXT'),
-      //       ),
-      //       TextButton(
-      //         onPressed: controlsDetails.onStepCancel,
-      //         child: const Text('PREVIOUS'),
-      //       ),
-      //     ],
-      //   );
-      // },
+      controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
+        return Row(
+          children: <Widget>[
+            TextButton(
+              onPressed: controlsDetails.onStepContinue,
+              child: const Text('NEXT'),
+            ),
+            TextButton(
+              onPressed: controlsDetails.onStepCancel,
+              child: const Text('PREVIOUS'),
+            ),
+          ],
+        );
+      },
       currentStep: _index,
       onStepCancel: () {
         if (_index > 0) {
