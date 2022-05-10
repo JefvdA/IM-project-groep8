@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:examap/screens/admin/local_widgets/add_student_tab.dart';
+import 'package:examap/screens/admin/local_widgets/add_exam.dart';
 import 'package:examap/screens/admin/local_widgets/change_password_tab.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class AdminScreenState extends State<AdminScreen> {
   final List<Widget> _items = [
     const AddStudentsTab(),
     const ChangePasswordTab(),
+    const AddExam(),
   ];
   int _selectedIndex = 0;
 
@@ -39,6 +41,10 @@ class AdminScreenState extends State<AdminScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.key),
             label: 'Wachtwoord wijzigen',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Add Exam',
           ),
         ],
         currentIndex: _selectedIndex,

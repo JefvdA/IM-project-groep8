@@ -26,6 +26,8 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -33,14 +35,20 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
             onPressed: () {
               context.read<AuthenticationService>().signOut();
             },
-            child: const Text("Uitloggen"),
+            child: const Text(
+              "Sign out",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         Center(
           child: Column(
             children: [
               Container(
-                margin: const EdgeInsets.all(12),
+                margin: const EdgeInsets.all(8),
                 width: 400,
                 height: 30,
                 child: TextField(
@@ -50,7 +58,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                     labelText: "Oude wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.grey,
                         width: 2,
                       ),
                     ),
@@ -68,7 +76,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                     labelText: "Nieuwe wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.grey,
                         width: 2,
                       ),
                     ),
@@ -86,7 +94,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                     labelText: "Bevestig nieuwe wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.black,
+                        color: Colors.grey,
                         width: 2,
                       ),
                     ),
@@ -97,7 +105,13 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                 onPressed: () {
                   _changePassword();
                 },
-                child: const Text("Verander wachtwoord"),
+                child: const Text(
+                  "Change password",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               Text(_message, style: _messageStyle),
             ],

@@ -172,6 +172,9 @@ class _ExamScreenState extends State<ExamScreen> {
         if (_index >= 0) {
           setState(() {
             _index += 1;
+            if (_index == 3) {
+              _index -= 1;
+            }
           });
         }
       },
