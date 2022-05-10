@@ -2,24 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-import 'multiple_choice_add_screen.dart';
-
-class OQExam extends StatelessWidget {
-  const OQExam({Key? key}) : super(key: key);
+class AddMCQuestionScreen extends StatefulWidget {
+  const AddMCQuestionScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ExamAp',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      home: _OQAddExam(),
-    );
-  }
+  State<AddMCQuestionScreen> createState() => _AddMCQuestionScreenState();
 }
 
-class _OQAddExam extends StatelessWidget {
+class _AddMCQuestionScreenState extends State<AddMCQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +22,7 @@ class _OQAddExam extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Voeg Open Vraag toe :",
+                "Voeg Multiple Choice vraag toe :",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 56,
@@ -72,16 +62,62 @@ class _OQAddExam extends StatelessWidget {
                     ),
                     Container(
                       margin: const EdgeInsets.all(8),
+                      width: 600,
+                      height: 80,
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          label: Text.rich(
+                            TextSpan(
+                              children: <InlineSpan>[
+                                WidgetSpan(
+                                  child: Text(
+                                    'Antwoorden  gescheiden zijn door ;',
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Text(
+                                    '*',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      width: 600,
+                      height: 80,
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          label: Text.rich(
+                            TextSpan(
+                              children: <InlineSpan>[
+                                WidgetSpan(
+                                  child: Text(
+                                    'Oplossing',
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Text(
+                                    '*',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(8),
                       width: 400,
                       height: 30,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MCExam()),
-                          );
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.save_alt_rounded,
                           size: 30,
