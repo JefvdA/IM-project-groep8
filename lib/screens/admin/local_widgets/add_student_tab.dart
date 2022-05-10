@@ -121,7 +121,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
             // Reset the text field.
             .then((value) => {
                   setState(() {
-                    _message = "${lines.length} students added.";
+                    _message = "${lines.length} studenten toegevoegd.";
                     _messageStyle = const TextStyle(
                       color: Colors.green,
                     );
@@ -132,7 +132,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
         // Show a message if the students were not added.
         setState(() {
           _message =
-              "Something went wrong, please check the data you provided!";
+              "Er is iets fout gegaan bij het toevoegen van de studenten, check je meegegeven data.";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );

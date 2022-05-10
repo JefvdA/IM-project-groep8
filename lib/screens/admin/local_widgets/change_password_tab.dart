@@ -55,7 +55,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: oldPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Old password",
+                    labelText: "Oude wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
@@ -73,7 +73,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: newPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "New password",
+                    labelText: "Nieuwe wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
@@ -91,7 +91,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: confirmPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Confirm new password",
+                    labelText: "Bevestig nieuwe wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
