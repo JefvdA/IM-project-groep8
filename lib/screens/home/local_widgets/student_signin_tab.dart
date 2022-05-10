@@ -82,7 +82,7 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
                         return DropdownMenuItem<String>(
                           value: value.get('s-nummer'),
                           child: Text(
-                            value.get('s-nummer'),
+                            value.get('s-nummer') + " - " + value.get('name'),
                           ),
                         );
                       }).toList(),
