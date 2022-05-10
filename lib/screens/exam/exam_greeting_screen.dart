@@ -17,7 +17,6 @@ class GreetingScreenState extends State<GreetingScreen> {
   // ignore: prefer_typing_uninitialized_variables
 
   var setDefaultValue = true;
-  var testing = "";
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +62,15 @@ class GreetingScreenState extends State<GreetingScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const ExamScreen()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const ExamScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: const Icon(Icons.run_circle_rounded, size: 40),

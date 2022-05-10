@@ -25,9 +25,15 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
     var elevatedButton = ElevatedButton(
       onPressed: () {
         CurrentStudent.sNummer = _selectedValue;
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const GreetingScreen()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                const GreetingScreen(),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+          (Route<dynamic> route) => false,
         );
       },
       child: const Icon(Icons.login_rounded, size: 40),
@@ -66,7 +72,7 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
                     .collection('students')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     if (setDefaultValue) {
                       _selectedValue = snapshot.data!.docs[0].get("s-nummer");
                     }
@@ -82,7 +88,7 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
                         return DropdownMenuItem<String>(
                           value: value.get('s-nummer'),
                           child: Text(
-                            value.get('s-nummer'),
+                            value.get('s-nummer') + " - " + value.get('name'),
                           ),
                         );
                       }).toList(),

@@ -1,10 +1,14 @@
 // ignore_for_file: file_names
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:csv/csv.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:examap/services/authentication_service.dart';
+import 'package:examap/screens/student_list/student_list_screen.dart';
 
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
@@ -12,6 +16,8 @@ class AddStudentsTab extends StatefulWidget {
   @override
   State<AddStudentsTab> createState() => _AddStudentsTabState();
 }
+
+var setDefaultValue = true;
 
 class _AddStudentsTabState extends State<AddStudentsTab> {
   String _message = "";
@@ -27,6 +33,8 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      //mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -34,7 +42,13 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
             onPressed: () {
               context.read<AuthenticationService>().signOut();
             },
-            child: const Text("Uitloggen"),
+            child: const Text(
+              "Sign out",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         Center(
@@ -44,7 +58,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               Container(
                 margin: const EdgeInsets.all(12),
                 width: 1000,
-                height: 300,
+                height: 200,
                 child: TextField(
                   maxLines: 10,
                   controller: csvController,
@@ -64,7 +78,27 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                 onPressed: () {
                   _addStudents();
                 },
-                child: const Text("Studenten toevoegen"),
+                child: const Text("Add students \u{2795}"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _loadCsv();
+                },
+                child: const Text("Load students from csv"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const StudentListScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                  );
+                },
+                child: const Text("Show list"),
               ),
             ],
           ),
@@ -112,5 +146,10 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
         });
       }
     }
+  }
+
+  Future<void> _loadCsv() async {
+    final _rawData = await rootBundle.loadString("Students.csv");
+    csvController.text = _rawData;
   }
 }

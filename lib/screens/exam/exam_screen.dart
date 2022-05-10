@@ -10,14 +10,6 @@ import 'package:geolocator/geolocator.dart';
 
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Firestore Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-    );
-  }
 
   @override
   State<ExamScreen> createState() => _ExamScreenState();
@@ -38,6 +30,7 @@ class Item {
 class _ExamScreenState extends State<ExamScreen> {
   String user = CurrentStudent.sNummer;
   List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
+
   //timer
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
@@ -82,10 +75,12 @@ class _ExamScreenState extends State<ExamScreen> {
 
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
+
   CollectionReference examsCollection = FirebaseFirestore.instance
       .collection('exams')
       .doc('Intro Mobile')
       .collection("vragen");
+
   askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
@@ -266,6 +261,7 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             ),
           ],
+
         ),
       ),
     );
