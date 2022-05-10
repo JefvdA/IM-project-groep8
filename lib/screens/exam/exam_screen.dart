@@ -28,9 +28,6 @@ class Item {
 }
 
 class _ExamScreenState extends State<ExamScreen> {
-  TextEditingController textarea = TextEditingController();
-  TextEditingController textarea2 = TextEditingController();
-
   String user = CurrentStudent.sNummer;
   List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
 
@@ -79,6 +76,11 @@ class _ExamScreenState extends State<ExamScreen> {
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
 
+  CollectionReference examsCollection = FirebaseFirestore.instance
+      .collection('exams')
+      .doc('Intro Mobile')
+      .collection("vragen");
+
   askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
@@ -107,7 +109,137 @@ class _ExamScreenState extends State<ExamScreen> {
                 children: [
                   SingleChildScrollView(
                     child: Container(
-                      child: _build(),
+                      child: FutureBuilder(
+                        future: examsCollection.get(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            List<Step> stepsen = [];
+                            for (int i = 0;
+                                i < snapshot.data.docs.length;
+                                i++) {
+                              if (snapshot.data.docs[i]['type'] ==
+                                  'Multiple choice') {
+                                stepsen.add(
+                                  Step(
+                                    title: Text(
+                                      'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
+                                      style: const TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    content: Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapshot.data.docs[i]['vraag'],
+                                            style: const TextStyle(
+                                              fontSize: 26,
+                                              fontFamily: 'Roboto',
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          _choiceBuild(
+                                              snapshot.data.docs[i]['opties']),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                stepsen.add(
+                                  Step(
+                                    title: Text(
+                                      'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
+                                      style: const TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    content: Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapshot.data.docs[i]['vraag'],
+                                            style: const TextStyle(
+                                              fontSize: 26,
+                                              fontFamily: 'Roboto',
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const TextField(
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            maxLines: 1,
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  "Geef je antwoord in...",
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.redAccent),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                            ;
+                            return Stepper(
+                              steps: stepsen,
+                              controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
+        return Row(
+          children: <Widget>[
+            TextButton(
+              onPressed: controlsDetails.onStepContinue,
+              child: const Text('NEXT'),
+            ),
+            TextButton(
+              onPressed: controlsDetails.onStepCancel,
+              child: const Text('PREVIOUS'),
+            ),
+          ],
+        );
+      },
+      currentStep: _index,
+      onStepCancel: () {
+        if (_index > 0) {
+          setState(() {
+            _index -= 1;
+          });
+        }
+      },
+      onStepContinue: () {
+        if (_index >= 0) {
+          setState(() {
+            _index += 1;
+            if (_index == 3) {
+              _index -= 1;
+            }
+          });
+        }
+      },
+      onStepTapped: (int index) {
+        setState(() {
+          _index = index;
+        });
+      },
+                            );
+                          } else
+                            return CircularProgressIndicator();
+                        },
+                      ),
                     ),
                   ),
                   ElevatedButton(
@@ -129,6 +261,7 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             ),
           ],
+
         ),
       ),
     );
@@ -174,165 +307,15 @@ class _ExamScreenState extends State<ExamScreen> {
       );
 
   int _index = 0;
-  Widget _build() {
-    return Stepper(
-      controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
-        return Row(
-          children: <Widget>[
-            TextButton(
-              onPressed: controlsDetails.onStepContinue,
-              child: const Text('NEXT'),
-            ),
-            TextButton(
-              onPressed: controlsDetails.onStepCancel,
-              child: const Text('PREVIOUS'),
-            ),
-          ],
-        );
-      },
-      currentStep: _index,
-      onStepCancel: () {
-        if (_index > 0) {
-          setState(() {
-            _index -= 1;
-          });
-        }
-      },
-      onStepContinue: () {
-        if (_index >= 0) {
-          setState(() {
-            _index += 1;
-            if (_index == 3) {
-              _index -= 1;
-            }
-          });
-        }
-      },
-      onStepTapped: (int index) {
-        setState(() {
-          _index = index;
-        });
-      },
-      steps: <Step>[
-        Step(
-          title: const Text(
-            'Vraag1 : Open vraag',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
-              color: Colors.black,
-            ),
-          ),
-          content: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                const Text(
-                  'Wat is het beste framework ?',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'Roboto',
-                    color: Colors.black,
-                  ),
-                ),
-                TextField(
-                  controller: textarea,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                    hintText: "Geef je antwoord in...",
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Step(
-          title: const Text(
-            'Vraag2 : Multiple choice',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
-              color: Colors.black,
-            ),
-          ),
-          content: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                const Text(
-                  'Wat is de mooiste kleur ?',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'Roboto',
-                    color: Colors.black,
-                  ),
-                ),
-                _choiceBuild()
-              ],
-            ),
-          ),
-        ),
-        Step(
-          title: const Text(
-            'Vraag3 : Code correction',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Roboto',
-              color: Colors.black,
-            ),
-          ),
-          content: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                const Text(
-                  'Hoe scrhrijf je iets naar je console in C# ?',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontFamily: 'Roboto',
-                    color: Colors.black,
-                  ),
-                ),
-                TextField(
-                  controller: textarea2,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                    hintText: "Geef je antwoord in...",
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   int? _value = 1;
-  Widget _choiceBuild() {
+  Widget _choiceBuild(value) {
     return Wrap(
       children: List<Widget>.generate(
         4,
         (int index) {
           return ChoiceChip(
-            label: Text(colors[index]),
+            label: Text(value[index]),
             selected: _value == index,
             onSelected: (bool selected) {
               setState(() {
