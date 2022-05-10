@@ -66,7 +66,7 @@ class _StudentSignInTabState extends State<StudentSignInTab> {
                     .collection('students')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     if (setDefaultValue) {
                       _selectedValue = snapshot.data!.docs[0].get("s-nummer");
                     }
