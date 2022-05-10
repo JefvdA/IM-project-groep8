@@ -1,36 +1,27 @@
 // ignore_for_file: file_names
 
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
-class MCExam extends StatelessWidget {
-  const MCExam({Key? key}) : super(key: key);
+class AddCCQuestionScreen extends StatefulWidget {
+  const AddCCQuestionScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ExamAp',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      home: _MCAddExam(),
-    );
-  }
+  State<AddCCQuestionScreen> createState() => _AddCCQuestionScreenState();
 }
 
-class _MCAddExam extends StatelessWidget {
+class _AddCCQuestionScreenState extends State<AddCCQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ExamAP'),
-      ),
+      appBar: globalAppBar,
       body: Center(
         child: Form(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Voeg Multiple Choice vraag toe :",
+                "Voeg Code Correctie vraag toe :",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 56,
@@ -53,7 +44,7 @@ class _MCAddExam extends StatelessWidget {
                               children: <InlineSpan>[
                                 WidgetSpan(
                                   child: Text(
-                                    'Vraagstelling',
+                                    'CodeVraag',
                                   ),
                                 ),
                                 WidgetSpan(
@@ -79,33 +70,7 @@ class _MCAddExam extends StatelessWidget {
                               children: <InlineSpan>[
                                 WidgetSpan(
                                   child: Text(
-                                    'Antwoorden  gescheiden zijn door ;',
-                                  ),
-                                ),
-                                WidgetSpan(
-                                  child: Text(
-                                    '*',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      width: 600,
-                      height: 80,
-                      child: const TextField(
-                        decoration: InputDecoration(
-                          label: Text.rich(
-                            TextSpan(
-                              children: <InlineSpan>[
-                                WidgetSpan(
-                                  child: Text(
-                                    'Oplossing',
+                                    'Correcte Code',
                                   ),
                                 ),
                                 WidgetSpan(
@@ -125,13 +90,7 @@ class _MCAddExam extends StatelessWidget {
                       width: 400,
                       height: 30,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MCExam()),
-                          );
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.save_alt_rounded,
                           size: 30,

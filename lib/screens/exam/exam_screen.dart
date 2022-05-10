@@ -9,14 +9,6 @@ import 'package:geolocator/geolocator.dart';
 
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Firestore Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-    );
-  }
 
   @override
   State<ExamScreen> createState() => _ExamScreenState();
