@@ -54,7 +54,9 @@ class _ListOfStudentState extends State<ListOfStudent> {
                       child: ListTile(
                         trailing: ElevatedButton.icon(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {},
+                          onPressed: () {
+                            removeStudent(document.reference);
+                          },
                           label: const Text(""),
                         ),
                         contentPadding: const EdgeInsets.all(8),
@@ -94,5 +96,7 @@ class _ListOfStudentState extends State<ListOfStudent> {
     );
   }
 
-  void removeStudent() {}
+  void removeStudent(DocumentReference studentReference) {
+    studentReference.delete();
+  }
 }
