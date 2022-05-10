@@ -39,17 +39,13 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
       ),
     ];
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('ExamAP'),
+      ),
       body: Container(
         child: Column(
           children: [
-            DropdownButton(
-                value: _selectedValue,
-                items: Items,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedValue = value!;
-                  });
-                }),
+            Text("Bestaande vragen"),
             StreamBuilder(
               stream: examsCollection
                   .doc(this.exam)
@@ -83,36 +79,146 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
                 }
               },
             ),
-            TextField(
-              controller: _questionController,
-              decoration: const InputDecoration(
-                labelText: 'Vraag',
+            Text("Creer een nieuwe vraag"),
+            DropdownButton(
+                value: _selectedValue,
+                items: Items,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedValue = value!;
+                  });
+                }),
+            Container(
+              margin: const EdgeInsets.all(8),
+              width: 600,
+              height: 80,
+              child: TextField(
+                controller: _questionController,
+                decoration: const InputDecoration(
+                  label: Text.rich(
+                    TextSpan(
+                      children: <InlineSpan>[
+                        WidgetSpan(
+                          child: Text(
+                            'Vraag',
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: Text(
+                            '*',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-            if (_selectedValue == "Open vraag")
-              TextField(
-                controller: _rightAnswerController,
-                decoration: const InputDecoration(
-                  labelText: 'Antwoord',
+            if (_selectedValue == "Code correction")
+              Container(
+                margin: const EdgeInsets.all(8),
+                width: 600,
+                height: 80,
+                child: TextField(
+                  controller: _rightAnswerController,
+                  decoration: const InputDecoration(
+                    label: Text.rich(
+                      TextSpan(
+                        children: <InlineSpan>[
+                          WidgetSpan(
+                            child: Text(
+                              'Correcte Code',
+                            ),
+                          ),
+                          WidgetSpan(
+                            child: Text(
+                              '*',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             if (_selectedValue == "Multiple choice")
-              Column(children: [
-                TextField(
-                  controller: _answerController,
-                  decoration: const InputDecoration(
-                    labelText: 'Antwoorden Opties gesplits door kommas',
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    width: 600,
+                    height: 80,
+                    child: TextField(
+                      controller: _answerController,
+                      decoration: const InputDecoration(
+                        label: Text.rich(
+                          TextSpan(
+                            children: <InlineSpan>[
+                              WidgetSpan(
+                                child: Text(
+                                  'Antwoorden  gescheiden zijn door ,',
+                                ),
+                              ),
+                              WidgetSpan(
+                                child: Text(
+                                  '*',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    width: 600,
+                    height: 80,
+                    child: TextField(
+                      controller: _rightAnswerController,
+                      decoration: const InputDecoration(
+                        label: Text.rich(
+                          TextSpan(
+                            children: <InlineSpan>[
+                              WidgetSpan(
+                                child: Text(
+                                  'Oplossing',
+                                ),
+                              ),
+                              WidgetSpan(
+                                child: Text(
+                                  '*',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            Container(
+              margin: const EdgeInsets.all(8),
+              width: 400,
+              height: 30,
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.save_alt_rounded,
+                  size: 30,
                 ),
-                TextField(
-                  controller: _rightAnswerController,
-                  decoration: const InputDecoration(
-                    labelText: 'Juiste Antwoord',
-                  ),
-                )
-              ]),
-            ElevatedButton(
-                onPressed: addQuestion, child: const Text('Toevoegen')),
+                label:
+                    const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(200, 50),
+                ),
+              ),
+            )
           ],
         ),
       ),

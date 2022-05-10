@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/exam/exam_screen.dart';
-import 'package:examap/screens/exam/test.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 
 import 'package:flutter/material.dart';
@@ -66,7 +65,7 @@ class GreetingScreenState extends State<GreetingScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Test()),
+                    MaterialPageRoute(builder: (context) => const ExamScreen()),
                   );
                 },
                 child: const Icon(Icons.run_circle_rounded, size: 40),

@@ -19,6 +19,37 @@ class _AddExamTabState extends State<AddExamTab> {
     return Container(
       child: Column(
         children: [
+          Text("Bestaande examens"),
+          StreamBuilder(
+            stream: examsCollection.snapshots(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(snapshot.data.docs[index].data()['name']),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddQuestionsTab(
+                                snapshot.data.docs[index].data()['name']),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          Text("Creer een nieuw examen"),
           TextField(
             controller: _nameController,
             decoration: InputDecoration(
@@ -31,34 +62,6 @@ class _AddExamTabState extends State<AddExamTab> {
               labelText: 'Description',
             ),
           ),
-          StreamBuilder(
-              stream: examsCollection.snapshots(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(snapshot.data.docs[index].data()['name']),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AddQuestionsTab(
-                                  snapshot.data.docs[index].data()['name']),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  );
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
           ElevatedButton(onPressed: addExam, child: Text('Toevoegen')),
         ],
       ),
@@ -66,10 +69,12 @@ class _AddExamTabState extends State<AddExamTab> {
   }
 
   void addExam() {
-    examsCollection.doc(_nameController.text).set({
-      'name': _nameController.text,
-      'description': _descriptionController.text,
-    });
+    examsCollection.doc(_nameController.text).set(
+      {
+        'name': _nameController.text,
+        'description': _descriptionController.text,
+      },
+    );
     Navigator.push(
       context,
       MaterialPageRoute(
