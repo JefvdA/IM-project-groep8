@@ -3,7 +3,9 @@
 import 'package:examap/screens/add_exam_questions/add_ccquestion_screen.dart';
 import 'package:examap/screens/add_exam_questions/add_mcquestion_screen.dart';
 import 'package:examap/screens/add_exam_questions/add_oquestion_screen.dart';
+import 'package:examap/services/authentication_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddExamTab extends StatefulWidget {
   const AddExamTab({Key? key}) : super(key: key);
@@ -24,6 +26,18 @@ class _AddExamTabState extends State<AddExamTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              ElevatedButton(
+                onPressed: () {
+                  context.read<AuthenticationService>().signOut();
+                },
+                child: const Text(
+                  "Sign out",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
