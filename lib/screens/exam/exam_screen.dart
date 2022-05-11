@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/main.dart';
 import 'package:examap/repositories/current_student.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +10,6 @@ import 'package:geolocator/geolocator.dart';
 
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Firestore Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-    );
-  }
 
   @override
   State<ExamScreen> createState() => _ExamScreenState();
@@ -40,6 +33,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   String user = CurrentStudent.sNummer;
   List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
+
   //timer
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
@@ -67,15 +61,16 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void addTime() {
     final addSeconds = isCountdown ? -1 : 1;
-
-    setState(() {
-      final seconds = _duration.inSeconds + addSeconds;
-      if (seconds < 0) {
-        timer?.cancel();
-      } else {
-        _duration = Duration(seconds: seconds);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        final seconds = _duration.inSeconds + addSeconds;
+        if (seconds < 0) {
+          timer?.cancel();
+        } else {
+          _duration = Duration(seconds: seconds);
+        }
+      });
+    }
   }
 
   void startTimer() {
@@ -84,6 +79,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
+
   askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
@@ -96,26 +92,46 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget build(BuildContext context) {
     askPermission();
     return Scaffold(
-        appBar: globalAppBar,
-        body: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          buildTime(),
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 204, 202, 202),
+      appBar: globalAppBar,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildTime(),
+            Container(
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 204, 202, 202),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      child: _build(),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const MyApp(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: const Text("Examen indienen"),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SingleChildScrollView(
-                  child: Container(child: _build()),
-                )
-              ],
-            ),
-          ),
-        ])));
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildTime() {
@@ -127,9 +143,9 @@ class _ExamScreenState extends State<ExamScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         buildTimeCard(time: hours),
-        const SizedBox(width: 5),
+        const SizedBox(width: 2),
         buildTimeCard(time: minutes),
-        const SizedBox(width: 5),
+        const SizedBox(width: 2),
         buildTimeCard(time: seconds),
       ],
     );
@@ -139,7 +155,6 @@ class _ExamScreenState extends State<ExamScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(10),
@@ -153,13 +168,42 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 24),
         ],
       );
 
   int _index = 0;
   Widget _build() {
     return Stepper(
+      controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
+        return Row(
+          children: <Widget>[
+            TextButton(
+              onPressed: controlsDetails.onStepContinue,
+              child: const Text(
+                'Volgende',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: controlsDetails.onStepCancel,
+              child: const Text(
+                'Vorige',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
       currentStep: _index,
       onStepCancel: () {
         if (_index > 0) {
@@ -207,14 +251,19 @@ class _ExamScreenState extends State<ExamScreen> {
                     ),
                   ),
                   TextField(
-                      controller: textarea,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                          hintText: "Geef je antwoord in...",
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.redAccent))))
+                    controller: textarea,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 1,
+                    decoration: const InputDecoration(
+                      hintText: "Geef je antwoord in...",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               )),
         ),
@@ -229,20 +278,21 @@ class _ExamScreenState extends State<ExamScreen> {
             ),
           ),
           content: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const Text(
-                    'Wat is de mooiste kleur ?',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontFamily: 'Roboto',
-                      color: Colors.black,
-                    ),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Text(
+                  'Wat is de mooiste kleur ?',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
                   ),
-                  _choiceBuild()
-                ],
-              )),
+                ),
+                _choiceBuild()
+              ],
+            ),
+          ),
         ),
         Step(
           title: const Text(
@@ -255,28 +305,34 @@ class _ExamScreenState extends State<ExamScreen> {
             ),
           ),
           content: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const Text(
-                    'Hoe scrhrijf jr irts naar je console in C# ?',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontFamily: 'Roboto',
-                      color: Colors.black,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Text(
+                  'Hoe scrhrijf jr irts naar je console in C# ?',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
+                  ),
+                ),
+                TextField(
+                  controller: textarea2,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                    hintText: "Geef je antwoord in...",
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.redAccent,
+                      ),
                     ),
                   ),
-                  TextField(
-                      controller: textarea2,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 1,
-                      decoration: const InputDecoration(
-                          hintText: "Geef je antwoord in...",
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.redAccent))))
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );

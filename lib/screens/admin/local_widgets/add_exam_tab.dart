@@ -1,18 +1,21 @@
 // ignore_for_file: file_names
 
-import 'package:examap/screens/exam/code_correction_add_screen.dart';
-import 'package:examap/screens/exam/multiple_choice_add_screen.dart';
-import 'package:examap/screens/exam/open_question_add_screen.dart';
+import 'package:examap/screens/add_exam_question_screen/add_ccquestion_screen.dart';
+import 'package:examap/screens/add_exam_question_screen/add_mcquestion_screen.dart';
+import 'package:examap/screens/add_exam_question_screen/add_oquestion_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class AddExam extends StatefulWidget {
-  const AddExam({Key? key}) : super(key: key);
+import '../../../services/authentication_service.dart';
+
+class AddExamTab extends StatefulWidget {
+  const AddExamTab({Key? key}) : super(key: key);
 
   @override
-  State<AddExam> createState() => _AddExamQuestions();
+  State<AddExamTab> createState() => _AddExamTabState();
 }
 
-class _AddExamQuestions extends State<AddExam> {
+class _AddExamTabState extends State<AddExamTab> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,11 +27,28 @@ class _AddExamQuestions extends State<AddExam> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              ElevatedButton(
+                onPressed: () {
+                  context.read<AuthenticationService>().signOut();
+                },
+                child: const Text(
+                  "Afmelden",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const OQExam()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const AddOQuestionScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
                   );
                 },
                 icon: const Icon(
@@ -47,7 +67,12 @@ class _AddExamQuestions extends State<AddExam> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MCExam()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const AddMCQuestionScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
                   );
                 },
                 icon: const Icon(
@@ -64,7 +89,12 @@ class _AddExamQuestions extends State<AddExam> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CCExam()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const AddCCQuestionScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
                   );
                 },
                 icon: const Icon(

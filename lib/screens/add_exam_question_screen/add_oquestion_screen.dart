@@ -2,24 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-import 'multiple_choice_add_screen.dart';
+import 'add_mcquestion_screen.dart';
 
-class CCExam extends StatelessWidget {
-  const CCExam({Key? key}) : super(key: key);
+class AddOQuestionScreen extends StatefulWidget {
+  const AddOQuestionScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ExamAp',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      home: _CCAddExam(),
-    );
-  }
+  State<AddOQuestionScreen> createState() => _AddOQuestionScreenState();
 }
 
-class _CCAddExam extends StatelessWidget {
+class _AddOQuestionScreenState extends State<AddOQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +24,7 @@ class _CCAddExam extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Voeg Code Correctie vraag toe :",
+                "Voeg Open Vraag toe :",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 56,
@@ -55,33 +47,7 @@ class _CCAddExam extends StatelessWidget {
                               children: <InlineSpan>[
                                 WidgetSpan(
                                   child: Text(
-                                    'CodeVraag',
-                                  ),
-                                ),
-                                WidgetSpan(
-                                  child: Text(
-                                    '*',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      width: 600,
-                      height: 80,
-                      child: const TextField(
-                        decoration: InputDecoration(
-                          label: Text.rich(
-                            TextSpan(
-                              children: <InlineSpan>[
-                                WidgetSpan(
-                                  child: Text(
-                                    'Correcte Code',
+                                    'Vraagstelling',
                                   ),
                                 ),
                                 WidgetSpan(
@@ -101,13 +67,7 @@ class _CCAddExam extends StatelessWidget {
                       width: 400,
                       height: 30,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MCExam()),
-                          );
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.save_alt_rounded,
                           size: 30,

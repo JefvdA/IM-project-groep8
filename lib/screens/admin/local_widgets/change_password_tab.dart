@@ -36,7 +36,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
               context.read<AuthenticationService>().signOut();
             },
             child: const Text(
-              "Sign out",
+              "Afmelden",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -55,7 +55,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: oldPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Old password",
+                    labelText: "Oud Wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
@@ -73,7 +73,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: newPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "New password",
+                    labelText: "Nieuw paswoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
@@ -91,7 +91,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: confirmPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Confirm new password",
+                    labelText: "Bevestig nieuw wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
@@ -106,7 +106,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   _changePassword();
                 },
                 child: const Text(
-                  "Change password",
+                  "Wachtwoord wijzigen",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,
@@ -129,7 +129,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
 
     if (newPassword != confirmPassword) {
       setState(() {
-        _message = "New passwords do not match";
+        _message = "Nieuwe wachtwoorden komen niet overeen";
         _messageStyle = const TextStyle(
           color: Colors.red,
         );
@@ -140,7 +140,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
     auth.changePassword(oldPassword, newPassword).then((String? response) {
       if (response == "SUCCES") {
         setState(() {
-          _message = "Password changed successfully";
+          _message = "wachtwoord succesvol veranderd";
           _messageStyle = const TextStyle(
             color: Colors.green,
           );
@@ -148,24 +148,24 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
         oldPasswordController.clear();
         newPasswordController.clear();
         confirmPasswordController.clear();
-      } else if (response == "Password should be at least 6 characters") {
+      } else if (response == "Wachtwoord moet minimaal 6 tekens lang zijn") {
         setState(() {
-          _message = "Password should be at least 6 characters";
+          _message = "Wachtwoord moet minimaal 6 tekens lang zijn";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );
         });
       } else if (response ==
-          "The password is invalid or the user does not have a password.") {
+          "Het wachtwoord is ongeldig of de gebruiker heeft geen wachtwoord.") {
         setState(() {
-          _message = "The old password is invalid";
+          _message = "Het oude wachtwoord is ongeldig";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );
         });
       } else {
         setState(() {
-          _message = "Password change failed";
+          _message = "veranderen van wachtwoord mislukt";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );

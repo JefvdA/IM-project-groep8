@@ -2,22 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-class MCExam extends StatelessWidget {
-  const MCExam({Key? key}) : super(key: key);
+class AddMCQuestionScreen extends StatefulWidget {
+  const AddMCQuestionScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ExamAp',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      home: _MCAddExam(),
-    );
-  }
+  State<AddMCQuestionScreen> createState() => _AddMCQuestionScreenState();
 }
 
-class _MCAddExam extends StatelessWidget {
+class _AddMCQuestionScreenState extends State<AddMCQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,13 +117,7 @@ class _MCAddExam extends StatelessWidget {
                       width: 400,
                       height: 30,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MCExam()),
-                          );
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.save_alt_rounded,
                           size: 30,

@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/exam/exam_screen.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 
@@ -21,7 +22,8 @@ class GreetingScreenState extends State<GreetingScreen> {
   @override
   Widget build(BuildContext context) {
     final _dropdownFormKey = GlobalKey<FormState>();
-
+    CollectionReference examsCollection =
+        FirebaseFirestore.instance.collection('exams');
     return Scaffold(
       appBar: globalAppBar,
       body: Center(
@@ -48,15 +50,27 @@ class GreetingScreenState extends State<GreetingScreen> {
                   color: Colors.red,
                 ),
               ),
-              const Text(
-                  'Het examen bestaat uit één onderdeel dat meerder oefeningen bevat. Lees de oefeningen goed en zorg ervoor dat je ze correct maakt.\n'
-                  'Je hebt 3u de tijd om je examen te maken en in te dienen. Zorg ervoor dat je op tijd je examen indient !',
-                  style: TextStyle(fontSize: 20)),
+              FutureBuilder(
+                future: examsCollection.get(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data.docs[0]['description'],
+                        style: const TextStyle(fontSize: 20));
+                  }
+                  return const CircularProgressIndicator();
+                },
+              ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const ExamScreen()),
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          const ExamScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: const Icon(Icons.run_circle_rounded, size: 40),

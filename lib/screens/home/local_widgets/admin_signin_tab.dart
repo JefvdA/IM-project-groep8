@@ -13,8 +13,8 @@ class AdminSignInTab extends StatefulWidget {
 
 class _AdminSignInTab extends State<AdminSignInTab> {
   // For testing - no manual input everytime
-  String _adminEmail = "admin@ap.be";
-  String _adminPassword = "Admin123";
+  final String _adminEmail = "admin@ap.be";
+  final String _adminPassword = "AdminAd123";
 
   String _message = "";
 
