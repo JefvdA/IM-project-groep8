@@ -36,7 +36,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
               context.read<AuthenticationService>().signOut();
             },
             child: const Text(
-              "Sign out",
+              "Afmelden",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -55,7 +55,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: oldPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Oud wachtwoord",
+                    labelText: "Oud Wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,

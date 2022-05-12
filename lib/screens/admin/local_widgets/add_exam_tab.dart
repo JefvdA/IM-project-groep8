@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/admin/local_widgets/add_questions_tab.dart';
 import 'package:examap/services/authentication_service.dart';
@@ -15,12 +16,13 @@ class AddExamTab extends StatefulWidget {
 }
 
 class _AddExamTabState extends State<AddExamTab> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: Column(
         children: [
@@ -57,27 +59,28 @@ class _AddExamTabState extends State<AddExamTab> {
                         );
                       },
                     );
-                  },
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-          Text("Creer een nieuw examen"),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'Examennaam',
-            ),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: InputDecoration(
-              labelText: 'Description',
-            ),
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+              Text("Creer een nieuw examen"),
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Examennaam',
+                ),
+              ),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Description',
+                ),
+              ),
+              ElevatedButton(onPressed: addExam, child: Text('Toevoegen')),
+            ],
           ),
           ElevatedButton(onPressed: addExam, child: Text('Toevoegen')),
           ElevatedButton.icon(

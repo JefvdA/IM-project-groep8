@@ -1,14 +1,11 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:csv/csv.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:examap/services/authentication_service.dart';
-import 'package:examap/screens/student_list/student_list_screen.dart';
+import '../../student_list/student_List_screen.dart';
 
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
@@ -63,7 +60,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                   maxLines: 10,
                   controller: csvController,
                   decoration: const InputDecoration(
-                    labelText: "CSV data voor nieuwe students",
+                    labelText: "CSV data voor nieuwe studenten",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -98,7 +95,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                     ),
                   );
                 },
-                child: const Text("Show list"),
+                child: const Text("Lijst weergeven"),
               ),
             ],
           ),

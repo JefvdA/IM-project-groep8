@@ -43,7 +43,9 @@ class AdminScreenState extends State<AdminScreen> {
             label: 'Wachtwoord wijzigen',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add), label: 'Examen toevoegen'),
+            icon: Icon(Icons.add),
+            label: 'Examen toevoegen',
+          ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onTap,

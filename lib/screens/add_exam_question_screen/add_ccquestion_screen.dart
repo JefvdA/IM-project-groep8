@@ -1,28 +1,26 @@
 // ignore_for_file: file_names
-
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
-class AddOQuestionScreen extends StatefulWidget {
-  const AddOQuestionScreen({Key? key}) : super(key: key);
+class AddCCQuestionScreen extends StatefulWidget {
+  const AddCCQuestionScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddOQuestionScreen> createState() => _AddOQuestionScreenState();
+  State<AddCCQuestionScreen> createState() => _AddCCQuestionScreenState();
 }
 
-class _AddOQuestionScreenState extends State<AddOQuestionScreen> {
+class _AddCCQuestionScreenState extends State<AddCCQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ExamAP'),
-      ),
+      appBar: globalAppBar,
       body: Center(
         child: Form(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Voeg Open Vraag toe :",
+                "Voeg Code Correctie vraag toe :",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 56,
@@ -45,7 +43,33 @@ class _AddOQuestionScreenState extends State<AddOQuestionScreen> {
                               children: <InlineSpan>[
                                 WidgetSpan(
                                   child: Text(
-                                    'Vraagstelling',
+                                    'CodeVraag',
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Text(
+                                    '*',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      width: 600,
+                      height: 80,
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          label: Text.rich(
+                            TextSpan(
+                              children: <InlineSpan>[
+                                WidgetSpan(
+                                  child: Text(
+                                    'Correcte Code',
                                   ),
                                 ),
                                 WidgetSpan(

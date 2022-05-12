@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/main.dart';
 import 'package:examap/repositories/current_student.dart';
 import 'package:examap/screens/home/home_screen.dart';
 import 'package:examap/widgets/global_app_bar.dart';
@@ -57,7 +58,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void addTime() {
     final addSeconds = isCountdown ? -1 : 1;
-
+    
     if (mounted) {
       setState(() {
         final seconds = _duration.inSeconds + addSeconds;
@@ -76,6 +77,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
+
 
   CollectionReference examsCollection = FirebaseFirestore.instance
       .collection('exams')
@@ -102,6 +104,7 @@ class _ExamScreenState extends State<ExamScreen> {
             buildTime(),
             Container(
               padding: const EdgeInsets.all(4),
+
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 204, 202, 202),
               ),
@@ -150,6 +153,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                       ),
                                     ),
                                   ),
+                                  
                                 );
                               } else {
                                 stepsen.add(
