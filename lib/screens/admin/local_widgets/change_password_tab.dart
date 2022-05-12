@@ -140,7 +140,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
     auth.changePassword(oldPassword, newPassword).then((String? response) {
       if (response == "SUCCES") {
         setState(() {
-          _message = "wachtwoord succesvol veranderd";
+          _message = "Wachtwoord succesvol veranderd";
           _messageStyle = const TextStyle(
             color: Colors.green,
           );
@@ -165,7 +165,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
         });
       } else {
         setState(() {
-          _message = "veranderen van wachtwoord mislukt";
+          _message = "Veranderen van wachtwoord mislukt";
           _messageStyle = const TextStyle(
             color: Colors.red,
           );

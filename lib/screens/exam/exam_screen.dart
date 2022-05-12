@@ -30,7 +30,6 @@ class Item {
 
 class _ExamScreenState extends State<ExamScreen> {
   String user = CurrentStudent.sNummer;
-  List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
 
   //timer
   static const countdownDuration = Duration(hours: 3);
@@ -59,6 +58,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void addTime() {
     final addSeconds = isCountdown ? -1 : 1;
+    
     if (mounted) {
       setState(() {
         final seconds = _duration.inSeconds + addSeconds;
@@ -203,43 +203,60 @@ class _ExamScreenState extends State<ExamScreen> {
                             ;
                             return Stepper(
                               steps: stepsen,
-                              controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
-        return Row(
-          children: <Widget>[
-            TextButton(
-              onPressed: controlsDetails.onStepContinue,
-              child: const Text('NEXT'),
-            ),
-            TextButton(
-              onPressed: controlsDetails.onStepCancel,
-              child: const Text('PREVIOUS'),
-            ),
-          ],
-        );
-      },
-      currentStep: _index,
-      onStepCancel: () {
-        if (_index > 0) {
-          setState(() {
-            _index -= 1;
-          });
-        }
-      },
-      onStepContinue: () {
-        if (_index >= 0) {
-          setState(() {
-            _index += 1;
-            if (_index == 3) {
-              _index -= 1;
-            }
-          });
-        }
-      },
-      onStepTapped: (int index) {
-        setState(() {
-          _index = index;
-        });
-      },
+                              controlsBuilder: (BuildContext context,
+                                  ControlsDetails controlsDetails) {
+                                return Row(
+                                  children: <Widget>[
+                                    TextButton(
+                                      onPressed: controlsDetails.onStepContinue,
+                                      child: const Text(
+                                        'Volgende',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: controlsDetails.onStepCancel,
+                                      child: const Text(
+                                        'Vorige',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              currentStep: _index,
+                              onStepCancel: () {
+                                if (_index > 0) {
+                                  setState(() {
+                                    _index -= 1;
+                                  });
+                                }
+                              },
+                              onStepContinue: () {
+                                if (_index >= 0) {
+                                  setState(() {
+                                    _index += 1;
+                                    if (_index == 3) {
+                                      _index -= 1;
+                                    }
+                                  });
+                                }
+                              },
+                              onStepTapped: (int index) {
+                                setState(() {
+                                  _index = index;
+                                });
+                              },
                             );
                           } else
                             return CircularProgressIndicator();

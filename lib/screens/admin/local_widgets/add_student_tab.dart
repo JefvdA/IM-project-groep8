@@ -75,19 +75,13 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                 onPressed: () {
                   _addStudents();
                 },
-                child: const Text(" student toevoegen \u{2795}"),
+                child: const Text("Studenten toevoegen \u{2795}"),
               ),
               ElevatedButton(
                 onPressed: () {
                   _loadCsv();
                 },
-                child: const Text("Laad leerlingen uit csv"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _loadCsv();
-                },
-                child: const Text("Load students from csv"),
+                child: const Text("Laad studenten uit csv"),
               ),
               ElevatedButton(
                 onPressed: () {
