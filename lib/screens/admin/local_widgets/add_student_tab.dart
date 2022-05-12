@@ -1,13 +1,12 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:csv/csv.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:examap/services/authentication_service.dart';
+import '../../student_list/student_List_screen.dart';
+
 import 'package:examap/screens/student_list/student_list_screen.dart';
 
 class AddStudentsTab extends StatefulWidget {
@@ -43,7 +42,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               context.read<AuthenticationService>().signOut();
             },
             child: const Text(
-              "Sign out",
+              "Afmelden",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -63,7 +62,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                   maxLines: 10,
                   controller: csvController,
                   decoration: const InputDecoration(
-                    labelText: "CSV data for new students",
+                    labelText: "CSV data voor nieuwe studenten",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -78,7 +77,13 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                 onPressed: () {
                   _addStudents();
                 },
-                child: const Text("Add students \u{2795}"),
+                child: const Text(" student toevoegen \u{2795}"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _loadCsv();
+                },
+                child: const Text("Laad leerlingen uit csv"),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -98,7 +103,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                     ),
                   );
                 },
-                child: const Text("Show list"),
+                child: const Text("Lijst weergeven"),
               ),
             ],
           ),
@@ -149,6 +154,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
   }
 
   Future<void> _loadCsv() async {
+    final _rawData = await rootBundle.loadString("assets/Students.csv");
     final _rawData = await rootBundle.loadString("Students.csv");
     csvController.text = _rawData;
   }

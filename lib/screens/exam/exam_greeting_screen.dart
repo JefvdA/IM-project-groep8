@@ -23,7 +23,6 @@ class GreetingScreenState extends State<GreetingScreen> {
     final _dropdownFormKey = GlobalKey<FormState>();
     CollectionReference examsCollection =
         FirebaseFirestore.instance.collection('exams');
-
     return Scaffold(
       appBar: globalAppBar,
       body: Center(
@@ -55,9 +54,11 @@ class GreetingScreenState extends State<GreetingScreen> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return Text(snapshot.data.docs[0]['description'],
-                        style: TextStyle(fontSize: 20));
+
+                        style: const TextStyle(fontSize: 20));
                   }
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
+
                 },
               ),
               ElevatedButton(
