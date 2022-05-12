@@ -29,7 +29,6 @@ class Item {
 
 class _ExamScreenState extends State<ExamScreen> {
   String user = CurrentStudent.sNummer;
-  List<String> colors = ["Rood", "Geel", "Blauw", "Zwart"];
 
   //timer
   static const countdownDuration = Duration(hours: 3);
@@ -59,14 +58,16 @@ class _ExamScreenState extends State<ExamScreen> {
   void addTime() {
     final addSeconds = isCountdown ? -1 : 1;
 
-    setState(() {
-      final seconds = _duration.inSeconds + addSeconds;
-      if (seconds < 0) {
-        timer?.cancel();
-      } else {
-        _duration = Duration(seconds: seconds);
-      }
-    });
+    if (mounted) {
+      setState(() {
+        final seconds = _duration.inSeconds + addSeconds;
+        if (seconds < 0) {
+          timer?.cancel();
+        } else {
+          _duration = Duration(seconds: seconds);
+        }
+      });
+    }
   }
 
   void startTimer() {
@@ -198,43 +199,60 @@ class _ExamScreenState extends State<ExamScreen> {
                             ;
                             return Stepper(
                               steps: stepsen,
-                              controlsBuilder: (BuildContext context, ControlsDetails controlsDetails) {
-        return Row(
-          children: <Widget>[
-            TextButton(
-              onPressed: controlsDetails.onStepContinue,
-              child: const Text('NEXT'),
-            ),
-            TextButton(
-              onPressed: controlsDetails.onStepCancel,
-              child: const Text('PREVIOUS'),
-            ),
-          ],
-        );
-      },
-      currentStep: _index,
-      onStepCancel: () {
-        if (_index > 0) {
-          setState(() {
-            _index -= 1;
-          });
-        }
-      },
-      onStepContinue: () {
-        if (_index >= 0) {
-          setState(() {
-            _index += 1;
-            if (_index == 3) {
-              _index -= 1;
-            }
-          });
-        }
-      },
-      onStepTapped: (int index) {
-        setState(() {
-          _index = index;
-        });
-      },
+                              controlsBuilder: (BuildContext context,
+                                  ControlsDetails controlsDetails) {
+                                return Row(
+                                  children: <Widget>[
+                                    TextButton(
+                                      onPressed: controlsDetails.onStepContinue,
+                                      child: const Text(
+                                        'Volgende',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: controlsDetails.onStepCancel,
+                                      child: const Text(
+                                        'Vorige',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              currentStep: _index,
+                              onStepCancel: () {
+                                if (_index > 0) {
+                                  setState(() {
+                                    _index -= 1;
+                                  });
+                                }
+                              },
+                              onStepContinue: () {
+                                if (_index >= 0) {
+                                  setState(() {
+                                    _index += 1;
+                                    if (_index == 3) {
+                                      _index -= 1;
+                                    }
+                                  });
+                                }
+                              },
+                              onStepTapped: (int index) {
+                                setState(() {
+                                  _index = index;
+                                });
+                              },
                             );
                           } else
                             return CircularProgressIndicator();
@@ -261,7 +279,6 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             ),
           ],
-
         ),
       ),
     );
@@ -276,9 +293,9 @@ class _ExamScreenState extends State<ExamScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         buildTimeCard(time: hours),
-        const SizedBox(width: 5),
+        const SizedBox(width: 2),
         buildTimeCard(time: minutes),
-        const SizedBox(width: 5),
+        const SizedBox(width: 2),
         buildTimeCard(time: seconds),
       ],
     );
@@ -288,7 +305,6 @@ class _ExamScreenState extends State<ExamScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(10),
@@ -302,7 +318,6 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 24),
         ],
       );
 

@@ -42,7 +42,7 @@ class _ListOfStudentState extends State<StudentListScreen> {
                           onPressed: () {
                             removeStudent(document.reference);
                           },
-                          label: const Text(""),
+                          label: const Text("Verwijderen"),
                         ),
                         contentPadding: const EdgeInsets.all(8),
                         title: Center(

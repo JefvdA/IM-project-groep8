@@ -2,7 +2,6 @@
 
 import 'package:examap/screens/admin/local_widgets/add_exam_tab.dart';
 import 'package:examap/screens/admin/local_widgets/add_student_tab.dart';
-import 'package:examap/screens/admin/local_widgets/add_exam_tab.dart';
 import 'package:examap/screens/admin/local_widgets/change_password_tab.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +43,7 @@ class AdminScreenState extends State<AdminScreen> {
             label: 'Wachtwoord wijzigen',
           ),
           BottomNavigationBarItem(
-
               icon: Icon(Icons.add), label: 'Examen toevoegen'),
-
         ],
         currentIndex: _selectedIndex,
         onTap: _onTap,

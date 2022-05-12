@@ -43,7 +43,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               context.read<AuthenticationService>().signOut();
             },
             child: const Text(
-              "Sign out",
+              "Afmelden",
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -63,7 +63,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                   maxLines: 10,
                   controller: csvController,
                   decoration: const InputDecoration(
-                    labelText: "CSV data for new students",
+                    labelText: "CSV data voor nieuwe students",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -78,13 +78,13 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                 onPressed: () {
                   _addStudents();
                 },
-                child: const Text("Add students \u{2795}"),
+                child: const Text("Studenten toevoegen \u{2795}"),
               ),
               ElevatedButton(
                 onPressed: () {
                   _loadCsv();
                 },
-                child: const Text("Load students from csv"),
+                child: const Text("Laad studenten uit csv"),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -149,7 +149,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
   }
 
   Future<void> _loadCsv() async {
-    final _rawData = await rootBundle.loadString("Students.csv");
+    final _rawData = await rootBundle.loadString("assets/Students.csv");
     csvController.text = _rawData;
   }
 }
