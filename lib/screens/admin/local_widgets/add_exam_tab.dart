@@ -1,10 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/admin/local_widgets/add_questions_tab.dart';
 import 'package:examap/services/authentication_service.dart';
-import 'package:examap/screens/add_exam_questions/add_ccquestion_screen.dart';
-import 'package:examap/screens/add_exam_questions/add_mcquestion_screen.dart';
-import 'package:examap/screens/add_exam_questions/add_oquestion_screen.dart';
+import 'package:examap/screens/add_exam_question_screen/add_ccquestion_screen.dart';
+import 'package:examap/screens/add_exam_question_screen/add_mcquestion_screen.dart';
+import 'package:examap/screens/add_exam_question_screen/add_oquestion_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,6 @@ class _AddExamTabState extends State<AddExamTab> {
       FirebaseFirestore.instance.collection('exams');
   @override
   Widget build(BuildContext context) {
-
     return Container(
       child: Column(
         children: [
@@ -59,28 +58,27 @@ class _AddExamTabState extends State<AddExamTab> {
                         );
                       },
                     );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ),
-              Text("Creer een nieuw examen"),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Examennaam',
-                ),
-              ),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                ),
-              ),
-              ElevatedButton(onPressed: addExam, child: Text('Toevoegen')),
-            ],
+                  },
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          Text("Creer een nieuw examen"),
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: 'Examennaam',
+            ),
+          ),
+          TextField(
+            controller: _descriptionController,
+            decoration: InputDecoration(
+              labelText: 'Description',
+            ),
           ),
           ElevatedButton(onPressed: addExam, child: Text('Toevoegen')),
           ElevatedButton.icon(
