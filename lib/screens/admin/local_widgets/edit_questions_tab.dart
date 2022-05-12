@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/screens/admin/local_widgets/add_questions_tab.dart';
 import 'package:flutter/material.dart';
 
 class EditQuestionsTab extends StatefulWidget {
@@ -29,15 +28,33 @@ class _EditQuestionsTabState extends State<EditQuestionsTab> {
   Widget build(BuildContext context) {
     List<DropdownMenuItem<String>> Items = [
       const DropdownMenuItem(
-        child: Text("Open vraag"),
+        child: Text(
+          "Open vraag",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
         value: "Open vraag",
       ),
       const DropdownMenuItem(
-        child: Text("Multiple choice"),
+        child: Text(
+          "Multiple choice",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
         value: "Multiple choice",
       ),
       const DropdownMenuItem(
-        child: Text("Code correction"),
+        child: Text(
+          "Code correction",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
         value: "Code correction",
       ),
     ];
@@ -45,8 +62,10 @@ class _EditQuestionsTabState extends State<EditQuestionsTab> {
       appBar: AppBar(
         title: const Text('ExamAP'),
       ),
-      body: Container(
+      body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             DropdownButton(
                 value: _selectedValue,

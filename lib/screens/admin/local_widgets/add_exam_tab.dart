@@ -22,134 +22,83 @@ class _AddExamTabState extends State<AddExamTab> {
       FirebaseFirestore.instance.collection('exams');
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              context.read<AuthenticationService>().signOut();
-            },
-            child: const Text(
-              "Afmelden",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            context.read<AuthenticationService>().signOut();
+          },
+          child: const Text(
+            "Afmelden",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
             ),
           ),
-          Text("Bestaande examens"),
-          StreamBuilder(
-            stream: examsCollection.snapshots(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(snapshot.data.docs[index].data()['name']),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddQuestionsTab(
-                                snapshot.data.docs[index].data()['name']),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
+        ),
+        const Text(
+          "Bestaande examens",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
           ),
-          Text("Creer een nieuw examen"),
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'Examennaam',
-            ),
-          ),
-          TextField(
-            controller: _descriptionController,
-            decoration: InputDecoration(
-              labelText: 'Description',
-            ),
-          ),
-          ElevatedButton(onPressed: addExam, child: Text('Toevoegen')),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const AddOQuestionScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
+        ),
+        StreamBuilder(
+          stream: examsCollection.snapshots(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(
+                      snapshot.data.docs[index].data()['name'],
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddQuestionsTab(
+                              snapshot.data.docs[index].data()['name']),
+                        ),
+                      );
+                    },
+                  );
+                },
               );
-            },
-            icon: const Icon(
-              Icons.add_circle_outline,
-              size: 30,
-            ),
-            label: const Text(
-              "OPEN VRAAG",
-              style: TextStyle(fontSize: 24),
-            ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(200, 50),
-            ),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const AddMCQuestionScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            },
-            icon: const Icon(
-              Icons.add_circle_outline,
-              size: 30,
-            ),
-            label:
-                const Text("MULTIPLE CHOICE", style: TextStyle(fontSize: 24)),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(200, 50),
-            ),
+            }
+          },
+        ),
+        const Text(
+          "Creëer een nieuw examen",
+          style: TextStyle(
+              fontSize: 26, color: Colors.grey, fontWeight: FontWeight.bold),
+        ),
+        TextField(
+          controller: _nameController,
+          decoration: const InputDecoration(
+            labelText: 'Examennaam',
           ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const AddCCQuestionScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            },
-            icon: const Icon(
-              Icons.add_circle_outline,
-              size: 30,
-            ),
-            label: const Text("CODE CORRECTIE", style: TextStyle(fontSize: 24)),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(200, 50),
-            ),
+        ),
+        TextField(
+          controller: _descriptionController,
+          decoration: const InputDecoration(
+            labelText: 'Description',
           ),
-        ],
-      ),
+        ),
+        ElevatedButton(onPressed: addExam, child: const Text('Toevoegen')),
+      ],
     );
   }
 

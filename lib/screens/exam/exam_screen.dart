@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/main.dart';
 import 'package:examap/repositories/current_student.dart';
-import 'package:examap/screens/home/home_screen.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -58,7 +57,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void addTime() {
     final addSeconds = isCountdown ? -1 : 1;
-    
+
     if (mounted) {
       setState(() {
         final seconds = _duration.inSeconds + addSeconds;
@@ -78,7 +77,6 @@ class _ExamScreenState extends State<ExamScreen> {
   CollectionReference location =
       FirebaseFirestore.instance.collection("students");
 
-
   CollectionReference examsCollection = FirebaseFirestore.instance
       .collection('exams')
       .doc('Intro Mobile')
@@ -96,6 +94,7 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget build(BuildContext context) {
     askPermission();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: globalAppBar,
       body: Center(
         child: Column(
@@ -103,8 +102,6 @@ class _ExamScreenState extends State<ExamScreen> {
           children: [
             buildTime(),
             Container(
-              padding: const EdgeInsets.all(4),
-
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 204, 202, 202),
               ),
@@ -112,156 +109,149 @@ class _ExamScreenState extends State<ExamScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SingleChildScrollView(
-                    child: Container(
-                      child: FutureBuilder(
-                        future: examsCollection.get(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.hasData) {
-                            List<Step> stepsen = [];
-                            for (int i = 0;
-                                i < snapshot.data.docs.length;
-                                i++) {
-                              if (snapshot.data.docs[i]['type'] ==
-                                  'Multiple choice') {
-                                stepsen.add(
-                                  Step(
-                                    title: Text(
-                                      'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
-                                      style: const TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    content: Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            snapshot.data.docs[i]['vraag'],
-                                            style: const TextStyle(
-                                              fontSize: 26,
-                                              fontFamily: 'Roboto',
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          _choiceBuild(
-                                              snapshot.data.docs[i]['opties']),
-                                        ],
-                                      ),
+                    child: FutureBuilder(
+                      future: examsCollection.get(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          List<Step> stepsen = [];
+                          for (int i = 0; i < snapshot.data.docs.length; i++) {
+                            if (snapshot.data.docs[i]['type'] ==
+                                'Multiple choice') {
+                              stepsen.add(
+                                Step(
+                                  title: Text(
+                                    'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
+                                    style: const TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Roboto',
+                                      color: Colors.black,
                                     ),
                                   ),
-                                  
-                                );
-                              } else {
-                                stepsen.add(
-                                  Step(
-                                    title: Text(
-                                      'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
-                                      style: const TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    content: Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            snapshot.data.docs[i]['vraag'],
-                                            style: const TextStyle(
-                                              fontSize: 26,
-                                              fontFamily: 'Roboto',
-                                              color: Colors.black,
-                                            ),
+                                  content: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          snapshot.data.docs[i]['vraag'],
+                                          style: const TextStyle(
+                                            fontSize: 26,
+                                            fontFamily: 'Roboto',
+                                            color: Colors.black,
                                           ),
-                                          const TextField(
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                              hintText:
-                                                  "Geef je antwoord in...",
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.redAccent),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                        _choiceBuild(
+                                            snapshot.data.docs[i]['opties']),
+                                      ],
                                     ),
                                   ),
-                                );
-                              }
+                                ),
+                              );
+                            } else {
+                              stepsen.add(
+                                Step(
+                                  title: Text(
+                                    'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
+                                    style: const TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Roboto',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  content: Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          snapshot.data.docs[i]['vraag'],
+                                          style: const TextStyle(
+                                            fontSize: 26,
+                                            fontFamily: 'Roboto',
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        const TextField(
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 1,
+                                          decoration: InputDecoration(
+                                            hintText: "Geef je antwoord in...",
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.redAccent),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
                             }
-                            ;
-                            return Stepper(
-                              steps: stepsen,
-                              controlsBuilder: (BuildContext context,
-                                  ControlsDetails controlsDetails) {
-                                return Row(
-                                  children: <Widget>[
-                                    TextButton(
-                                      onPressed: controlsDetails.onStepContinue,
-                                      child: const Text(
-                                        'Volgende',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Roboto',
-                                          color: Colors.red,
-                                        ),
+                          }
+                          ;
+                          return Stepper(
+                            steps: stepsen,
+                            controlsBuilder: (BuildContext context,
+                                ControlsDetails controlsDetails) {
+                              return Row(
+                                children: <Widget>[
+                                  TextButton(
+                                    onPressed: controlsDetails.onStepContinue,
+                                    child: const Text(
+                                      'Volgende',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.red,
                                       ),
                                     ),
-                                    TextButton(
-                                      onPressed: controlsDetails.onStepCancel,
-                                      child: const Text(
-                                        'Vorige',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Roboto',
-                                          color: Colors.red,
-                                        ),
+                                  ),
+                                  TextButton(
+                                    onPressed: controlsDetails.onStepCancel,
+                                    child: const Text(
+                                      'Vorige',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.red,
                                       ),
                                     ),
-                                  ],
-                                );
-                              },
-                              currentStep: _index,
-                              onStepCancel: () {
-                                if (_index > 0) {
-                                  setState(() {
-                                    _index -= 1;
-                                  });
-                                }
-                              },
-                              onStepContinue: () {
-                                if (_index >= 0) {
-                                  setState(() {
-                                    _index += 1;
-                                    if (_index == 3) {
-                                      _index -= 1;
-                                    }
-                                  });
-                                }
-                              },
-                              onStepTapped: (int index) {
+                                  ),
+                                ],
+                              );
+                            },
+                            currentStep: _index,
+                            onStepCancel: () {
+                              if (_index > 0) {
                                 setState(() {
-                                  _index = index;
+                                  _index -= 1;
                                 });
-                              },
-                            );
-                          } else
-                            return CircularProgressIndicator();
-                        },
-                      ),
+                              }
+                            },
+                            onStepContinue: () {
+                              if (_index >= 0) {
+                                setState(() {
+                                  _index += 1;
+                                  if (_index == 3) {
+                                    _index -= 1;
+                                  }
+                                });
+                              }
+                            },
+                            onStepTapped: (int index) {
+                              setState(() {
+                                _index = index;
+                              });
+                            },
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
                     ),
                   ),
                   ElevatedButton(
@@ -270,7 +260,7 @@ class _ExamScreenState extends State<ExamScreen> {
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              const HomeScreen(),
+                              const MyApp(),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
