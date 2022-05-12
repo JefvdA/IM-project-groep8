@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/services/authentication_service.dart';
 import '../../student_list/student_List_screen.dart';
 
+import 'package:examap/screens/student_list/student_list_screen.dart';
+
 class AddStudentsTab extends StatefulWidget {
   const AddStudentsTab({Key? key}) : super(key: key);
 
@@ -85,13 +87,20 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  _loadCsv();
+                },
+                child: const Text("Load students from csv"),
+              ),
+              ElevatedButton(
+                onPressed: () {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            const StudentListScreen(),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero),
+                      pageBuilder: (context, animation1, animation2) =>
+                          const StudentListScreen(),
+                      transitionDuration: Duration.zero,
+                      reverseTransitionDuration: Duration.zero,
+                    ),
                   );
                 },
                 child: const Text("Lijst weergeven"),
@@ -124,7 +133,7 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
             // Reset the text field.
             .then((value) => {
                   setState(() {
-                    _message = "${lines.length} students added.";
+                    _message = "${lines.length} studenten toegevoegd.";
                     _messageStyle = const TextStyle(
                       color: Colors.green,
                     );
@@ -133,21 +142,20 @@ class _AddStudentsTabState extends State<AddStudentsTab> {
                 });
       } catch (e) {
         // Show a message if the students were not added.
-        setState(
-          () {
-            _message =
-                "Something went wrong, please check the data you provided!";
-            _messageStyle = const TextStyle(
-              color: Colors.red,
-            );
-          },
-        );
+        setState(() {
+          _message =
+              "Er is iets fout gegaan bij het toevoegen van de studenten, check je meegegeven data.";
+          _messageStyle = const TextStyle(
+            color: Colors.red,
+          );
+        });
       }
     }
   }
 
   Future<void> _loadCsv() async {
     final _rawData = await rootBundle.loadString("assets/Students.csv");
+    final _rawData = await rootBundle.loadString("Students.csv");
     csvController.text = _rawData;
   }
 }

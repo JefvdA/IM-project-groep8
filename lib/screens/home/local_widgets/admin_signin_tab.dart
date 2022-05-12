@@ -76,7 +76,7 @@ class _AdminSignInTab extends State<AdminSignInTab> {
                     ..text =
                         _adminPassword, // For testing - no manual input everytime
                   decoration: const InputDecoration(
-                    labelText: "Password",
+                    labelText: "Wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.black,
@@ -99,7 +99,7 @@ class _AdminSignInTab extends State<AdminSignInTab> {
                       .then((value) => {
                             if (value != "Signed in")
                               _showMessage(
-                                  "This email / password is not correct, please try again.")
+                                  "Deze combinatie van email en wachtwoord is niet bekend in onze database. Probeer het opnieuw.")
                           });
                 },
                 child: const Icon(Icons.login_rounded, size: 40),

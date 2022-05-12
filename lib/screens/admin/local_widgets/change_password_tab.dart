@@ -73,7 +73,7 @@ class _ChangePasswordTabState extends State<ChangePasswordTab> {
                   maxLines: 1,
                   controller: newPasswordController,
                   decoration: const InputDecoration(
-                    labelText: "Nieuw paswoord",
+                    labelText: "Nieuw wachtwoord",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,

@@ -17,7 +17,6 @@ class GreetingScreenState extends State<GreetingScreen> {
   // ignore: prefer_typing_uninitialized_variables
 
   var setDefaultValue = true;
-  var testing = "";
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +54,11 @@ class GreetingScreenState extends State<GreetingScreen> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return Text(snapshot.data.docs[0]['description'],
+
                         style: const TextStyle(fontSize: 20));
                   }
                   return const CircularProgressIndicator();
+
                 },
               ),
               ElevatedButton(
