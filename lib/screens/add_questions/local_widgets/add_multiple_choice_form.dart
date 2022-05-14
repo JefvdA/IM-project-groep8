@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class MultipleChoiceForm extends StatefulWidget {
+class AddMultipleChoiceForm extends StatefulWidget {
   final String exam;
-  const MultipleChoiceForm(this.exam, {Key? key}) : super(key: key);
+  const AddMultipleChoiceForm(this.exam, {Key? key}) : super(key: key);
 
   @override
-  State<MultipleChoiceForm> createState() => _MultipleChoiceFormState();
+  State<AddMultipleChoiceForm> createState() => _AddMultipleChoiceFormState();
 }
 
-class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
+class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
   final CollectionReference examsCollection =
     FirebaseFirestore.instance.collection('exams');
 

@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CodeCorrectionForm extends StatefulWidget {
+class AddCodeCorrectionForm extends StatefulWidget {
   final String exam;
-  const CodeCorrectionForm(this.exam, {Key? key}) : super(key: key);
+  const AddCodeCorrectionForm(this.exam, {Key? key}) : super(key: key);
 
   @override
-  State<CodeCorrectionForm> createState() => _CodeCorrectionFormState();
+  State<AddCodeCorrectionForm> createState() => _AddCodeCorrectionFormState();
 }
 
-class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
+class _AddCodeCorrectionFormState extends State<AddCodeCorrectionForm> {
   final CollectionReference examsCollection =
     FirebaseFirestore.instance.collection('exams');
 

@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class OpenQuestionForm extends StatefulWidget {
+class AddOpenQuestionForm extends StatefulWidget {
   final String exam;
-  const OpenQuestionForm(this.exam, {Key? key}) : super(key: key);
+  const AddOpenQuestionForm(this.exam, {Key? key}) : super(key: key);
 
   @override
-  State<OpenQuestionForm> createState() => _OpenQuestionFormState();
+  State<AddOpenQuestionForm> createState() => _AddOpenQuestionFormState();
 }
 
-class _OpenQuestionFormState extends State<OpenQuestionForm> {
+class _AddOpenQuestionFormState extends State<AddOpenQuestionForm> {
   final CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
 
