@@ -1,25 +1,39 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AddMultipleChoiceForm extends StatefulWidget {
-  final String exam;
-  const AddMultipleChoiceForm(this.exam, {Key? key}) : super(key: key);
+class EditCodeCorrectionForm extends StatefulWidget {
+  final String examId;
+  final String questionId;
+  final LinkedHashMap<String, dynamic> question;
+  const EditCodeCorrectionForm(this.examId, this.questionId, this.question, {Key? key}) : super(key: key);
 
   @override
-  State<AddMultipleChoiceForm> createState() => _AddMultipleChoiceFormState();
+  State<EditCodeCorrectionForm> createState() => _EditCodeCorrectionFormState();
 }
 
-class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
+class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
   final CollectionReference examsCollection =
     FirebaseFirestore.instance.collection('exams');
 
   final TextEditingController _questionController = TextEditingController();
-  final TextEditingController _optionsController = TextEditingController();
-  final TextEditingController _correctOptionController = TextEditingController();
+  final TextEditingController _givenCodeController = TextEditingController();
+  final TextEditingController _correctCodeController = TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
+  bool _isCaseSensitive = false;
+
+  loadQuestionData() {
+    _questionController.text = widget.question['question'];
+    _givenCodeController.text = widget.question['given_code'];
+    _correctCodeController.text = widget.question['correct_code'];
+    _pointsController.text = widget.question['points'].toString();
+    _isCaseSensitive = widget.question['case_sensitive'];
+  }
 
   @override
   Widget build(BuildContext context) {
+    loadQuestionData();
     return Column(
       children: [
         Container(
@@ -52,16 +66,17 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
         Container(
           margin: const EdgeInsets.all(8),
           width: 600,
-          height: 80,
+          height: 200,
           child: TextField(
-            controller: _optionsController,
+            maxLines: 10,
+            controller: _givenCodeController,
             decoration: const InputDecoration(
               label: Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
                     WidgetSpan(
                       child: Text(
-                        'Antwoorden  gescheiden zijn door ,',
+                        'Start-code',
                       ),
                     ),
                     WidgetSpan(
@@ -79,16 +94,17 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
         Container(
           margin: const EdgeInsets.all(8),
           width: 600,
-          height: 80,
+          height: 200,
           child: TextField(
-            controller: _correctOptionController,
+            maxLines: 10,
+            controller: _correctCodeController,
             decoration: const InputDecoration(
               label: Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
                     WidgetSpan(
                       child: Text(
-                        'Oplossing',
+                        'Correcte Code',
                       ),
                     ),
                     WidgetSpan(
@@ -131,6 +147,24 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
           ),
         ),
         Container(
+          margin: const EdgeInsets.all(8),
+          width: 600,
+          height: 80,
+          child: Row(
+            children: [
+              const Text(
+                'Case-sensitive:'
+              ),
+              Switch(
+                value: _isCaseSensitive,
+                onChanged: ((value) => setState(() => _isCaseSensitive = value)),
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+              ),
+            ],
+          ),
+        ),
+        Container(
             margin: const EdgeInsets.all(8),
             width: 400,
             height: 30,
@@ -148,25 +182,21 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
                 minimumSize: const Size(200, 50),
               ),
             ),
-          )
+          ),
       ],
     );
   }
-
+  
   void addQuestion() async {
-    int id = await examsCollection
-      .doc(widget.exam)
-      .collection('questions')
-      .get()
-      .then((value) {
-      return value.docs.length + 1;
-    });
-    examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
-      "type": "MC",
+    String id = widget.questionId;
+    examsCollection.doc(widget.examId).collection('questions').doc(id).set({
+      "type": "CC",
       "question": _questionController.text,
-      "options": _optionsController.text.split(","),
-      "correct_option": _correctOptionController.text,
+      "given_code": _givenCodeController.text,
+      "correct_code": _correctCodeController.text,
+      "case_sensitive": _isCaseSensitive,
       "points": int.parse(_pointsController.text),
     });
+    Navigator.pop(context);
   }
 }

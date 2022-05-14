@@ -91,7 +91,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const EditQuestionsScreen(),
+                                    EditQuestionsScreen(widget.exam, snapshot.data.docs[index].id, snapshot.data.docs[index].data()),
                               ),
                             );
                           });

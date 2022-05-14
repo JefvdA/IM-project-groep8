@@ -1,15 +1,19 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AddMultipleChoiceForm extends StatefulWidget {
-  final String exam;
-  const AddMultipleChoiceForm(this.exam, {Key? key}) : super(key: key);
+class EditMultipleChoiceForm extends StatefulWidget {
+  final String examId;
+  final String questionId;
+  final LinkedHashMap<String, dynamic> question;
+  const EditMultipleChoiceForm(this.examId, this.questionId, this.question, {Key? key}) : super(key: key);
 
   @override
-  State<AddMultipleChoiceForm> createState() => _AddMultipleChoiceFormState();
+  State<EditMultipleChoiceForm> createState() => _EditMultipleChoiceFormState();
 }
 
-class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
+class _EditMultipleChoiceFormState extends State<EditMultipleChoiceForm> {
   final CollectionReference examsCollection =
     FirebaseFirestore.instance.collection('exams');
 
@@ -18,8 +22,16 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
   final TextEditingController _correctOptionController = TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
 
+  void loadQuestionData() {
+    _questionController.text = widget.question['question'];
+    _optionsController.text = widget.question['options'].toString().substring(1, widget.question['options'].toString().length - 1);
+    _correctOptionController.text = widget.question['correct_option'];
+    _pointsController.text = widget.question['points'].toString();
+  }
+
   @override
   Widget build(BuildContext context) {
+    loadQuestionData();
     return Column(
       children: [
         Container(
@@ -154,19 +166,14 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
   }
 
   void addQuestion() async {
-    int id = await examsCollection
-      .doc(widget.exam)
-      .collection('questions')
-      .get()
-      .then((value) {
-      return value.docs.length + 1;
-    });
-    examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
+    String id = widget.questionId;
+    examsCollection.doc(widget.examId).collection('questions').doc(id).set({
       "type": "MC",
       "question": _questionController.text,
       "options": _optionsController.text.split(","),
       "correct_option": _correctOptionController.text,
       "points": int.parse(_pointsController.text),
     });
+    Navigator.pop(context);
   }
 }
