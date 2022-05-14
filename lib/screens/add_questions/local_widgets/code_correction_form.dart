@@ -17,6 +17,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
   final TextEditingController _givenCodeController = TextEditingController();
   final TextEditingController _correctCodeController = TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
+  bool _isCaseSensitive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +81,9 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
         Container(
           margin: const EdgeInsets.all(8),
           width: 600,
-          height: 80,
+          height: 200,
           child: TextField(
+            maxLines: 10,
             controller: _correctCodeController,
             decoration: const InputDecoration(
               label: Text.rich(
@@ -132,6 +134,24 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
           ),
         ),
         Container(
+          margin: const EdgeInsets.all(8),
+          width: 600,
+          height: 80,
+          child: Row(
+            children: [
+              const Text(
+                'Case-sensitive:'
+              ),
+              Switch(
+                value: _isCaseSensitive,
+                onChanged: ((value) => setState(() => _isCaseSensitive = value)),
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+              ),
+            ],
+          ),
+        ),
+        Container(
             margin: const EdgeInsets.all(8),
             width: 400,
             height: 30,
@@ -167,6 +187,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
       "question": _questionController.text,
       "given_code": _givenCodeController.text,
       "correct_code": _correctCodeController.text,
+      "case_sensitive": _isCaseSensitive,
       "points": int.parse(_pointsController.text),
     });
   }

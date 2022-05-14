@@ -57,73 +57,76 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
       ),
     ];
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: globalAppBar,
-      body: Column(
-        children: [
-          const Text(
-            "Bestaande vragen",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.black,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Text(
+              "Bestaande vragen",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
             ),
-          ),
-          StreamBuilder(
-            stream:
-                examsCollection.doc(widget.exam).collection('questions').snapshots(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                        title: Text(
-                          snapshot.data.docs[index].data()['question'],
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Color.fromARGB(255, 124, 0, 0),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  EditQuestionsTab(index, widget.exam),
+            StreamBuilder(
+              stream:
+                  examsCollection.doc(widget.exam).collection('questions').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                          title: Text(
+                            snapshot.data.docs[index].data()['question'],
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 124, 0, 0),
                             ),
-                          );
-                        });
-                  },
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-          const Text(
-            "Creëer een nieuwe vraag",
-            style: TextStyle(
-              fontSize: 26,
-              color: Colors.grey,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditQuestionsTab(index, widget.exam),
+                              ),
+                            );
+                          });
+                    },
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
-          ),
-          DropdownButton(
-              value: _selectedValue,
-              items: items,
-              onChanged: (String? value) {
-                setState(() {
-                  _selectedValue = value!;
-                });
-              }),
-          if(_selectedValue == "OQ")
-            OpenQuestionForm(widget.exam)
-          else if (_selectedValue == "MC")
-            MultipleChoiceForm(widget.exam)
-          else if (_selectedValue == "CC")
-            CodeCorrectionForm(widget.exam)
-        ],
+            const Text(
+              "Creëer een nieuwe vraag",
+              style: TextStyle(
+                fontSize: 26,
+                color: Colors.grey,
+              ),
+            ),
+            DropdownButton(
+                value: _selectedValue,
+                items: items,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedValue = value!;
+                  });
+                }),
+            if(_selectedValue == "OQ")
+              OpenQuestionForm(widget.exam)
+            else if (_selectedValue == "MC")
+              MultipleChoiceForm(widget.exam)
+            else if (_selectedValue == "CC")
+              CodeCorrectionForm(widget.exam)
+          ],
+        ),
       ),
     );
   }
