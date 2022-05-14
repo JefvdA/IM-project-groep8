@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/admin/local_widgets/edit_questions_tab.dart';
+import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class AddQuestionsTab extends StatefulWidget {
@@ -17,6 +18,7 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _answerController = TextEditingController();
   final TextEditingController _rightAnswerController = TextEditingController();
+  final TextEditingController _givenCodeController = TextEditingController();
   int id = 0;
 
   String exam = "";
@@ -57,9 +59,7 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
       ),
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ExamAP'),
-      ),
+      appBar: globalAppBar,
       body: Column(
         children: [
           const Text(
@@ -87,7 +87,6 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
                           ),
                         ),
                         onTap: () {
-                          print(exam);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -148,32 +147,64 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
             ),
           ),
           if (_selectedValue == "Code correction")
-            Container(
-              margin: const EdgeInsets.all(8),
-              width: 600,
-              height: 80,
-              child: TextField(
-                controller: _rightAnswerController,
-                decoration: const InputDecoration(
-                  label: Text.rich(
-                    TextSpan(
-                      children: <InlineSpan>[
-                        WidgetSpan(
-                          child: Text(
-                            'Correcte Code',
-                          ),
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  width: 600,
+                  height: 200,
+                  child: TextField(
+                    maxLines: 10,
+                    controller: _givenCodeController,
+                    decoration: const InputDecoration(
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Start-code die student krijgt',
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
                         ),
-                        WidgetSpan(
-                          child: Text(
-                            '*',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  width: 600,
+                  height: 80,
+                  child: TextField(
+                    controller: _rightAnswerController,
+                    decoration: const InputDecoration(
+                      label: Text.rich(
+                        TextSpan(
+                          children: <InlineSpan>[
+                            WidgetSpan(
+                              child: Text(
+                                'Correcte Code',
+                              ),
+                            ),
+                            WidgetSpan(
+                              child: Text(
+                                '*',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           if (_selectedValue == "Multiple choice")
             Column(
@@ -239,7 +270,9 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
             width: 400,
             height: 30,
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                addQuestion();
+              },
               icon: const Icon(
                 Icons.save_alt_rounded,
                 size: 30,
@@ -282,6 +315,8 @@ class _AddQuestionsTabState extends State<AddQuestionsTab> {
       examsCollection.doc(this.exam).collection('vragen').doc("vraag $id").set({
         "type": _selectedValue,
         "vraag": _questionController.text,
+        "given_code": _givenCodeController.text,
+        "correct_code": _rightAnswerController.text
       });
     }
   }
