@@ -3,16 +3,16 @@ import 'package:examap/screens/admin/local_widgets/edit_questions_tab.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 
-class AddQuestionsTab extends StatefulWidget {
+class AddQuestionsScreen extends StatefulWidget {
   final String exam;
-  const AddQuestionsTab(this.exam, {Key? key}) : super(key: key);
+  const AddQuestionsScreen(this.exam, {Key? key}) : super(key: key);
 
   @override
-  State<AddQuestionsTab> createState() => _AddQuestionsTabState(exam);
+  State<AddQuestionsScreen> createState() => _AddQuestionsScreenState(exam);
 }
 
-class _AddQuestionsTabState extends State<AddQuestionsTab> {
-  _AddQuestionsTabState(this.exam);
+class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
+  _AddQuestionsScreenState(this.exam);
   CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
   final TextEditingController _questionController = TextEditingController();

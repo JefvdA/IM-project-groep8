@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/screens/admin/local_widgets/add_questions_tab.dart';
+import 'package:examap/screens/add_questions/add_questions_screen.dart';
 import 'package:examap/services/authentication_service.dart';
-import 'package:examap/screens/add_exam_question_screen/add_ccquestion_screen.dart';
-import 'package:examap/screens/add_exam_question_screen/add_mcquestion_screen.dart';
-import 'package:examap/screens/add_exam_question_screen/add_oquestion_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +62,7 @@ class _AddExamTabState extends State<AddExamTab> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AddQuestionsTab(
+                          builder: (context) => AddQuestionsScreen(
                               snapshot.data.docs[index].data()['name']),
                         ),
                       );
@@ -112,7 +109,7 @@ class _AddExamTabState extends State<AddExamTab> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => AddQuestionsTab(_nameController.text)),
+          builder: (context) => AddQuestionsScreen(_nameController.text)),
     );
   }
 }
