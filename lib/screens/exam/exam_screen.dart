@@ -120,7 +120,7 @@ class _ExamScreenState extends State<ExamScreen> {
                               stepsen.add(
                                 Step(
                                   title: Text(
-                                    'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
+                                    'Vraag${i + 1}',
                                     style: const TextStyle(
                                       fontSize: 26,
                                       fontWeight: FontWeight.bold,
@@ -151,7 +151,7 @@ class _ExamScreenState extends State<ExamScreen> {
                               stepsen.add(
                                 Step(
                                   title: Text(
-                                    'Vraag${i + 1} : ${snapshot.data.docs[i]['type']}',
+                                    'Vraag${i + 1}',
                                     style: const TextStyle(
                                       fontSize: 26,
                                       fontWeight: FontWeight.bold,
@@ -198,9 +198,9 @@ class _ExamScreenState extends State<ExamScreen> {
                               return Row(
                                 children: <Widget>[
                                   TextButton(
-                                    onPressed: controlsDetails.onStepContinue,
+                                    onPressed: controlsDetails.onStepCancel,
                                     child: const Text(
-                                      'Volgende',
+                                      'Vorige',
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -210,9 +210,9 @@ class _ExamScreenState extends State<ExamScreen> {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: controlsDetails.onStepCancel,
+                                    onPressed: controlsDetails.onStepContinue,
                                     child: const Text(
-                                      'Vorige',
+                                      'Volgende',
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,

@@ -162,7 +162,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
       return value.docs.length + 1;
     });
     examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
-      "type": "MP",
+      "type": "MC",
       "question": _questionController.text,
       "options": _optionsController.text.split(","),
       "corrent_option": _correctOptionController.text,
