@@ -1,12 +1,12 @@
+import 'package:examap/screens/edit_questions/edit_questions_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:examap/widgets/global_app_bar.dart';
 
-import 'package:examap/screens/admin/local_widgets/edit_questions_tab.dart';
-import 'package:examap/screens/add_questions/local_widgets/code_correction_form.dart';
-import 'package:examap/screens/add_questions/local_widgets/multiple_choice_form.dart';
-import 'package:examap/screens/add_questions/local_widgets/open_question_form.dart';
+import 'package:examap/screens/add_questions/local_widgets/add_code_correction_form.dart';
+import 'package:examap/screens/add_questions/local_widgets/add_multiple_choice_form.dart';
+import 'package:examap/screens/add_questions/local_widgets/add_open_question_form.dart';
 
 class AddQuestionsScreen extends StatefulWidget {
   final String exam;
@@ -91,7 +91,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    EditQuestionsTab(index, widget.exam),
+                                    EditQuestionsScreen(widget.exam, snapshot.data.docs[index].id, snapshot.data.docs[index].data()),
                               ),
                             );
                           });
@@ -120,11 +120,11 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                   });
                 }),
             if(_selectedValue == "OQ")
-              OpenQuestionForm(widget.exam)
+              AddOpenQuestionForm(widget.exam)
             else if (_selectedValue == "MC")
-              MultipleChoiceForm(widget.exam)
+              AddMultipleChoiceForm(widget.exam)
             else if (_selectedValue == "CC")
-              CodeCorrectionForm(widget.exam)
+              AddCodeCorrectionForm(widget.exam)
           ],
         ),
       ),

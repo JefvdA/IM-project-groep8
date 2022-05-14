@@ -1,23 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CodeCorrectionForm extends StatefulWidget {
+class AddMultipleChoiceForm extends StatefulWidget {
   final String exam;
-  const CodeCorrectionForm(this.exam, {Key? key}) : super(key: key);
+  const AddMultipleChoiceForm(this.exam, {Key? key}) : super(key: key);
 
   @override
-  State<CodeCorrectionForm> createState() => _CodeCorrectionFormState();
+  State<AddMultipleChoiceForm> createState() => _AddMultipleChoiceFormState();
 }
 
-class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
+class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
   final CollectionReference examsCollection =
     FirebaseFirestore.instance.collection('exams');
 
   final TextEditingController _questionController = TextEditingController();
-  final TextEditingController _givenCodeController = TextEditingController();
-  final TextEditingController _correctCodeController = TextEditingController();
+  final TextEditingController _optionsController = TextEditingController();
+  final TextEditingController _correctOptionController = TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
-  bool _isCaseSensitive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +52,16 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
         Container(
           margin: const EdgeInsets.all(8),
           width: 600,
-          height: 200,
+          height: 80,
           child: TextField(
-            maxLines: 10,
-            controller: _givenCodeController,
+            controller: _optionsController,
             decoration: const InputDecoration(
               label: Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
                     WidgetSpan(
                       child: Text(
-                        'Start-code',
+                        'Antwoorden  gescheiden zijn door ,',
                       ),
                     ),
                     WidgetSpan(
@@ -81,17 +79,16 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
         Container(
           margin: const EdgeInsets.all(8),
           width: 600,
-          height: 200,
+          height: 80,
           child: TextField(
-            maxLines: 10,
-            controller: _correctCodeController,
+            controller: _correctOptionController,
             decoration: const InputDecoration(
               label: Text.rich(
                 TextSpan(
                   children: <InlineSpan>[
                     WidgetSpan(
                       child: Text(
-                        'Correcte Code',
+                        'Oplossing',
                       ),
                     ),
                     WidgetSpan(
@@ -134,24 +131,6 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
           ),
         ),
         Container(
-          margin: const EdgeInsets.all(8),
-          width: 600,
-          height: 80,
-          child: Row(
-            children: [
-              const Text(
-                'Case-sensitive:'
-              ),
-              Switch(
-                value: _isCaseSensitive,
-                onChanged: ((value) => setState(() => _isCaseSensitive = value)),
-                activeTrackColor: Colors.lightGreenAccent,
-                activeColor: Colors.green,
-              ),
-            ],
-          ),
-        ),
-        Container(
             margin: const EdgeInsets.all(8),
             width: 400,
             height: 30,
@@ -169,11 +148,11 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                 minimumSize: const Size(200, 50),
               ),
             ),
-          ),
+          )
       ],
     );
   }
-  
+
   void addQuestion() async {
     int id = await examsCollection
       .doc(widget.exam)
@@ -183,12 +162,15 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
       return value.docs.length + 1;
     });
     examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
-      "type": "CC",
+      "type": "MC",
       "question": _questionController.text,
-      "given_code": _givenCodeController.text,
-      "correct_code": _correctCodeController.text,
-      "case_sensitive": _isCaseSensitive,
+      "options": _optionsController.text.split(","),
+      "correct_option": _correctOptionController.text,
       "points": int.parse(_pointsController.text),
     });
+    _questionController.clear();
+    _optionsController.clear();
+    _correctOptionController.clear();
+    _pointsController.clear();
   }
 }
