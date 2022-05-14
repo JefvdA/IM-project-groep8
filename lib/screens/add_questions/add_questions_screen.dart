@@ -8,11 +8,10 @@ class AddQuestionsScreen extends StatefulWidget {
   const AddQuestionsScreen(this.exam, {Key? key}) : super(key: key);
 
   @override
-  State<AddQuestionsScreen> createState() => _AddQuestionsScreenState(exam);
+  State<AddQuestionsScreen> createState() => _AddQuestionsScreenState();
 }
 
 class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
-  _AddQuestionsScreenState(this.exam);
   CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
   final TextEditingController _questionController = TextEditingController();
@@ -21,12 +20,11 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
   final TextEditingController _givenCodeController = TextEditingController();
   int id = 0;
 
-  String exam = "";
   String _selectedValue = "Open vraag";
 
   @override
   Widget build(BuildContext context) {
-    List<DropdownMenuItem<String>> Items = [
+    List<DropdownMenuItem<String>> items = [
       const DropdownMenuItem(
         child: Text(
           "Open vraag",
@@ -71,7 +69,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
           ),
           StreamBuilder(
             stream:
-                examsCollection.doc(this.exam).collection('vragen').snapshots(),
+                examsCollection.doc(widget.exam).collection('vragen').snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -91,7 +89,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  EditQuestionsTab(index, exam),
+                                  EditQuestionsTab(index, widget.exam),
                             ),
                           );
                         });
@@ -113,7 +111,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
           ),
           DropdownButton(
               value: _selectedValue,
-              items: Items,
+              items: items,
               onChanged: (String? value) {
                 setState(() {
                   _selectedValue = value!;
@@ -291,28 +289,27 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
 
   void addQuestion() async {
     int id = await examsCollection
-        .doc(this.exam)
+        .doc(widget.exam)
         .collection('vragen')
         .get()
         .then((value) {
       return value.docs.length + 1;
     });
-    print(id);
     if (_selectedValue == "Open vraag") {
-      examsCollection.doc(this.exam).collection('vragen').doc("vraag $id").set({
+      examsCollection.doc(widget.exam).collection('vragen').doc("vraag $id").set({
         "type": _selectedValue,
         "vraag": _questionController.text,
         "antwoord": _rightAnswerController.text
       });
     } else if (_selectedValue == "Multiple choice") {
-      examsCollection.doc(this.exam).collection('vragen').doc("vraag $id").set({
+      examsCollection.doc(widget.exam).collection('vragen').doc("vraag $id").set({
         "type": _selectedValue,
         "vraag": _questionController.text,
         "antwoord": _rightAnswerController.text,
         "opties": _answerController.text.split(",")
       });
     } else if (_selectedValue == "Code correction") {
-      examsCollection.doc(this.exam).collection('vragen').doc("vraag $id").set({
+      examsCollection.doc(widget.exam).collection('vragen').doc("vraag $id").set({
         "type": _selectedValue,
         "vraag": _questionController.text,
         "given_code": _givenCodeController.text,
