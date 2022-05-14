@@ -16,6 +16,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _optionsController = TextEditingController();
   final TextEditingController _correctOptionController = TextEditingController();
+  final TextEditingController _pointsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +104,33 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
           ),
         ),
         Container(
+          margin: const EdgeInsets.all(8),
+          width: 600,
+          height: 80,
+          child: TextField(
+            controller: _pointsController,
+            decoration: const InputDecoration(
+              label: Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    WidgetSpan(
+                      child: Text(
+                        'Aantal punten',
+                      ),
+                    ),
+                    WidgetSpan(
+                      child: Text(
+                        '*',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(
             margin: const EdgeInsets.all(8),
             width: 400,
             height: 30,
@@ -137,7 +165,8 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
       "type": "MP",
       "question": _questionController.text,
       "options": _optionsController.text.split(","),
-      "corrent_option": _correctOptionController.text
+      "corrent_option": _correctOptionController.text,
+      "points": int.parse(_pointsController.text),
     });
   }
 }

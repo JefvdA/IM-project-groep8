@@ -16,6 +16,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _givenCodeController = TextEditingController();
   final TextEditingController _correctCodeController = TextEditingController();
+  final TextEditingController _pointsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +105,33 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
           ),
         ),
         Container(
+          margin: const EdgeInsets.all(8),
+          width: 600,
+          height: 80,
+          child: TextField(
+            controller: _pointsController,
+            decoration: const InputDecoration(
+              label: Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    WidgetSpan(
+                      child: Text(
+                        'Aantal punten',
+                      ),
+                    ),
+                    WidgetSpan(
+                      child: Text(
+                        '*',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(
             margin: const EdgeInsets.all(8),
             width: 400,
             height: 30,
@@ -121,8 +149,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                 minimumSize: const Size(200, 50),
               ),
             ),
-          )
-      
+          ),
       ],
     );
   }
@@ -139,7 +166,8 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
       "type": "CC",
       "question": _questionController.text,
       "given_code": _givenCodeController.text,
-      "correct_code": _correctCodeController.text
+      "correct_code": _correctCodeController.text,
+      "points": int.parse(_pointsController.text),
     });
   }
 }

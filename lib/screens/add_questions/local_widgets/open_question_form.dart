@@ -14,6 +14,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
       FirebaseFirestore.instance.collection('exams');
 
   final TextEditingController _questionController = TextEditingController();
+  final TextEditingController _pointsController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,33 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
                     WidgetSpan(
                       child: Text(
                         'Vraag',
+                      ),
+                    ),
+                    WidgetSpan(
+                      child: Text(
+                        '*',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(8),
+          width: 600,
+          height: 80,
+          child: TextField(
+            controller: _pointsController,
+            decoration: const InputDecoration(
+              label: Text.rich(
+                TextSpan(
+                  children: <InlineSpan>[
+                    WidgetSpan(
+                      child: Text(
+                        'Aantal punten',
                       ),
                     ),
                     WidgetSpan(
@@ -79,7 +107,8 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
     });
     examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
       "type": "OQ",
-      "question": _questionController.text
+      "question": _questionController.text,
+      "points": int.parse(_pointsController.text),
     });
   }
 }
