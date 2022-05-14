@@ -2,8 +2,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/main.dart';
 import 'package:examap/repositories/current_student.dart';
-import 'package:examap/screens/home/home_screen.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -115,8 +115,7 @@ class _ExamScreenState extends State<ExamScreen> {
                         if (snapshot.hasData) {
                           List<Step> stepsen = [];
                           for (int i = 0; i < snapshot.data.docs.length; i++) {
-                            if (snapshot.data.docs[i]['type'] ==
-                                'MC') {
+                            if (snapshot.data.docs[i]['type'] == 'MC') {
                               stepsen.add(
                                 Step(
                                   title: Text(
@@ -260,7 +259,7 @@ class _ExamScreenState extends State<ExamScreen> {
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              const HomeScreen(),
+                              const MyApp(),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
