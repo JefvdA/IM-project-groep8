@@ -190,5 +190,9 @@ class _AddCodeCorrectionFormState extends State<AddCodeCorrectionForm> {
       "case_sensitive": _isCaseSensitive,
       "points": int.parse(_pointsController.text),
     });
+    _questionController.clear();
+    _givenCodeController.clear();
+    _correctCodeController.clear();
+    _pointsController.clear();
   }
 }

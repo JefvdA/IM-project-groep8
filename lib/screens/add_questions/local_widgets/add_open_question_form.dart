@@ -110,5 +110,7 @@ class _AddOpenQuestionFormState extends State<AddOpenQuestionForm> {
       "question": _questionController.text,
       "points": int.parse(_pointsController.text),
     });
+    _questionController.clear();
+    _pointsController.clear();
   }
 }

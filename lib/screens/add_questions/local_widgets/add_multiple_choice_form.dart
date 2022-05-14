@@ -168,5 +168,9 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
       "correct_option": _correctOptionController.text,
       "points": int.parse(_pointsController.text),
     });
+    _questionController.clear();
+    _optionsController.clear();
+    _correctOptionController.clear();
+    _pointsController.clear();
   }
 }
