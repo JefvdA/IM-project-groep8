@@ -2,8 +2,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/main.dart';
 import 'package:examap/repositories/current_student.dart';
+import 'package:examap/screens/home/home_screen.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -74,18 +74,18 @@ class _ExamScreenState extends State<ExamScreen> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  CollectionReference location =
+  CollectionReference students =
       FirebaseFirestore.instance.collection("students");
 
   CollectionReference examsCollection = FirebaseFirestore.instance
       .collection('exams')
-      .doc('Intro Mobile')
-      .collection("vragen");
+      .doc('Intro mobile')
+      .collection("questions");
 
   askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
-    await location
+    await students
         .doc(CurrentStudent.sNummer)
         .update({"lat": position.latitude, "lon": position.longitude});
   }
@@ -116,7 +116,7 @@ class _ExamScreenState extends State<ExamScreen> {
                           List<Step> stepsen = [];
                           for (int i = 0; i < snapshot.data.docs.length; i++) {
                             if (snapshot.data.docs[i]['type'] ==
-                                'Multiple choice') {
+                                'MC') {
                               stepsen.add(
                                 Step(
                                   title: Text(
@@ -133,7 +133,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          snapshot.data.docs[i]['vraag'],
+                                          snapshot.data.docs[i]['question'],
                                           style: const TextStyle(
                                             fontSize: 26,
                                             fontFamily: 'Roboto',
@@ -141,7 +141,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                           ),
                                         ),
                                         _choiceBuild(
-                                            snapshot.data.docs[i]['opties']),
+                                            snapshot.data.docs[i]['options']),
                                       ],
                                     ),
                                   ),
@@ -164,7 +164,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          snapshot.data.docs[i]['vraag'],
+                                          snapshot.data.docs[i]['question'],
                                           style: const TextStyle(
                                             fontSize: 26,
                                             fontFamily: 'Roboto',
@@ -260,12 +260,13 @@ class _ExamScreenState extends State<ExamScreen> {
                         context,
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              const MyApp(),
+                              const HomeScreen(),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
                         (Route<dynamic> route) => false,
                       );
+                      endExam();
                     },
                     child: const Text("Examen indienen"),
                   ),
@@ -314,7 +315,6 @@ class _ExamScreenState extends State<ExamScreen> {
           ),
         ],
       );
-
   int _index = 0;
 
   int? _value = 1;
@@ -335,5 +335,10 @@ class _ExamScreenState extends State<ExamScreen> {
         },
       ).toList(),
     );
+  }
+
+  void endExam() {
+    // Remove student from students collection
+    students.doc(CurrentStudent.sNummer).delete();
   }
 }
