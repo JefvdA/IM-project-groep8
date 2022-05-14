@@ -1,7 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/screens/admin/local_widgets/edit_questions_tab.dart';
-import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:examap/widgets/global_app_bar.dart';
+
+import 'package:examap/screens/admin/local_widgets/edit_questions_tab.dart';
+import 'package:examap/screens/add_questions/local_widgets/code_correction_form.dart';
+import 'package:examap/screens/add_questions/local_widgets/multiple_choice_form.dart';
+import 'package:examap/screens/add_questions/local_widgets/open_question_form.dart';
 
 class AddQuestionsScreen extends StatefulWidget {
   final String exam;
@@ -12,15 +17,10 @@ class AddQuestionsScreen extends StatefulWidget {
 }
 
 class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
-  CollectionReference examsCollection =
+  final CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
-  final TextEditingController _questionController = TextEditingController();
-  final TextEditingController _answerController = TextEditingController();
-  final TextEditingController _rightAnswerController = TextEditingController();
-  final TextEditingController _givenCodeController = TextEditingController();
-  int id = 0;
 
-  String _selectedValue = "Open vraag";
+  String _selectedValue = "OQ";
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
             color: Colors.black,
           ),
         ),
-        value: "Open vraag",
+        value: "OQ",
       ),
       const DropdownMenuItem(
         child: Text(
@@ -43,7 +43,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
             color: Colors.black,
           ),
         ),
-        value: "Multiple choice",
+        value: "MC",
       ),
       const DropdownMenuItem(
         child: Text(
@@ -53,7 +53,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
             color: Colors.black,
           ),
         ),
-        value: "Code correction",
+        value: "CC",
       ),
     ];
     return Scaffold(
@@ -69,7 +69,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
           ),
           StreamBuilder(
             stream:
-                examsCollection.doc(widget.exam).collection('vragen').snapshots(),
+                examsCollection.doc(widget.exam).collection('questions').snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -78,7 +78,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                         title: Text(
-                          snapshot.data.docs[index].data()['vraag'],
+                          snapshot.data.docs[index].data()['question'],
                           style: const TextStyle(
                             fontSize: 20,
                             color: Color.fromARGB(255, 124, 0, 0),
@@ -117,204 +117,14 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                   _selectedValue = value!;
                 });
               }),
-          Container(
-            margin: const EdgeInsets.all(8),
-            width: 600,
-            height: 80,
-            child: TextField(
-              controller: _questionController,
-              decoration: const InputDecoration(
-                label: Text.rich(
-                  TextSpan(
-                    children: <InlineSpan>[
-                      WidgetSpan(
-                        child: Text(
-                          'Vraag',
-                        ),
-                      ),
-                      WidgetSpan(
-                        child: Text(
-                          '*',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          if (_selectedValue == "Code correction")
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  width: 600,
-                  height: 200,
-                  child: TextField(
-                    maxLines: 10,
-                    controller: _givenCodeController,
-                    decoration: const InputDecoration(
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Start-code die student krijgt',
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  width: 600,
-                  height: 80,
-                  child: TextField(
-                    controller: _rightAnswerController,
-                    decoration: const InputDecoration(
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Correcte Code',
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          if (_selectedValue == "Multiple choice")
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  width: 600,
-                  height: 80,
-                  child: TextField(
-                    controller: _answerController,
-                    decoration: const InputDecoration(
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Antwoorden  gescheiden zijn door ,',
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(8),
-                  width: 600,
-                  height: 80,
-                  child: TextField(
-                    controller: _rightAnswerController,
-                    decoration: const InputDecoration(
-                      label: Text.rich(
-                        TextSpan(
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              child: Text(
-                                'Oplossing',
-                              ),
-                            ),
-                            WidgetSpan(
-                              child: Text(
-                                '*',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          Container(
-            margin: const EdgeInsets.all(8),
-            width: 400,
-            height: 30,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                addQuestion();
-              },
-              icon: const Icon(
-                Icons.save_alt_rounded,
-                size: 30,
-              ),
-              label:
-                  const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50),
-              ),
-            ),
-          )
+          if(_selectedValue == "OQ")
+            OpenQuestionForm(widget.exam)
+          else if (_selectedValue == "MC")
+            MultipleChoiceForm(widget.exam)
+          else if (_selectedValue == "CC")
+            CodeCorrectionForm(widget.exam)
         ],
       ),
     );
-  }
-
-  void addQuestion() async {
-    int id = await examsCollection
-        .doc(widget.exam)
-        .collection('vragen')
-        .get()
-        .then((value) {
-      return value.docs.length + 1;
-    });
-    if (_selectedValue == "Open vraag") {
-      examsCollection.doc(widget.exam).collection('vragen').doc("vraag $id").set({
-        "type": _selectedValue,
-        "vraag": _questionController.text,
-        "antwoord": _rightAnswerController.text
-      });
-    } else if (_selectedValue == "Multiple choice") {
-      examsCollection.doc(widget.exam).collection('vragen').doc("vraag $id").set({
-        "type": _selectedValue,
-        "vraag": _questionController.text,
-        "antwoord": _rightAnswerController.text,
-        "opties": _answerController.text.split(",")
-      });
-    } else if (_selectedValue == "Code correction") {
-      examsCollection.doc(widget.exam).collection('vragen').doc("vraag $id").set({
-        "type": _selectedValue,
-        "vraag": _questionController.text,
-        "given_code": _givenCodeController.text,
-        "correct_code": _rightAnswerController.text
-      });
-    }
   }
 }
