@@ -1,30 +1,26 @@
 // ignore_for_file: file_names
 import 'dart:async';
+import 'dart:collection';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/main.dart';
-import 'package:examap/repositories/current_student.dart';
-import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:examap/widgets/global_app_bar.dart';
+import 'package:examap/main.dart';
+
+import 'package:examap/repositories/current_student.dart';
+
+import 'package:examap/screens/exam/local_widgets/code_correction_question.dart';
+import 'package:examap/screens/exam/local_widgets/multiple_choice_question.dart';
+import 'package:examap/screens/exam/local_widgets/open_question.dart';
 
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
 
   @override
   State<ExamScreen> createState() => _ExamScreenState();
-}
-
-class Item {
-  Item({
-    required this.expandedValue,
-    required this.headerValue,
-    this.isExpanded = false,
-  });
-
-  String expandedValue;
-  String headerValue;
-  bool isExpanded;
 }
 
 class _ExamScreenState extends State<ExamScreen> {
@@ -34,8 +30,9 @@ class _ExamScreenState extends State<ExamScreen> {
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
   Timer? timer;
-
   bool isCountdown = true;
+
+  int _index = 0;
 
   get headerColor => null;
 
@@ -74,10 +71,10 @@ class _ExamScreenState extends State<ExamScreen> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  CollectionReference students =
+  final CollectionReference studentsCollection =
       FirebaseFirestore.instance.collection("students");
 
-  CollectionReference examsCollection = FirebaseFirestore.instance
+  final CollectionReference examsCollection = FirebaseFirestore.instance
       .collection('exams')
       .doc('Intro mobile')
       .collection("questions");
@@ -85,7 +82,7 @@ class _ExamScreenState extends State<ExamScreen> {
   askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
-    await students
+    await studentsCollection
         .doc(CurrentStudent.sNummer)
         .update({"lat": position.latitude, "lon": position.longitude});
   }
@@ -101,7 +98,7 @@ class _ExamScreenState extends State<ExamScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildTime(),
+              _buildTime(),
               Container(
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 204, 202, 202),
@@ -116,11 +113,10 @@ class _ExamScreenState extends State<ExamScreen> {
                           if (snapshot.hasData) {
                             List<Step> stepsen = [];
                             for (int i = 0; i < snapshot.data.docs.length; i++) {
-                              if (snapshot.data.docs[i]['type'] == 'MC') {
                                 stepsen.add(
                                   Step(
                                     title: Text(
-                                      'Vraag${i + 1}',
+                                      '${snapshot.data.docs[i].data()["question"]}',
                                       style: const TextStyle(
                                         fontSize: 26,
                                         fontWeight: FontWeight.bold,
@@ -128,69 +124,10 @@ class _ExamScreenState extends State<ExamScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    content: Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            snapshot.data.docs[i]['question'],
-                                            style: const TextStyle(
-                                              fontSize: 26,
-                                              fontFamily: 'Roboto',
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          _choiceBuild(
-                                              snapshot.data.docs[i]['options']),
-                                        ],
-                                      ),
-                                    ),
+                                    content: _buildQuestion(snapshot.data.docs[i].data()),
                                   ),
                                 );
-                              } else {
-                                stepsen.add(
-                                  Step(
-                                    title: Text(
-                                      'Vraag${i + 1}',
-                                      style: const TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    content: Container(
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            snapshot.data.docs[i]['question'],
-                                            style: const TextStyle(
-                                              fontSize: 26,
-                                              fontFamily: 'Roboto',
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          const TextField(
-                                            keyboardType: TextInputType.multiline,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                              hintText: "Geef je antwoord in...",
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.redAccent),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
                             }
-                            ;
                             return Stepper(
                               steps: stepsen,
                               controlsBuilder: (BuildContext context,
@@ -280,7 +217,7 @@ class _ExamScreenState extends State<ExamScreen> {
     );
   }
 
-  Widget buildTime() {
+  Widget _buildTime() {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final hours = twoDigits(_duration.inHours);
     final minutes = twoDigits(_duration.inMinutes.remainder(60));
@@ -288,58 +225,62 @@ class _ExamScreenState extends State<ExamScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        buildTimeCard(time: hours),
+        _buildTimeCard(time: hours),
         const SizedBox(width: 2),
-        buildTimeCard(time: minutes),
+        _buildTimeCard(time: minutes),
         const SizedBox(width: 2),
-        buildTimeCard(time: seconds),
+        _buildTimeCard(time: seconds),
       ],
     );
   }
 
-  Widget buildTimeCard({required String time}) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              time,
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Colors.white,
-                fontSize: 30,
-              ),
+  Widget _buildTimeCard({required String time}) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            time,
+            style: const TextStyle(
+              fontWeight: FontWeight.normal,
+              color: Colors.white,
+              fontSize: 30,
             ),
           ),
-        ],
-      );
-  int _index = 0;
+        ),
+      ],
+    ); 
 
-  int? _value = 1;
-  Widget _choiceBuild(value) {
-    return Wrap(
-      children: List<Widget>.generate(
-        4,
-        (int index) {
-          return ChoiceChip(
-            label: Text(value[index]),
-            selected: _value == index,
-            onSelected: (bool selected) {
-              setState(() {
-                _value = selected ? index : null;
-              });
-            },
-          );
-        },
-      ).toList(),
-    );
+  Widget _buildQuestion(LinkedHashMap<String, dynamic> question) {
+    switch (question['type']) {
+      case "MC":
+        return MultipleChoiceQuestion(question);
+      case "OQ":
+        return OpenQuestion(question);
+      case "CC":
+        return CodeCorrectionQuestion(question);
+      default:
+        return Container();
+    }
   }
 
-  void endExam() {
+  endExam() {
     // Remove student from students collection
-    students.doc(CurrentStudent.sNummer).delete();
+    studentsCollection.doc(CurrentStudent.sNummer).delete();
   }
+}
+
+class Item {
+  Item({
+    required this.expandedValue,
+    required this.headerValue,
+    this.isExpanded = false,
+  });
+
+  String expandedValue;
+  String headerValue;
+  bool isExpanded;
 }
