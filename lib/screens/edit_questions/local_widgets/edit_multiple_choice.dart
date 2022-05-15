@@ -196,5 +196,8 @@ class _EditMultipleChoiceFormState extends State<EditMultipleChoiceForm> {
     Navigator.pop(context);
   }
   
-  void removeQuestion() {}
+  void removeQuestion() {
+    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
+    Navigator.pop(context);
+  }
 }

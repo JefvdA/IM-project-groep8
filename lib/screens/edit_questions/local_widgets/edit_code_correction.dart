@@ -219,5 +219,8 @@ class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
     Navigator.pop(context);
   }
   
-  void removeQuestion() {}
+  void removeQuestion() {
+    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
+    Navigator.pop(context);
+  }
 }

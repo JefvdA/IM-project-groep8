@@ -137,6 +137,7 @@ class _EditOpenQuestionFormState extends State<EditOpenQuestionForm> {
   }
 
   void removeQuestion() {
-
+    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
+    Navigator.pop(context);
   }
 }
