@@ -96,183 +96,185 @@ class _ExamScreenState extends State<ExamScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: globalAppBar,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildTime(),
-            Container(
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 204, 202, 202),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SingleChildScrollView(
-                    child: FutureBuilder(
-                      future: examsCollection.get(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          List<Step> stepsen = [];
-                          for (int i = 0; i < snapshot.data.docs.length; i++) {
-                            if (snapshot.data.docs[i]['type'] == 'MC') {
-                              stepsen.add(
-                                Step(
-                                  title: Text(
-                                    'Vraag${i + 1}',
-                                    style: const TextStyle(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildTime(),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 204, 202, 202),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SingleChildScrollView(
+                      child: FutureBuilder(
+                        future: examsCollection.get(),
+                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            List<Step> stepsen = [];
+                            for (int i = 0; i < snapshot.data.docs.length; i++) {
+                              if (snapshot.data.docs[i]['type'] == 'MC') {
+                                stepsen.add(
+                                  Step(
+                                    title: Text(
+                                      'Vraag${i + 1}',
+                                      style: const TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  content: Container(
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          snapshot.data.docs[i]['question'],
-                                          style: const TextStyle(
-                                            fontSize: 26,
-                                            fontFamily: 'Roboto',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        _choiceBuild(
-                                            snapshot.data.docs[i]['options']),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              stepsen.add(
-                                Step(
-                                  title: Text(
-                                    'Vraag${i + 1}',
-                                    style: const TextStyle(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  content: Container(
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          snapshot.data.docs[i]['question'],
-                                          style: const TextStyle(
-                                            fontSize: 26,
-                                            fontFamily: 'Roboto',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        const TextField(
-                                          keyboardType: TextInputType.multiline,
-                                          maxLines: 1,
-                                          decoration: InputDecoration(
-                                            hintText: "Geef je antwoord in...",
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Colors.redAccent),
+                                    content: Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapshot.data.docs[i]['question'],
+                                            style: const TextStyle(
+                                              fontSize: 26,
+                                              fontFamily: 'Roboto',
+                                              color: Colors.black,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          _choiceBuild(
+                                              snapshot.data.docs[i]['options']),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                stepsen.add(
+                                  Step(
+                                    title: Text(
+                                      'Vraag${i + 1}',
+                                      style: const TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Roboto',
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    content: Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapshot.data.docs[i]['question'],
+                                            style: const TextStyle(
+                                              fontSize: 26,
+                                              fontFamily: 'Roboto',
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const TextField(
+                                            keyboardType: TextInputType.multiline,
+                                            maxLines: 1,
+                                            decoration: InputDecoration(
+                                              hintText: "Geef je antwoord in...",
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.redAccent),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
                             }
-                          }
-                          ;
-                          return Stepper(
-                            steps: stepsen,
-                            controlsBuilder: (BuildContext context,
-                                ControlsDetails controlsDetails) {
-                              return Row(
-                                children: <Widget>[
-                                  TextButton(
-                                    onPressed: controlsDetails.onStepCancel,
-                                    child: const Text(
-                                      'Vorige',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.red,
+                            ;
+                            return Stepper(
+                              steps: stepsen,
+                              controlsBuilder: (BuildContext context,
+                                  ControlsDetails controlsDetails) {
+                                return Row(
+                                  children: <Widget>[
+                                    TextButton(
+                                      onPressed: controlsDetails.onStepCancel,
+                                      child: const Text(
+                                        'Vorige',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: controlsDetails.onStepContinue,
-                                    child: const Text(
-                                      'Volgende',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.red,
+                                    TextButton(
+                                      onPressed: controlsDetails.onStepContinue,
+                                      child: const Text(
+                                        'Volgende',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                            currentStep: _index,
-                            onStepCancel: () {
-                              if (_index > 0) {
-                                setState(() {
-                                  _index -= 1;
-                                });
-                              }
-                            },
-                            onStepContinue: () {
-                              if (_index >= 0) {
-                                setState(() {
-                                  _index += 1;
-                                  if (_index == 3) {
+                                  ],
+                                );
+                              },
+                              currentStep: _index,
+                              onStepCancel: () {
+                                if (_index > 0) {
+                                  setState(() {
                                     _index -= 1;
-                                  }
+                                  });
+                                }
+                              },
+                              onStepContinue: () {
+                                if (_index >= 0) {
+                                  setState(() {
+                                    _index += 1;
+                                    if (_index == 3) {
+                                      _index -= 1;
+                                    }
+                                  });
+                                }
+                              },
+                              onStepTapped: (int index) {
+                                setState(() {
+                                  _index = index;
                                 });
-                              }
-                            },
-                            onStepTapped: (int index) {
-                              setState(() {
-                                _index = index;
-                              });
-                            },
-                          );
-                        } else {
-                          return const CircularProgressIndicator();
-                        }
-                      },
+                              },
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const MyApp(),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
-                      endExam();
-                    },
-                    child: const Text("Examen indienen"),
-                  ),
-                ],
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                const MyApp(),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                        endExam();
+                      },
+                      child: const Text("Examen indienen"),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
