@@ -173,7 +173,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                 if (_index >= 0) {
                                   setState(() {
                                     _index += 1;
-                                    if (_index == 3) {
+                                    if (_index == snapshot.data.docs.length) {
                                       _index -= 1;
                                     }
                                   });
