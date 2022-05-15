@@ -102,18 +102,42 @@ class _EditOpenQuestionFormState extends State<EditOpenQuestionForm> {
               minimumSize: const Size(200, 50),
             ),
           ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(8),
+          width: 400,
+          height: 30,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              removeQuestion();
+            },
+            icon: const Icon(
+              Icons.delete_rounded,
+              size: 30,
+            ),
+            label:
+                const Text("VRAAG VERWIJDEREN", style: TextStyle(fontSize: 24)),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(200, 50),
+            ),
+          ),
         )
       ],
     );
   }
 
-  void addQuestion() async {
+  void addQuestion() {
     String id = widget.questionId;
     examsCollection.doc(widget.examId).collection('questions').doc(id).set({
       "type": "OQ",
       "question": _questionController.text,
       "points": int.parse(_pointsController.text),
     });
+    Navigator.pop(context);
+  }
+
+  void removeQuestion() {
+    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
     Navigator.pop(context);
   }
 }
