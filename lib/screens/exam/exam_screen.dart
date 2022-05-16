@@ -17,10 +17,7 @@ import 'package:examap/screens/exam/local_widgets/code_correction_question.dart'
 import 'package:examap/screens/exam/local_widgets/multiple_choice_question.dart';
 import 'package:examap/screens/exam/local_widgets/open_question.dart';
 
-import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
@@ -66,7 +63,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
     addSteps();
     
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     startTimer();
     reset();
@@ -110,7 +107,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     timer?.cancel();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -131,7 +128,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
         });
         _notification = state;
         if (kDebugMode) {
-          print("paused " + " $count");
+          print("paused $count");
         }
       }
     });
