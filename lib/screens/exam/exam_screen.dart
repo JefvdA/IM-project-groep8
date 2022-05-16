@@ -307,6 +307,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                       },
                       child: const Text("Examen indienen"),
                     ),
+                    Text("Je hebt $count keer de app verlaten !")
                   ],
                 ),
               ),
