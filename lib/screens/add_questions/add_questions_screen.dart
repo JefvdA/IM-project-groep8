@@ -70,8 +70,10 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
               ),
             ),
             StreamBuilder(
-              stream:
-                  examsCollection.doc(widget.exam).collection('questions').snapshots(),
+              stream: examsCollection
+                  .doc(widget.exam)
+                  .collection('questions')
+                  .snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -90,8 +92,10 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    EditQuestionsScreen(widget.exam, snapshot.data.docs[index].id, snapshot.data.docs[index].data()),
+                                builder: (context) => EditQuestionsScreen(
+                                    widget.exam,
+                                    snapshot.data.docs[index].id,
+                                    snapshot.data.docs[index].data()),
                               ),
                             );
                           });
@@ -119,7 +123,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                     _selectedValue = value!;
                   });
                 }),
-            if(_selectedValue == "OQ")
+            if (_selectedValue == "OQ")
               AddOpenQuestionForm(widget.exam)
             else if (_selectedValue == "MC")
               AddMultipleChoiceForm(widget.exam)

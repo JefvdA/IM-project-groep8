@@ -7,7 +7,9 @@ class EditMultipleChoiceForm extends StatefulWidget {
   final String examId;
   final String questionId;
   final LinkedHashMap<String, dynamic> question;
-  const EditMultipleChoiceForm(this.examId, this.questionId, this.question, {Key? key}) : super(key: key);
+  const EditMultipleChoiceForm(this.examId, this.questionId, this.question,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<EditMultipleChoiceForm> createState() => _EditMultipleChoiceFormState();
@@ -15,16 +17,19 @@ class EditMultipleChoiceForm extends StatefulWidget {
 
 class _EditMultipleChoiceFormState extends State<EditMultipleChoiceForm> {
   final CollectionReference examsCollection =
-    FirebaseFirestore.instance.collection('exams');
+      FirebaseFirestore.instance.collection('exams');
 
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _optionsController = TextEditingController();
-  final TextEditingController _correctOptionController = TextEditingController();
+  final TextEditingController _correctOptionController =
+      TextEditingController();
   final TextEditingController _pointsController = TextEditingController();
 
   void loadQuestionData() {
     _questionController.text = widget.question['question'];
-    _optionsController.text = widget.question['options'].toString().substring(1, widget.question['options'].toString().length - 1);
+    _optionsController.text = widget.question['options']
+        .toString()
+        .substring(1, widget.question['options'].toString().length - 1);
     _correctOptionController.text = widget.question['correct_option'];
     _pointsController.text = widget.question['points'].toString();
   }
@@ -143,23 +148,22 @@ class _EditMultipleChoiceFormState extends State<EditMultipleChoiceForm> {
           ),
         ),
         Container(
-            margin: const EdgeInsets.all(8),
-            width: 400,
-            height: 30,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                addQuestion();
-              },
-              icon: const Icon(
-                Icons.save_alt_rounded,
-                size: 30,
-              ),
-              label:
-                  const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50),
-              ),
+          margin: const EdgeInsets.all(8),
+          width: 400,
+          height: 30,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              addQuestion();
+            },
+            icon: const Icon(
+              Icons.save_alt_rounded,
+              size: 30,
             ),
+            label: const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(200, 50),
+            ),
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(8),
@@ -195,9 +199,13 @@ class _EditMultipleChoiceFormState extends State<EditMultipleChoiceForm> {
     });
     Navigator.pop(context);
   }
-  
+
   void removeQuestion() {
-    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
+    examsCollection
+        .doc(widget.examId)
+        .collection('questions')
+        .doc(widget.questionId)
+        .delete();
     Navigator.pop(context);
   }
 }

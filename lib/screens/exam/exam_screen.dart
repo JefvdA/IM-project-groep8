@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/main.dart';
 import 'package:examap/repositories/current_student.dart';
 import 'package:examap/widgets/global_app_bar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -27,13 +28,14 @@ class Item {
   bool isExpanded;
 }
 
-class _ExamScreenState extends State<ExamScreen> {
+class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   String user = CurrentStudent.sNummer;
 
   //timer
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
   Timer? timer;
+  int count = 0;
 
   bool isCountdown = true;
 
@@ -42,9 +44,39 @@ class _ExamScreenState extends State<ExamScreen> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance?.addObserver(this);
     startTimer();
     reset();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  AppLifecycleState? _notification;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      if (state == AppLifecycleState.resumed) {
+        state = AppLifecycleState.resumed;
+        _notification = state;
+        if (kDebugMode) {
+          print("resumed");
+        }
+      } else if (state == AppLifecycleState.paused) {
+        state = AppLifecycleState.paused;
+        setState(() {
+          count += 1;
+        });
+        _notification = state;
+        if (kDebugMode) {
+          print("paused " + " $count");
+        }
+      }
+    });
   }
 
   void reset() {
@@ -112,10 +144,13 @@ class _ExamScreenState extends State<ExamScreen> {
                     SingleChildScrollView(
                       child: FutureBuilder(
                         future: examsCollection.get(),
-                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
                             List<Step> stepsen = [];
-                            for (int i = 0; i < snapshot.data.docs.length; i++) {
+                            for (int i = 0;
+                                i < snapshot.data.docs.length;
+                                i++) {
                               if (snapshot.data.docs[i]['type'] == 'MC') {
                                 stepsen.add(
                                   Step(
@@ -172,10 +207,12 @@ class _ExamScreenState extends State<ExamScreen> {
                                             ),
                                           ),
                                           const TextField(
-                                            keyboardType: TextInputType.multiline,
+                                            keyboardType:
+                                                TextInputType.multiline,
                                             maxLines: 1,
                                             decoration: InputDecoration(
-                                              hintText: "Geef je antwoord in...",
+                                              hintText:
+                                                  "Geef je antwoord in...",
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     width: 1,

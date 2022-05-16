@@ -54,11 +54,9 @@ class GreetingScreenState extends State<GreetingScreen> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return Text(snapshot.data.docs[0]['description'],
-
                         style: const TextStyle(fontSize: 20));
                   }
                   return const CircularProgressIndicator();
-
                 },
               ),
               ElevatedButton(

@@ -11,7 +11,7 @@ class AddCodeCorrectionForm extends StatefulWidget {
 
 class _AddCodeCorrectionFormState extends State<AddCodeCorrectionForm> {
   final CollectionReference examsCollection =
-    FirebaseFirestore.instance.collection('exams');
+      FirebaseFirestore.instance.collection('exams');
 
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _givenCodeController = TextEditingController();
@@ -139,12 +139,11 @@ class _AddCodeCorrectionFormState extends State<AddCodeCorrectionForm> {
           height: 80,
           child: Row(
             children: [
-              const Text(
-                'Case-sensitive:'
-              ),
+              const Text('Case-sensitive:'),
               Switch(
                 value: _isCaseSensitive,
-                onChanged: ((value) => setState(() => _isCaseSensitive = value)),
+                onChanged: ((value) =>
+                    setState(() => _isCaseSensitive = value)),
                 activeTrackColor: Colors.lightGreenAccent,
                 activeColor: Colors.green,
               ),
@@ -152,37 +151,40 @@ class _AddCodeCorrectionFormState extends State<AddCodeCorrectionForm> {
           ),
         ),
         Container(
-            margin: const EdgeInsets.all(8),
-            width: 400,
-            height: 30,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                addQuestion();
-              },
-              icon: const Icon(
-                Icons.save_alt_rounded,
-                size: 30,
-              ),
-              label:
-                  const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50),
-              ),
+          margin: const EdgeInsets.all(8),
+          width: 400,
+          height: 30,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              addQuestion();
+            },
+            icon: const Icon(
+              Icons.save_alt_rounded,
+              size: 30,
+            ),
+            label: const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(200, 50),
             ),
           ),
+        ),
       ],
     );
   }
-  
+
   void addQuestion() async {
     int id = await examsCollection
-      .doc(widget.exam)
-      .collection('questions')
-      .get()
-      .then((value) {
+        .doc(widget.exam)
+        .collection('questions')
+        .get()
+        .then((value) {
       return value.docs.length + 1;
     });
-    examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
+    examsCollection
+        .doc(widget.exam)
+        .collection('questions')
+        .doc("question $id")
+        .set({
       "type": "CC",
       "question": _questionController.text,
       "given_code": _givenCodeController.text,
