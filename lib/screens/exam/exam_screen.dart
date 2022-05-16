@@ -34,10 +34,10 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   //timer
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
-  Timer? timer;
-  int count = 0;
-
   bool isCountdown = true;
+  Timer? timer;
+
+  int leftApplicationCount = 0;
 
   int currentStep = 0;
   late List<Step> steps = [];
@@ -111,25 +111,19 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  AppLifecycleState? _notification;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     setState(() {
       if (state == AppLifecycleState.resumed) {
         state = AppLifecycleState.resumed;
-        _notification = state;
         if (kDebugMode) {
           print("resumed");
         }
       } else if (state == AppLifecycleState.paused) {
         state = AppLifecycleState.paused;
         setState(() {
-          count += 1;
+          leftApplicationCount += 1;
         });
-        _notification = state;
-        if (kDebugMode) {
-          print("paused $count");
-        }
       }
     });
   }
@@ -175,6 +169,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     .set({
       "student": user,
       "answers": answers.map((e) => jsonDecode(jsonEncode(e))),
+      "leftApplicationCount": leftApplicationCount,
     });
 
     // Remove student from students collection
@@ -223,8 +218,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        formKeys[currentStep].currentState
-                                            ?.save();
                                         controlsDetails.onStepCancel!();                                           
                                       },
                                     ),
@@ -239,8 +232,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        formKeys[currentStep].currentState
-                                            ?.save();
                                         controlsDetails.onStepContinue!();                                       
                                       },
                                     ),
@@ -258,7 +249,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                 }
                               },
                               onStepTapped: (int index) {
-                                formKeys[currentStep].currentState?.save();
                                 goToStep(index);
                               },
                             );
@@ -284,7 +274,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                       },
                       child: const Text("Examen indienen"),
                     ),
-                    Text("Je hebt $count keer de app verlaten !")
+                    Text("Je hebt $leftApplicationCount keer de app verlaten !")
                   ],
                 ),
               ),
