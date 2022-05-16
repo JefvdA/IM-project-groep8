@@ -26,48 +26,50 @@ class GradeExam extends StatelessWidget {
     });
   }
 
+  List<Widget> Answers() {
+    List<Widget> list = [];
+    for (var i = 0; i < answers.length; i++) {
+      if (answers[i]['type'] == 'OQ') {
+        list.add(
+          Column(
+            children: [
+              Text(
+                answers[i]['question'],
+                style: const TextStyle(fontSize: 20),
+              ),
+              Text(
+                answers[i]['answer'],
+                style: const TextStyle(fontSize: 20),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Score op ${answers[i]['points']} ",
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     getAnswers();
-    return Column(
-      children: [
-        StreamBuilder(
-          stream: resultsCollection.snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData) {
-              return ListView(
-                shrinkWrap: true,
-                children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                  Map<String, dynamic> data =
-                      document.data()! as Map<String, dynamic>;
-                  print(data);
-                  return Card(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              data['student'].toString(),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Roboto',
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              );
-            } else {
-              return Text('Loading');
-            }
-          },
-        ),
-      ],
+    print(answers);
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text('Beoordelen'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(children: Answers()),
+          ),
+        ],
+      ),
     );
   }
 }

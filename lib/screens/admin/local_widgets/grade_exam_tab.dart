@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../grade_exam.dart';
 
-class Test extends StatelessWidget {
-  const Test({Key? key}) : super(key: key);
+class GradeExamTab extends StatelessWidget {
+  const GradeExamTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class Test extends StatelessWidget {
                       return Card(
                         color: Colors.white,
                         child: ListTile(
-                          trailing: Row(
+                          trailing: Column(
                             children: [
                               ElevatedButton.icon(
                                 icon: const Icon(Icons.grading_rounded),
@@ -79,6 +79,21 @@ class Test extends StatelessWidget {
                                     color: Colors.black,
                                   ),
                                 ),
+                                Text(
+                                  "${data['score']} op ${data['maxScore']}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Roboto',
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                    "${data['needGrading']}/${data['totalQuestions']}",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Roboto',
+                                      color: Colors.black,
+                                    )),
                               ],
                             ),
                           ),

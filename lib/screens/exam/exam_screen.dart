@@ -178,6 +178,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
   void endExam() {
     var totalScore = 0;
+    var maxScore = 0;
     var totalQuestions = 0;
     var needGrading = 0;
     // Get data from question forms
@@ -189,19 +190,23 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
       totalQuestions++;
       if (answers[i].type == "OQ") {
         needGrading++;
+        maxScore += answers[i].points;
       }
       if (answers[i].type == "MC") {
         var x = answers[i] as MCAnswer;
         totalScore += x.automaticCodeCorrection();
+        maxScore += answers[i].points;
       }
       if (answers[i].type == "CC") {
         var x = answers[i] as CCAnswer;
         totalScore += x.automaticCodeCorrection();
+        maxScore += answers[i].points;
       }
     }
     restultsCollection.doc(user).set({
       "student": user,
       "score": totalScore,
+      "maxScore": maxScore,
       "totalQuestions": totalQuestions,
       "needGrading": needGrading,
       "answers": answers.map((e) => jsonDecode(jsonEncode(e))),

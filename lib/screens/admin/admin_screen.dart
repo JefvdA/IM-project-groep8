@@ -19,7 +19,7 @@ class AdminScreenState extends State<AdminScreen> {
     const AddStudentsTab(),
     const ChangePasswordTab(),
     const AddExamTab(),
-    const Test()
+    const GradeExamTab()
   ];
   int _selectedIndex = 0;
 
@@ -49,7 +49,7 @@ class AdminScreenState extends State<AdminScreen> {
             label: 'Examen toevoegen',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grade_outlined), label: 'Test'),
+              icon: Icon(Icons.grade_outlined), label: 'Beoordelen'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onTap,
