@@ -5,14 +5,23 @@ class MCAnswer extends Answer {
   final String correctOption;
   final String answer;
 
-  MCAnswer(String question, String type, int points, this.options, this.correctOption, this.answer) : super(question, type, points);
+  MCAnswer(String question, String type, int points, this.options,
+      this.correctOption, this.answer)
+      : super(question, type, points);
 
   Map toJson() => {
-    'question': question,
-    'type': type,
-    'points': points,
-    'options': options,
-    'correctOption': correctOption,
-    'answer': answer,
-  };
+        'question': question,
+        'type': type,
+        'points': points,
+        'options': options,
+        'correctOption': correctOption,
+        'answer': answer,
+      };
+  int automaticCodeCorrection() {
+    if (answer.toLowerCase().trim() == correctOption.toLowerCase().trim()) {
+      return points;
+    } else {
+      return 0;
+    }
+  }
 }
