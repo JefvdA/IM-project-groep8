@@ -6,4 +6,13 @@ class MCAnswer extends Answer {
   final String answer;
 
   MCAnswer(String question, String type, int points, this.options, this.correctOption, this.answer) : super(question, type, points);
+
+  Map toJson() => {
+    'question': question,
+    'type': type,
+    'points': points,
+    'options': options,
+    'correctOption': correctOption,
+    'answer': answer,
+  };
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:examap/models/answer/answer.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class ExamScreen extends StatefulWidget {
 class _ExamScreenState extends State<ExamScreen> {
   String user = CurrentStudent.sNummer;
 
-  List<String> answers = [];
+  List<Answer> answers = [];
 
   //timer
   static const countdownDuration = Duration(hours: 3);
@@ -45,9 +46,12 @@ class _ExamScreenState extends State<ExamScreen> {
       FirebaseFirestore.instance.collection("students");
 
   final CollectionReference questionsCollection = FirebaseFirestore.instance
-      .collection('exams')
-      .doc('Intro mobile')
-      .collection("questions");
+    .collection('exams')
+    .doc('Intro mobile')
+    .collection("questions");
+
+  final CollectionReference restultsCollection = FirebaseFirestore.instance
+    .collection('results');
 
   @override
   void initState() {
@@ -67,10 +71,7 @@ class _ExamScreenState extends State<ExamScreen> {
       steps.add(
         Step(
           title: Text(
-            // '${snapshot.data.docs[i].data()["question"]}',
-            answers.isNotEmpty
-                ? answers[1]
-                : "",
+            question.get('question'),
             style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
@@ -94,9 +95,7 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   void addAnswer(Answer answer) {
-    // For now just printing the answer to the console
-    print(answer.question);
-    // TODO : Add answer to list of answers, so we can save it to the database later
+    answers.add(answer);
   }
 
   void reset() {
@@ -135,6 +134,13 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   void endExam() {
+    // Save results to firestore
+    restultsCollection.doc(user)
+    .set({
+      "student": user,
+      "answers": answers.map((e) => jsonDecode(jsonEncode(e))),
+    });
+
     // Remove student from students collection
     studentsCollection.doc(CurrentStudent.sNummer).delete();
   }
