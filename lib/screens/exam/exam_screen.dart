@@ -32,7 +32,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   List<Answer> answers = [];
 
   //timer
-  static const countdownDuration = Duration(hours: 3);
+  static const countdownDuration = Duration(seconds: 10);
   Duration _duration = const Duration();
   bool isCountdown = true;
   Timer? timer;
@@ -143,6 +143,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
       setState(() {
         final seconds = _duration.inSeconds + addSeconds;
         if (seconds < 0) {
+          endExam();
           timer?.cancel();
         } else {
           _duration = Duration(seconds: seconds);
@@ -163,7 +164,17 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
         .update({"lat": position.latitude, "lon": position.longitude});
   }
 
+  void getAnswers() {
+    for (int i = 0; i < formKeys.length; i++) {
+      final formKey = formKeys[i];
+      formKey.currentState?.save();
+    }
+  }
+
   void endExam() {
+    // Get data from question forms
+    getAnswers();
+
     // Save results to firestore
     restultsCollection.doc(user)
     .set({
@@ -174,6 +185,18 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
     // Remove student from students collection
     studentsCollection.doc(CurrentStudent.sNummer).delete();
+
+    // Return to homescreen
+    Navigator.pushAndRemoveUntil(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const MyApp(),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -259,19 +282,26 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const MyApp(),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
-                        endExam();
-                      },
+                      onPressed: () => showDialog(
+                        context: context, 
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Examen indienen"),
+                          content: const Text("Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context), 
+                              child: const Text("Annuleren"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                endExam();
+                              },
+                              child: const Text("Indienen"),
+                            ),
+                          ],
+                        ),
+                      ),
                       child: const Text("Examen indienen"),
                     ),
                     Text("Je hebt $leftApplicationCount keer de app verlaten !")
