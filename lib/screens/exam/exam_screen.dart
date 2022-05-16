@@ -17,6 +17,11 @@ import 'package:examap/screens/exam/local_widgets/code_correction_question.dart'
 import 'package:examap/screens/exam/local_widgets/multiple_choice_question.dart';
 import 'package:examap/screens/exam/local_widgets/open_question.dart';
 
+import 'package:examap/widgets/global_app_bar.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
 
@@ -24,7 +29,7 @@ class ExamScreen extends StatefulWidget {
   State<ExamScreen> createState() => _ExamScreenState();
 }
 
-class _ExamScreenState extends State<ExamScreen> {
+class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   String user = CurrentStudent.sNummer;
 
   List<Answer> answers = [];
@@ -33,6 +38,8 @@ class _ExamScreenState extends State<ExamScreen> {
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
   Timer? timer;
+  int count = 0;
+
   bool isCountdown = true;
 
   int currentStep = 0;
@@ -58,6 +65,8 @@ class _ExamScreenState extends State<ExamScreen> {
     super.initState();
 
     addSteps();
+    
+    WidgetsBinding.instance?.addObserver(this);
 
     startTimer();
     reset();
@@ -96,6 +105,36 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void addAnswer(Answer answer) {
     answers.add(answer);
+  }
+  
+  @override
+  void dispose() {
+    timer?.cancel();
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  AppLifecycleState? _notification;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      if (state == AppLifecycleState.resumed) {
+        state = AppLifecycleState.resumed;
+        _notification = state;
+        if (kDebugMode) {
+          print("resumed");
+        }
+      } else if (state == AppLifecycleState.paused) {
+        state = AppLifecycleState.paused;
+        setState(() {
+          count += 1;
+        });
+        _notification = state;
+        if (kDebugMode) {
+          print("paused " + " $count");
+        }
+      }
+    });
   }
 
   void reset() {
@@ -248,6 +287,7 @@ class _ExamScreenState extends State<ExamScreen> {
                       },
                       child: const Text("Examen indienen"),
                     ),
+                    Text("Je hebt $count keer de app verlaten !")
                   ],
                 ),
               ),

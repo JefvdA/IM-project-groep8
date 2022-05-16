@@ -7,7 +7,9 @@ class EditCodeCorrectionForm extends StatefulWidget {
   final String examId;
   final String questionId;
   final LinkedHashMap<String, dynamic> question;
-  const EditCodeCorrectionForm(this.examId, this.questionId, this.question, {Key? key}) : super(key: key);
+  const EditCodeCorrectionForm(this.examId, this.questionId, this.question,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<EditCodeCorrectionForm> createState() => _EditCodeCorrectionFormState();
@@ -15,7 +17,7 @@ class EditCodeCorrectionForm extends StatefulWidget {
 
 class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
   final CollectionReference examsCollection =
-    FirebaseFirestore.instance.collection('exams');
+      FirebaseFirestore.instance.collection('exams');
 
   final TextEditingController _questionController = TextEditingController();
   final TextEditingController _givenCodeController = TextEditingController();
@@ -152,12 +154,11 @@ class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
           height: 80,
           child: Row(
             children: [
-              const Text(
-                'Case-sensitive:'
-              ),
+              const Text('Case-sensitive:'),
               Switch(
                 value: _isCaseSensitive,
-                onChanged: ((value) => setState(() => _isCaseSensitive = value)),
+                onChanged: ((value) =>
+                    setState(() => _isCaseSensitive = value)),
                 activeTrackColor: Colors.lightGreenAccent,
                 activeColor: Colors.green,
               ),
@@ -165,24 +166,23 @@ class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
           ),
         ),
         Container(
-            margin: const EdgeInsets.all(8),
-            width: 400,
-            height: 30,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                addQuestion();
-              },
-              icon: const Icon(
-                Icons.save_alt_rounded,
-                size: 30,
-              ),
-              label:
-                  const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50),
-              ),
+          margin: const EdgeInsets.all(8),
+          width: 400,
+          height: 30,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              addQuestion();
+            },
+            icon: const Icon(
+              Icons.save_alt_rounded,
+              size: 30,
+            ),
+            label: const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(200, 50),
             ),
           ),
+        ),
         Container(
           margin: const EdgeInsets.all(8),
           width: 400,
@@ -205,7 +205,7 @@ class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
       ],
     );
   }
-  
+
   void addQuestion() async {
     String id = widget.questionId;
     examsCollection.doc(widget.examId).collection('questions').doc(id).set({
@@ -218,9 +218,13 @@ class _EditCodeCorrectionFormState extends State<EditCodeCorrectionForm> {
     });
     Navigator.pop(context);
   }
-  
+
   void removeQuestion() {
-    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
+    examsCollection
+        .doc(widget.examId)
+        .collection('questions')
+        .doc(widget.questionId)
+        .delete();
     Navigator.pop(context);
   }
 }

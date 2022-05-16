@@ -7,7 +7,9 @@ class EditOpenQuestionForm extends StatefulWidget {
   final String examId;
   final String questionId;
   final LinkedHashMap<String, dynamic> question;
-  const EditOpenQuestionForm(this.examId, this.questionId, this.question, {Key? key}) : super(key: key);
+  const EditOpenQuestionForm(this.examId, this.questionId, this.question,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<EditOpenQuestionForm> createState() => _EditOpenQuestionFormState();
@@ -96,8 +98,7 @@ class _EditOpenQuestionFormState extends State<EditOpenQuestionForm> {
               Icons.save_alt_rounded,
               size: 30,
             ),
-            label:
-                const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
+            label: const Text("VRAAG OPSLAAN", style: TextStyle(fontSize: 24)),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(200, 50),
             ),
@@ -137,7 +138,11 @@ class _EditOpenQuestionFormState extends State<EditOpenQuestionForm> {
   }
 
   void removeQuestion() {
-    examsCollection.doc(widget.examId).collection('questions').doc(widget.questionId).delete();
+    examsCollection
+        .doc(widget.examId)
+        .collection('questions')
+        .doc(widget.questionId)
+        .delete();
     Navigator.pop(context);
   }
 }
