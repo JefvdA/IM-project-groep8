@@ -1,9 +1,8 @@
-import 'dart:collection';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CodeCorrectionQuestion extends StatefulWidget {
-  final LinkedHashMap<String, dynamic> questionDoc;
+  final QueryDocumentSnapshot<Object?> questionDoc;
   const CodeCorrectionQuestion(this.questionDoc, {Key? key}) : super(key: key);
 
   @override
@@ -27,7 +26,7 @@ class _CodeCorrectionQuestionState extends State<CodeCorrectionQuestion>{
             ),
           ),
           Text(
-            widget.questionDoc['given_code'],
+            widget.questionDoc.get('given_code'),
             style: const TextStyle(
               fontSize: 26,
               fontFamily: 'Roboto',
@@ -46,7 +45,7 @@ class _CodeCorrectionQuestionState extends State<CodeCorrectionQuestion>{
               ),
             ),
           ),
-          if(widget.questionDoc['case_sensitive'])
+          if(widget.questionDoc.get('case_sensitive'))
             const Text(
               "Let op: verbetering op deze vraag is hoofdlettergevoelig!",
               style: TextStyle(

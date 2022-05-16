@@ -1,9 +1,8 @@
-import 'dart:collection';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MultipleChoiceQuestion extends StatefulWidget {
-  final LinkedHashMap<String, dynamic> questionDoc;
+  final QueryDocumentSnapshot<Object?> questionDoc;
   const MultipleChoiceQuestion(this.questionDoc, { Key? key }) : super(key: key);
 
   @override
@@ -20,7 +19,7 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
       child: Column(
         children: [
           Text(
-            widget.questionDoc['question'],
+            widget.questionDoc.get('question'),
             style: const TextStyle(
               fontSize: 26,
               fontFamily: 'Roboto',
@@ -28,7 +27,7 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
             ),
           ),
           _choiceBuild(
-              widget.questionDoc['options']
+              widget.questionDoc.get('options'),
           ),
         ],
       ),

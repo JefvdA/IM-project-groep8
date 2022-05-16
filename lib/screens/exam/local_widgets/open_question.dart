@@ -1,9 +1,8 @@
-import 'dart:collection';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class OpenQuestion extends StatefulWidget {
-  final LinkedHashMap<String, dynamic> questionDoc;
+  final QueryDocumentSnapshot<Object?> questionDoc;
   const OpenQuestion(this.questionDoc, {Key? key}) : super(key: key);
 
   @override
@@ -11,6 +10,9 @@ class OpenQuestion extends StatefulWidget {
 }
 
 class _OpenQuestionState extends State<OpenQuestion> {
+
+  final TextEditingController _answerController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,17 +20,18 @@ class _OpenQuestionState extends State<OpenQuestion> {
       child: Column(
         children: [
           Text(
-            widget.questionDoc['question'],
+            widget.questionDoc.get('question'),
             style: const TextStyle(
               fontSize: 26,
               fontFamily: 'Roboto',
               color: Colors.black,
             ),
           ),
-          const TextField(
+          TextField(
+            controller: _answerController,
             keyboardType: TextInputType.multiline,
             maxLines: 1,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "Geef je antwoord in...",
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(

@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,6 +25,8 @@ class ExamScreen extends StatefulWidget {
 class _ExamScreenState extends State<ExamScreen> {
   String user = CurrentStudent.sNummer;
 
+  List<String> answers = [];
+
   //timer
   static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
@@ -33,15 +34,49 @@ class _ExamScreenState extends State<ExamScreen> {
   bool isCountdown = true;
 
   int _index = 0;
+  late List<Step> steps = [];
 
   get headerColor => null;
+
+  final CollectionReference studentsCollection =
+      FirebaseFirestore.instance.collection("students");
+
+  final CollectionReference questionsCollection = FirebaseFirestore.instance
+      .collection('exams')
+      .doc('Intro mobile')
+      .collection("questions");
 
   @override
   void initState() {
     super.initState();
 
+    addSteps();
+
     startTimer();
     reset();
+  }
+
+  void addSteps() async {
+    QuerySnapshot questionsSnapshot = await questionsCollection.get();
+    for (QueryDocumentSnapshot<Object?> question in questionsSnapshot.docs) { 
+      steps.add(
+        Step(
+          title: Text(
+            // '${snapshot.data.docs[i].data()["question"]}',
+            answers.isNotEmpty
+                ? answers[1]
+                : "",
+            style: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto',
+              color: Colors.black,
+            ),
+          ),
+          content: _buildQuestion(question),
+        ),
+      );
+    }
   }
 
   void reset() {
@@ -71,20 +106,17 @@ class _ExamScreenState extends State<ExamScreen> {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  final CollectionReference studentsCollection =
-      FirebaseFirestore.instance.collection("students");
-
-  final CollectionReference examsCollection = FirebaseFirestore.instance
-      .collection('exams')
-      .doc('Intro mobile')
-      .collection("questions");
-
-  askPermission() async {
+  void askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
     await studentsCollection
         .doc(CurrentStudent.sNummer)
         .update({"lat": position.latitude, "lon": position.longitude});
+  }
+
+  void endExam() {
+    // Remove student from students collection
+    studentsCollection.doc(CurrentStudent.sNummer).delete();
   }
 
   @override
@@ -108,28 +140,11 @@ class _ExamScreenState extends State<ExamScreen> {
                   children: [
                     SingleChildScrollView(
                       child: FutureBuilder(
-                        future: examsCollection.get(),
+                        future: questionsCollection.get(),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
-                            List<Step> stepsen = [];
-                            for (int i = 0; i < snapshot.data.docs.length; i++) {
-                                stepsen.add(
-                                  Step(
-                                    title: Text(
-                                      '${snapshot.data.docs[i].data()["question"]}',
-                                      style: const TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    content: _buildQuestion(snapshot.data.docs[i].data()),
-                                  ),
-                                );
-                            }
                             return Stepper(
-                              steps: stepsen,
+                              steps: steps,
                               controlsBuilder: (BuildContext context,
                                   ControlsDetails controlsDetails) {
                                 return Row(
@@ -254,22 +269,17 @@ class _ExamScreenState extends State<ExamScreen> {
       ],
     ); 
 
-  Widget _buildQuestion(LinkedHashMap<String, dynamic> question) {
+  Widget _buildQuestion(QueryDocumentSnapshot<Object?> question) {
     switch (question['type']) {
-      case "MC":
-        return MultipleChoiceQuestion(question);
       case "OQ":
         return OpenQuestion(question);
+      case "MC":
+        return MultipleChoiceQuestion(question);
       case "CC":
         return CodeCorrectionQuestion(question);
       default:
         return Container();
     }
-  }
-
-  endExam() {
-    // Remove student from students collection
-    studentsCollection.doc(CurrentStudent.sNummer).delete();
   }
 }
 
