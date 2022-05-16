@@ -5,11 +5,8 @@ class GradeExam extends StatelessWidget {
   final sNummer;
   final answers;
   GradeExam(this.sNummer, this.answers, {Key? key}) : super(key: key);
-  CollectionReference examsCollection =
-      FirebaseFirestore.instance.collection('exams');
   CollectionReference resultsCollection =
       FirebaseFirestore.instance.collection('results');
-  int totalScore = 0;
 
   getAnswers() async {
     await resultsCollection
@@ -20,25 +17,57 @@ class GradeExam extends StatelessWidget {
       for (var i = 0; i < data['answers'].length; i++) {
         if (data['answers'][i]['type'] == 'MC') {
           if (data['answers'][i]['correctOption'].trim() ==
-              data['answers'][i]['answer'].trim()) {
-            totalScore += data['answers'][i]['points'] as int;
-          }
+              data['answers'][i]['answer'].trim()) {}
         } else if (data['answers'][i]['type'] == 'CC') {
           if (data['answers'][i]['answer'].toLowerCase().trim() ==
-              data['answers'][i]['correctCode'].toLowerCase().trim()) {
-            totalScore += data['answers'][i]['points'] as int;
-          }
+              data['answers'][i]['correctCode'].toLowerCase().trim()) {}
         }
       }
     });
-    print(totalScore);
   }
 
   @override
   Widget build(BuildContext context) {
     getAnswers();
     return Column(
-      children: [],
+      children: [
+        StreamBuilder(
+          stream: resultsCollection.snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              return ListView(
+                shrinkWrap: true,
+                children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+                  print(data);
+                  return Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              data['student'].toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Roboto',
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+            } else {
+              return Text('Loading');
+            }
+          },
+        ),
+      ],
     );
   }
 }

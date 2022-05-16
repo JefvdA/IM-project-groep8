@@ -193,16 +193,11 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
       if (answers[i].type == "MC") {
         var x = answers[i] as MCAnswer;
         totalScore += x.automaticCodeCorrection();
-        print(x.answer);
-        print(x.correctOption);
       }
       if (answers[i].type == "CC") {
         var x = answers[i] as CCAnswer;
         totalScore += x.automaticCodeCorrection();
-        print(x.answer);
-        print(x.correctCode);
       }
-      print(totalScore);
     }
     restultsCollection.doc(user).set({
       "student": user,
