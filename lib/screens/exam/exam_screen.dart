@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 import 'dart:async';
 
+import 'package:examap/models/answer/answer.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -92,9 +93,9 @@ class _ExamScreenState extends State<ExamScreen> {
     });
   }
 
-  void addAnswer(String? answer) {
+  void addAnswer(Answer answer) {
     // For now just printing the answer to the console
-    print(answer);
+    print(answer.question);
     // TODO : Add answer to list of answers, so we can save it to the database later
   }
 

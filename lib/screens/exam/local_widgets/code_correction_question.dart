@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/models/answer/answer.dart';
+import 'package:examap/models/answer/impl/cc_answer.dart';
 import 'package:flutter/material.dart';
 
 class CodeCorrectionQuestion extends StatefulWidget {
@@ -44,7 +46,7 @@ class _CodeCorrectionQuestionState extends State<CodeCorrectionQuestion>{
             ),
           ),
           onSaved: (String? value) {
-            widget.addAnswerCallback(value);
+            saveAnswer(value);
           },
         ),
         if(widget.questionDoc.get('case_sensitive'))
@@ -59,6 +61,17 @@ class _CodeCorrectionQuestionState extends State<CodeCorrectionQuestion>{
       ],
     );
   }
+
+  void saveAnswer(answer) {
+    String question = widget.questionDoc.get('question');
+    String type = widget.questionDoc.get('type');
+    int points = widget.questionDoc.get('points');
+    String givenCode = widget.questionDoc.get('given_code');
+    String correctCode = widget.questionDoc.get('correct_code');
+    bool caseSensitive = widget.questionDoc.get('case_sensitive');
+    CCAnswer thisAnswer = CCAnswer(question, type, points, givenCode, correctCode, caseSensitive, answer);
+    widget.addAnswerCallback(thisAnswer);
+  }
 }
 
-typedef AddAnswerCallback = void Function(String? answer);
+typedef AddAnswerCallback = void Function(Answer answer);

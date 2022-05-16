@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/models/answer/answer.dart';
+import 'package:examap/models/answer/impl/mc_answer.dart';
 import 'package:flutter/material.dart';
 
 class MultipleChoiceQuestion extends StatefulWidget {
@@ -32,7 +34,7 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
             );
           }, 
           onSaved: (_) {
-            widget.addAnswerCallback(widget.questionDoc.get('options')[_value]);
+            saveAnswer(widget.questionDoc.get('options')[_value]);
           },
         ),
       ],
@@ -55,6 +57,16 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
       ).toList(),
     );
   }
+
+  void saveAnswer(answer) {
+    String question = widget.questionDoc.get('question');
+    String type = widget.questionDoc.get('type');
+    int points = widget.questionDoc.get('points');
+    List<dynamic> options = widget.questionDoc.get('options');
+    String correctOption = widget.questionDoc.get('correct_option');
+    MCAnswer thisAnswer = MCAnswer(question, type, points, options, correctOption, answer);
+    widget.addAnswerCallback(thisAnswer);
+  }
 }
 
-typedef AddAnswerCallback = void Function(String? answer);
+typedef AddAnswerCallback = void Function(Answer answer);

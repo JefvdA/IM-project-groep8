@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:examap/models/answer/answer.dart';
+import 'package:examap/models/answer/impl/oq_answer.dart';
 import 'package:flutter/material.dart';
 
 class OpenQuestion extends StatefulWidget {
@@ -36,12 +38,20 @@ class _OpenQuestionState extends State<OpenQuestion> {
             ),
           ),
           onSaved: (String? value) {
-            widget.addAnswerCallback(value);
+            saveAnswer(value);
           },
         ),
       ],
     );
   }
+
+  void saveAnswer(answer) {
+    String question = widget.questionDoc.get('question');
+    String type = widget.questionDoc.get('type');
+    int points = widget.questionDoc.get('points');
+    OQAnswer thisAnswer = OQAnswer(question, type, points, answer);
+    widget.addAnswerCallback(thisAnswer);
+  }
 }
 
-typedef AddAnswerCallback = void Function(String? answer);
+typedef AddAnswerCallback = void Function(Answer answer);
