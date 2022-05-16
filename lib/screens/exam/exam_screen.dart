@@ -32,12 +32,12 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   List<Answer> answers = [];
 
   //timer
-  static const countdownDuration = Duration(hours: 3);
+  static const countdownDuration = Duration(seconds: 10);
   Duration _duration = const Duration();
-  Timer? timer;
-  int count = 0;
-
   bool isCountdown = true;
+  Timer? timer;
+
+  int leftApplicationCount = 0;
 
   int currentStep = 0;
   late List<Step> steps = [];
@@ -111,25 +111,19 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  AppLifecycleState? _notification;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     setState(() {
       if (state == AppLifecycleState.resumed) {
         state = AppLifecycleState.resumed;
-        _notification = state;
         if (kDebugMode) {
           print("resumed");
         }
       } else if (state == AppLifecycleState.paused) {
         state = AppLifecycleState.paused;
         setState(() {
-          count += 1;
+          leftApplicationCount += 1;
         });
-        _notification = state;
-        if (kDebugMode) {
-          print("paused $count");
-        }
       }
     });
   }
@@ -149,6 +143,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
       setState(() {
         final seconds = _duration.inSeconds + addSeconds;
         if (seconds < 0) {
+          endExam();
           timer?.cancel();
         } else {
           _duration = Duration(seconds: seconds);
@@ -169,16 +164,39 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
         .update({"lat": position.latitude, "lon": position.longitude});
   }
 
+  void getAnswers() {
+    for (int i = 0; i < formKeys.length; i++) {
+      final formKey = formKeys[i];
+      formKey.currentState?.save();
+    }
+  }
+
   void endExam() {
+    // Get data from question forms
+    getAnswers();
+
     // Save results to firestore
     restultsCollection.doc(user)
     .set({
       "student": user,
       "answers": answers.map((e) => jsonDecode(jsonEncode(e))),
+      "leftApplicationCount": leftApplicationCount,
     });
 
     // Remove student from students collection
     studentsCollection.doc(CurrentStudent.sNummer).delete();
+
+    // Return to homescreen
+    Navigator.pushAndRemoveUntil(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) =>
+            const MyApp(),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -223,8 +241,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        formKeys[currentStep].currentState
-                                            ?.save();
                                         controlsDetails.onStepCancel!();                                           
                                       },
                                     ),
@@ -239,8 +255,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        formKeys[currentStep].currentState
-                                            ?.save();
                                         controlsDetails.onStepContinue!();                                       
                                       },
                                     ),
@@ -258,7 +272,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                 }
                               },
                               onStepTapped: (int index) {
-                                formKeys[currentStep].currentState?.save();
                                 goToStep(index);
                               },
                             );
@@ -269,22 +282,29 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const MyApp(),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
-                        endExam();
-                      },
+                      onPressed: () => showDialog(
+                        context: context, 
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Examen indienen"),
+                          content: const Text("Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context), 
+                              child: const Text("Annuleren"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                endExam();
+                              },
+                              child: const Text("Indienen"),
+                            ),
+                          ],
+                        ),
+                      ),
                       child: const Text("Examen indienen"),
                     ),
-                    Text("Je hebt $count keer de app verlaten !")
+                    Text("Je hebt $leftApplicationCount keer de app verlaten !")
                   ],
                 ),
               ),

@@ -13,7 +13,7 @@ class MultipleChoiceQuestion extends StatefulWidget {
 }
 
 class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
-  int? _value = 1;
+  int? _value = -1;
 
   @override
   Widget build(BuildContext context){
@@ -34,7 +34,8 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
             );
           }, 
           onSaved: (_) {
-            saveAnswer(widget.questionDoc.get('options')[_value]);
+            String answer = _value! > 0 ? widget.questionDoc.get('options')[_value] : '';
+            saveAnswer(answer);
           },
         ),
       ],

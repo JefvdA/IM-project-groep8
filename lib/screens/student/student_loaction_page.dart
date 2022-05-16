@@ -13,7 +13,7 @@ class StudentLocationScreen extends StatefulWidget {
 }
 
 class _StudentLocationScreenState extends State<StudentLocationScreen> {
-  CollectionReference StudentLocationScreen =
+  CollectionReference studentsCollection =
       FirebaseFirestore.instance.collection("students");
 
   setMarker(controller, lat, lon) async {
@@ -24,7 +24,7 @@ class _StudentLocationScreenState extends State<StudentLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: StudentLocationScreen.doc(CurrentStudent.sNummer).get(),
+      future: studentsCollection.doc(CurrentStudent.sNummer).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
