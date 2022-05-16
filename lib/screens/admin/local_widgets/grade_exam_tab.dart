@@ -88,7 +88,7 @@ class GradeExamTab extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                    "${data['needGrading']}/${data['totalQuestions']}",
+                                    "${data['needGrading']} vraag/vragen moeten nog verbeterd worden",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       fontFamily: 'Roboto',

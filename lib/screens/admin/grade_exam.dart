@@ -8,23 +8,23 @@ class GradeExam extends StatelessWidget {
   CollectionReference resultsCollection =
       FirebaseFirestore.instance.collection('results');
 
-  getAnswers() async {
-    await resultsCollection
-        .doc(sNummer)
-        .get()
-        .then((DocumentSnapshot snapshot) {
-      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
-      for (var i = 0; i < data['answers'].length; i++) {
-        if (data['answers'][i]['type'] == 'MC') {
-          if (data['answers'][i]['correctOption'].trim() ==
-              data['answers'][i]['answer'].trim()) {}
-        } else if (data['answers'][i]['type'] == 'CC') {
-          if (data['answers'][i]['answer'].toLowerCase().trim() ==
-              data['answers'][i]['correctCode'].toLowerCase().trim()) {}
-        }
-      }
-    });
-  }
+  // getAnswers() async {
+  //   await resultsCollection
+  //       .doc(sNummer)
+  //       .get()
+  //       .then((DocumentSnapshot snapshot) {
+  //     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+  //     for (var i = 0; i < data['answers'].length; i++) {
+  //       if (data['answers'][i]['type'] == 'MC') {
+  //         if (data['answers'][i]['correctOption'].trim() ==
+  //             data['answers'][i]['answer'].trim()) {}
+  //       } else if (data['answers'][i]['type'] == 'CC') {
+  //         if (data['answers'][i]['answer'].toLowerCase().trim() ==
+  //             data['answers'][i]['correctCode'].toLowerCase().trim()) {}
+  //       }
+  //     }
+  //   });
+  // }
 
   List<Widget> Answers() {
     List<Widget> list = [];
@@ -45,6 +45,11 @@ class GradeExam extends StatelessWidget {
                 decoration: InputDecoration(
                   labelText: "Score op ${answers[i]['points']} ",
                 ),
+                onChanged: (value) {
+                  answers[i]['score'] = int.parse(value);
+                  answers[i]['needGrading']--;
+                  print(value);
+                },
               ),
             ],
           ),
@@ -56,8 +61,7 @@ class GradeExam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getAnswers();
-    print(answers);
+    // getAnswers();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

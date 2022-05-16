@@ -220,8 +220,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     Navigator.pushAndRemoveUntil(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) =>
-            const MyApp(),
+        pageBuilder: (context, animation1, animation2) => const MyApp(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),
@@ -272,7 +271,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        controlsDetails.onStepCancel!();                                           
+                                        controlsDetails.onStepCancel!();
                                       },
                                     ),
                                     TextButton(
@@ -286,7 +285,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        controlsDetails.onStepContinue!();                                       
+                                        controlsDetails.onStepContinue!();
                                       },
                                     ),
                                   ],
@@ -314,13 +313,14 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                     ),
                     ElevatedButton(
                       onPressed: () => showDialog(
-                        context: context, 
+                        context: context,
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text("Examen indienen"),
-                          content: const Text("Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
+                          content: const Text(
+                              "Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
                           actions: [
                             TextButton(
-                              onPressed: () => Navigator.pop(context), 
+                              onPressed: () => Navigator.pop(context),
                               child: const Text("Annuleren"),
                             ),
                             TextButton(

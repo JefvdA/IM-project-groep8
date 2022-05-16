@@ -20,10 +20,18 @@ class CCAnswer extends Answer {
         'answer': answer,
       };
   int automaticCodeCorrection() {
-    if (givenCode.toLowerCase().trim() == correctCode.toLowerCase().trim()) {
-      return points;
+    if (caseSensitive) {
+      if (givenCode.trim() == correctCode.trim()) {
+        return points;
+      } else {
+        return 0;
+      }
     } else {
-      return 0;
+      if (givenCode.trim() == correctCode.trim()) {
+        return points;
+      } else {
+        return 0;
+      }
     }
   }
 }
