@@ -33,8 +33,10 @@ class _ExamScreenState extends State<ExamScreen> {
   Timer? timer;
   bool isCountdown = true;
 
-  int _index = 0;
+  int currentStep = 0;
   late List<Step> steps = [];
+
+  List<GlobalKey<FormState>> formKeys = [];
 
   get headerColor => null;
 
@@ -58,7 +60,9 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void addSteps() async {
     QuerySnapshot questionsSnapshot = await questionsCollection.get();
-    for (QueryDocumentSnapshot<Object?> question in questionsSnapshot.docs) { 
+    for (int i = 0; i < questionsSnapshot.docs.length; i++) { 
+      formKeys.add(GlobalKey<FormState>());
+      final QueryDocumentSnapshot<Object?> question = questionsSnapshot.docs[i];
       steps.add(
         Step(
           title: Text(
@@ -73,10 +77,25 @@ class _ExamScreenState extends State<ExamScreen> {
               color: Colors.black,
             ),
           ),
-          content: _buildQuestion(question),
+          content: Form(
+            key: formKeys[i],
+            child: _buildQuestion(question),
+          ),
         ),
       );
     }
+  }
+
+  void goToStep(int step) {
+    setState(() {
+      currentStep = step;
+    });
+  }
+
+  void addAnswer(String? answer) {
+    // For now just printing the answer to the console
+    print(answer);
+    // TODO : Add answer to list of answers, so we can save it to the database later
   }
 
   void reset() {
@@ -142,15 +161,15 @@ class _ExamScreenState extends State<ExamScreen> {
                       child: FutureBuilder(
                         future: questionsCollection.get(),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.hasData) {
+                          if (snapshot.hasData && steps.isNotEmpty) {
                             return Stepper(
                               steps: steps,
+                              currentStep: currentStep,
                               controlsBuilder: (BuildContext context,
                                   ControlsDetails controlsDetails) {
                                 return Row(
                                   children: <Widget>[
                                     TextButton(
-                                      onPressed: controlsDetails.onStepCancel,
                                       child: const Text(
                                         'Vorige',
                                         style: TextStyle(
@@ -160,9 +179,13 @@ class _ExamScreenState extends State<ExamScreen> {
                                           color: Colors.red,
                                         ),
                                       ),
+                                      onPressed: () {
+                                        formKeys[currentStep].currentState
+                                            ?.save();
+                                        controlsDetails.onStepCancel!();                                           
+                                      },
                                     ),
                                     TextButton(
-                                      onPressed: controlsDetails.onStepContinue,
                                       child: const Text(
                                         'Volgende',
                                         style: TextStyle(
@@ -172,32 +195,28 @@ class _ExamScreenState extends State<ExamScreen> {
                                           color: Colors.red,
                                         ),
                                       ),
+                                      onPressed: () {
+                                        formKeys[currentStep].currentState
+                                            ?.save();
+                                        controlsDetails.onStepContinue!();                                       
+                                      },
                                     ),
                                   ],
                                 );
                               },
-                              currentStep: _index,
                               onStepCancel: () {
-                                if (_index > 0) {
-                                  setState(() {
-                                    _index -= 1;
-                                  });
+                                if (currentStep > 0) {
+                                  goToStep(currentStep - 1);
                                 }
                               },
                               onStepContinue: () {
-                                if (_index >= 0) {
-                                  setState(() {
-                                    _index += 1;
-                                    if (_index == snapshot.data.docs.length) {
-                                      _index -= 1;
-                                    }
-                                  });
+                                if( currentStep + 1 != steps.length ) {
+                                  goToStep(currentStep + 1);
                                 }
                               },
                               onStepTapped: (int index) {
-                                setState(() {
-                                  _index = index;
-                                });
+                                formKeys[currentStep].currentState?.save();
+                                goToStep(index);
                               },
                             );
                           } else {
@@ -272,11 +291,11 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget _buildQuestion(QueryDocumentSnapshot<Object?> question) {
     switch (question['type']) {
       case "OQ":
-        return OpenQuestion(question);
+        return OpenQuestion(question, addAnswer);
       case "MC":
-        return MultipleChoiceQuestion(question);
+        return MultipleChoiceQuestion(question, addAnswer);
       case "CC":
-        return CodeCorrectionQuestion(question);
+        return CodeCorrectionQuestion(question, addAnswer);
       default:
         return Container();
     }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class OpenQuestion extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> questionDoc;
-  const OpenQuestion(this.questionDoc, {Key? key}) : super(key: key);
+  final AddAnswerCallback addAnswerCallback;
+  const OpenQuestion(this.questionDoc, this.addAnswerCallback, {Key? key}) : super(key: key);
 
   @override
   State<OpenQuestion> createState() => _OpenQuestionState();
@@ -11,37 +12,36 @@ class OpenQuestion extends StatefulWidget {
 
 class _OpenQuestionState extends State<OpenQuestion> {
 
-  final TextEditingController _answerController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          Text(
-            widget.questionDoc.get('question'),
-            style: const TextStyle(
-              fontSize: 26,
-              fontFamily: 'Roboto',
-              color: Colors.black,
+    return Column(
+      children: [
+        Text(
+          widget.questionDoc.get('question'),
+          style: const TextStyle(
+            fontSize: 26,
+            fontFamily: 'Roboto',
+            color: Colors.black,
+          ),
+        ),
+        TextFormField(
+          keyboardType: TextInputType.multiline,
+          maxLines: 1,
+          decoration: const InputDecoration(
+            hintText: "Geef je antwoord in...",
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  width: 1,
+                  color: Colors.redAccent),
             ),
           ),
-          TextField(
-            controller: _answerController,
-            keyboardType: TextInputType.multiline,
-            maxLines: 1,
-            decoration: const InputDecoration(
-              hintText: "Geef je antwoord in...",
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1,
-                    color: Colors.redAccent),
-              ),
-            ),
-          ),
-        ],
-      ),
+          onSaved: (String? value) {
+            widget.addAnswerCallback(value);
+          },
+        ),
+      ],
     );
   }
 }
+
+typedef AddAnswerCallback = void Function(String? answer);

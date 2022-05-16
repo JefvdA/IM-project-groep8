@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class MultipleChoiceQuestion extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> questionDoc;
-  const MultipleChoiceQuestion(this.questionDoc, { Key? key }) : super(key: key);
+  final AddAnswerCallback addAnswerCallback;
+  const MultipleChoiceQuestion(this.questionDoc, this.addAnswerCallback, { Key? key }) : super(key: key);
 
   @override
   State<MultipleChoiceQuestion> createState() => _MultipleChoiceQuestionState();
@@ -14,23 +15,27 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
 
   @override
   Widget build(BuildContext context){
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          Text(
-            widget.questionDoc.get('question'),
-            style: const TextStyle(
-              fontSize: 26,
-              fontFamily: 'Roboto',
-              color: Colors.black,
-            ),
+    return Column(
+      children: [
+        Text(
+          widget.questionDoc.get('question'),
+          style: const TextStyle(
+            fontSize: 26,
+            fontFamily: 'Roboto',
+            color: Colors.black,
           ),
-          _choiceBuild(
+        ),
+        FormField(
+          builder: (FormFieldState<dynamic> field) { 
+            return _choiceBuild(
               widget.questionDoc.get('options'),
-          ),
-        ],
-      ),
+            );
+          }, 
+          onSaved: (_) {
+            widget.addAnswerCallback(widget.questionDoc.get('options')[_value]);
+          },
+        ),
+      ],
     );
   }
 
@@ -51,3 +56,5 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
     );
   }
 }
+
+typedef AddAnswerCallback = void Function(String? answer);
