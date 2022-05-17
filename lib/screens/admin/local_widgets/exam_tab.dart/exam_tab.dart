@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/add_questions/add_questions_screen.dart';
-import 'package:examap/screens/admin/local_widgets/add_exam_screen.dart';
+import 'package:examap/screens/admin/local_widgets/exam_tab.dart/local_widgets/add_exam_screen.dart';
 import 'package:flutter/material.dart';
 
 class ExamTab extends StatefulWidget {
