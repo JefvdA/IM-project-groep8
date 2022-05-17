@@ -69,7 +69,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
     addSteps();
 
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
     startTimer();
     reset();
@@ -113,7 +113,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     timer?.cancel();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -206,6 +206,10 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     restultsCollection.doc(user).set({
       "student": user,
       "score": totalScore,
+      "location": {
+        "lat": latitude,
+        "lon": longitude,
+      },
       "maxScore": maxScore,
       "totalQuestions": totalQuestions,
       "needGrading": needGrading,
