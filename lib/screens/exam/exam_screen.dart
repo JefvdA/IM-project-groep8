@@ -38,7 +38,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   List<Answer> answers = [];
 
   //timer
-  static const countdownDuration = Duration(seconds: 50);
+  static const countdownDuration = Duration(hours: 3);
   Duration _duration = const Duration();
   bool isCountdown = true;
   Timer? timer;
