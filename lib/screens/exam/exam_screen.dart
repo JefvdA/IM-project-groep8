@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:examap/models/answer/answer.dart';
+import 'package:examap/models/answer/impl/oq_answer.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -19,6 +20,9 @@ import 'package:examap/screens/exam/local_widgets/open_question.dart';
 
 import 'package:flutter/foundation.dart';
 
+import '../../models/answer/impl/cc_answer.dart';
+import '../../models/answer/impl/mc_answer.dart';
+
 class ExamScreen extends StatefulWidget {
   const ExamScreen({Key? key}) : super(key: key);
 
@@ -28,6 +32,8 @@ class ExamScreen extends StatefulWidget {
 
 class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   String user = CurrentStudent.sNummer;
+  double latitude = 0;
+  double longitude = 0;
 
   List<Answer> answers = [];
 
@@ -50,20 +56,20 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
       FirebaseFirestore.instance.collection("students");
 
   final CollectionReference questionsCollection = FirebaseFirestore.instance
-    .collection('exams')
-    .doc('Intro mobile')
-    .collection("questions");
+      .collection('exams')
+      .doc('Intro mobile')
+      .collection("questions");
 
-  final CollectionReference restultsCollection = FirebaseFirestore.instance
-    .collection('results');
+  final CollectionReference restultsCollection =
+      FirebaseFirestore.instance.collection('results');
 
   @override
   void initState() {
     super.initState();
 
     addSteps();
-    
-    WidgetsBinding.instance.addObserver(this);
+
+    WidgetsBinding.instance!.addObserver(this);
 
     startTimer();
     reset();
@@ -71,7 +77,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
   void addSteps() async {
     QuerySnapshot questionsSnapshot = await questionsCollection.get();
-    for (int i = 0; i < questionsSnapshot.docs.length; i++) { 
+    for (int i = 0; i < questionsSnapshot.docs.length; i++) {
       formKeys.add(GlobalKey<FormState>());
       final QueryDocumentSnapshot<Object?> question = questionsSnapshot.docs[i];
       steps.add(
@@ -103,11 +109,11 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   void addAnswer(Answer answer) {
     answers.add(answer);
   }
-  
+
   @override
   void dispose() {
     timer?.cancel();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -159,9 +165,8 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   void askPermission() async {
     await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition();
-    await studentsCollection
-        .doc(CurrentStudent.sNummer)
-        .update({"lat": position.latitude, "lon": position.longitude});
+    latitude = position.latitude;
+    longitude = position.longitude;
   }
 
   void getAnswers() {
@@ -172,13 +177,38 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   }
 
   void endExam() {
+    var totalScore = 0;
+    var maxScore = 0;
+    var totalQuestions = 0;
+    var needGrading = 0;
     // Get data from question forms
     getAnswers();
 
     // Save results to firestore
-    restultsCollection.doc(user)
-    .set({
+    answers.map((e) => jsonDecode(jsonEncode(e)));
+    for (var i = 0; i < answers.length; i++) {
+      totalQuestions++;
+      if (answers[i].type == "OQ") {
+        needGrading++;
+        maxScore += answers[i].points;
+      }
+      if (answers[i].type == "MC") {
+        var x = answers[i] as MCAnswer;
+        totalScore += x.automaticCodeCorrection();
+        maxScore += answers[i].points;
+      }
+      if (answers[i].type == "CC") {
+        var x = answers[i] as CCAnswer;
+        totalScore += x.automaticCodeCorrection();
+        maxScore += answers[i].points;
+      }
+    }
+    restultsCollection.doc(user).set({
       "student": user,
+      "score": totalScore,
+      "maxScore": maxScore,
+      "totalQuestions": totalQuestions,
+      "needGrading": needGrading,
       "answers": answers.map((e) => jsonDecode(jsonEncode(e))),
       "leftApplicationCount": leftApplicationCount,
     });
@@ -190,8 +220,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     Navigator.pushAndRemoveUntil(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) =>
-            const MyApp(),
+        pageBuilder: (context, animation1, animation2) => const MyApp(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),
@@ -221,7 +250,8 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                     SingleChildScrollView(
                       child: FutureBuilder(
                         future: questionsCollection.get(),
-                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData && steps.isNotEmpty) {
                             return Stepper(
                               steps: steps,
@@ -241,7 +271,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        controlsDetails.onStepCancel!();                                           
+                                        controlsDetails.onStepCancel!();
                                       },
                                     ),
                                     TextButton(
@@ -255,7 +285,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                         ),
                                       ),
                                       onPressed: () {
-                                        controlsDetails.onStepContinue!();                                       
+                                        controlsDetails.onStepContinue!();
                                       },
                                     ),
                                   ],
@@ -267,7 +297,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                                 }
                               },
                               onStepContinue: () {
-                                if( currentStep + 1 != steps.length ) {
+                                if (currentStep + 1 != steps.length) {
                                   goToStep(currentStep + 1);
                                 }
                               },
@@ -283,13 +313,14 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
                     ),
                     ElevatedButton(
                       onPressed: () => showDialog(
-                        context: context, 
+                        context: context,
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text("Examen indienen"),
-                          content: const Text("Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
+                          content: const Text(
+                              "Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
                           actions: [
                             TextButton(
-                              onPressed: () => Navigator.pop(context), 
+                              onPressed: () => Navigator.pop(context),
                               child: const Text("Annuleren"),
                             ),
                             TextButton(
@@ -333,24 +364,24 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   }
 
   Widget _buildTimeCard({required String time}) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            time,
-            style: const TextStyle(
-              fontWeight: FontWeight.normal,
-              color: Colors.white,
-              fontSize: 30,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              time,
+              style: const TextStyle(
+                fontWeight: FontWeight.normal,
+                color: Colors.white,
+                fontSize: 30,
+              ),
             ),
           ),
-        ),
-      ],
-    ); 
+        ],
+      );
 
   Widget _buildQuestion(QueryDocumentSnapshot<Object?> question) {
     switch (question['type']) {

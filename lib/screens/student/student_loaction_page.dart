@@ -1,62 +1,58 @@
-// ignore_for_file: file_names
+import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/repositories/current_student.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart' as l;
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart' as ll;
+import 'package:http/http.dart' as http;
 
-class StudentLocationScreen extends StatefulWidget {
-  const StudentLocationScreen({Key? key}) : super(key: key);
+class StudentLocationScreen extends StatelessWidget {
+  StudentLocationScreen(this.latitude, this.longitude);
+  final double latitude;
+  final double longitude;
 
-  @override
-  State<StudentLocationScreen> createState() => _StudentLocationScreenState();
-}
-
-class _StudentLocationScreenState extends State<StudentLocationScreen> {
-  CollectionReference studentsCollection =
-      FirebaseFirestore.instance.collection("students");
-
-  setMarker(controller, lat, lon) async {
-    await controller.addMarker(l.GeoPoint(latitude: lat, longitude: lon),
-        const l.MarkerIcon(icon: Icon(Icons.abc)));
+  Future<String> address() async {
+    String url =
+        "http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=";
+    var response = await http.get(Uri.parse(url));
+    var address = json.decode(response.body)["address"];
+    var displayname = json.decode(response.body)["display_name"];
+    return displayname;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot>(
-      future: studentsCollection.doc(CurrentStudent.sNummer).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return const Text("Something went wrong");
-        }
-
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return const Text("Document does not exist");
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
-          l.MapController controller = l.MapController(
-            initMapWithUserPosition: false,
-            initPosition:
-                l.GeoPoint(latitude: data['lat'], longitude: data['lon']),
-          );
-          setMarker(controller, data['lat'], data['lon']);
-          return l.OSMFlutter(
-            controller: controller,
-            initZoom: 10,
-            userLocationMarker: l.UserLocationMaker(
-              personMarker: const l.MarkerIcon(icon: Icon(Icons.person)),
-              directionArrowMarker:
-                  const l.MarkerIcon(icon: Icon(Icons.arrow_forward)),
+    return Scaffold(
+      appBar: AppBar(title: Text("Appbar")),
+      body: Container(
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 100),
+        child: FlutterMap(
+          options:
+              MapOptions(center: ll.LatLng(latitude, longitude), minZoom: 10.0),
+          layers: [
+            TileLayerOptions(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c'],
             ),
-          );
-        }
-
-        return const Text("loading");
-      },
+            MarkerLayerOptions(
+              markers: [
+                Marker(
+                  width: 100.0,
+                  height: 100.0,
+                  point: ll.LatLng(latitude, longitude),
+                  builder: (context) => Container(
+                    child: IconButton(
+                      icon: const Icon(Icons.location_on),
+                      color: Colors.red,
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
