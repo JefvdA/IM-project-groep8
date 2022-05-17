@@ -4,7 +4,8 @@ import 'package:examap/screens/admin/local_widgets/exam_tab.dart/local_widgets/a
 import 'package:flutter/material.dart';
 
 class ExamTab extends StatefulWidget {
-  const ExamTab({Key? key}) : super(key: key);
+  final OnExamAddedCallback onExamAddedCallback;
+  const ExamTab(this.onExamAddedCallback, {Key? key}) : super(key: key);
 
   @override
   State<ExamTab> createState() => _ExamTabState();
@@ -13,6 +14,7 @@ class ExamTab extends StatefulWidget {
 class _ExamTabState extends State<ExamTab> {
 
   bool isExamLoaded = false;
+  bool doesExamExist = false;
   late QueryDocumentSnapshot exam;
 
   final CollectionReference examsCollection =
@@ -27,20 +29,26 @@ class _ExamTabState extends State<ExamTab> {
 
   void loadExam() async {
     bool examExists = await checkExamExists();
-    if(!examExists){
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AddExamScreen(),
-        ),
-      );
-    } else {
+    if(examExists){
       QuerySnapshot examSnapshot = await examsCollection.get();
       setState(() {
         exam = examSnapshot.docs.first;
         isExamLoaded = true;
+        doesExamExist = true;
+      });
+    } else {
+      setState(() {
+        isExamLoaded = true;
+        doesExamExist = false;
       });
     }
+  }
+
+  void onExamAdded() {
+    setState(() {
+      isExamLoaded = false;
+    });
+    loadExam();
   }
 
   Future<bool> checkExamExists() async {
@@ -52,10 +60,16 @@ class _ExamTabState extends State<ExamTab> {
   Widget build(BuildContext context) {
     return isExamLoaded 
     ?
-       AddQuestionsScreen(exam.get('name'))
+      doesExamExist
+      ?
+        const AddQuestionsScreen('exam')
+      :
+        AddExamScreen(onExamAdded)
     :
       const Center(
         child: CircularProgressIndicator(),
       );
   }
 }
+
+typedef OnExamAddedCallback = void Function();

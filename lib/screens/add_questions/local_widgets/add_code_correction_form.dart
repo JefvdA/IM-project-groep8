@@ -174,14 +174,14 @@ class _AddCodeCorrectionFormState extends State<AddCodeCorrectionForm> {
 
   void addQuestion() async {
     int id = await examsCollection
-        .doc(widget.exam)
+        .doc("exam")
         .collection('questions')
         .get()
         .then((value) {
       return value.docs.length + 1;
     });
     examsCollection
-        .doc(widget.exam)
+        .doc("exam")
         .collection('questions')
         .doc("question $id")
         .set({

@@ -56,7 +56,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
   final CollectionReference questionsCollection = FirebaseFirestore.instance
       .collection('exams')
-      .doc('Intro mobile')
+      .doc("exam")
       .collection("questions");
 
   final CollectionReference restultsCollection =

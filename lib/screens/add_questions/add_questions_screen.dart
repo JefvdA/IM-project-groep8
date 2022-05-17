@@ -1,4 +1,4 @@
-import 'package:examap/screens/admin/local_widgets/exam_tab.dart/exam_tab.dart';
+import 'package:examap/main.dart';
 import 'package:examap/screens/edit_questions/edit_questions_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -48,7 +48,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ExamTab(),
+        builder: (context) => const MyApp(),
       ),
     );
   }
@@ -163,20 +163,20 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
               onPressed: () => showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text("Examen indienen"),
+                  title: const Text("Database leegmaken"),
                   content: const Text(
-                      "Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
+                      "Weet u zeker dat u alles uit het systeem wilt verwijderen? U kan niet meer teruggaan!"),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text("Annuleren"),
+                      child: const Text("ANNULEREN"),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                         purgeDatabase();
                       },
-                      child: const Text("Indienen"),
+                      child: const Text("DOEN"),
                     ),
                   ],
                 ),
@@ -186,7 +186,7 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
                 size: 30,
               ),
               label:
-                  const Text("DELTE EVERYTHING", style: TextStyle(fontSize: 24)),
+                  const Text("ALLES VERWIJDEREN", style: TextStyle(fontSize: 24)),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(200, 50),
               ),

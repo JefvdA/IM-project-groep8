@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AddExamScreen extends StatefulWidget {
-  const AddExamScreen({Key? key}) : super(key: key);
+  final OnExamAddedCallback onExamAddedCallback;
+  const AddExamScreen(this.onExamAddedCallback, {Key? key}) : super(key: key);
 
   @override
   State<AddExamScreen> createState() => _AddExamScreenState();
@@ -110,16 +111,14 @@ class _AddExamScreenState extends State<AddExamScreen> {
   }
 
   void addExam() {
-    examCollection.doc(_nameController.text).set(
+    examCollection.doc("exam").set(
       {
         'name': _nameController.text,
         'description': _descriptionController.text,
       },
     );
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AddQuestionsScreen(_nameController.text)),
-    );
+    widget.onExamAddedCallback();
   }
 }
+
+typedef OnExamAddedCallback = void Function();

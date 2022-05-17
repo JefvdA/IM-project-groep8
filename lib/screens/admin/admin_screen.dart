@@ -22,11 +22,21 @@ class AdminScreenState extends State<AdminScreen> {
   final CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
 
+  List<Widget> _items = [];
+  int _selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
 
     checkExamExists();
+
+    _items = [
+      const AddStudentsTab(),
+      const ChangePasswordTab(),
+      ExamTab(checkExamExists),
+      const GradeExamTab()
+    ];
   }
 
   void checkExamExists() async {
@@ -35,14 +45,6 @@ class AdminScreenState extends State<AdminScreen> {
       doesExamExist = examSnapshot.docs.isNotEmpty;
     });
   }
-
-  final List<Widget> _items = [
-    const AddStudentsTab(),
-    const ChangePasswordTab(),
-    const ExamTab(),
-    const GradeExamTab()
-  ];
-  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
