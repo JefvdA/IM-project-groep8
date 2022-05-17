@@ -1,3 +1,4 @@
+import 'package:examap/screens/admin/local_widgets/exam_tab.dart/exam_tab.dart';
 import 'package:examap/screens/edit_questions/edit_questions_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +20,38 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
   final CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
 
+  final CollectionReference studentsCollection =
+      FirebaseFirestore.instance.collection('students');
+    
+  final CollectionReference resultsCollection =
+      FirebaseFirestore.instance.collection('results');
+
   String _selectedValue = "OQ";
+
+  void purgeDatabase() {
+    examsCollection.get().then((snapshot) {
+      for(DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+    studentsCollection.get().then((snapshot) {
+      for(DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+    resultsCollection.get().then((snapshot) {
+      for(DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+  
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ExamTab(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +158,39 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
             else if (_selectedValue == "MC")
               AddMultipleChoiceForm(widget.exam)
             else if (_selectedValue == "CC")
-              AddCodeCorrectionForm(widget.exam)
+              AddCodeCorrectionForm(widget.exam),
+            ElevatedButton.icon(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text("Examen indienen"),
+                  content: const Text(
+                      "Weet u zeker dat u het examen wilt indienen? U kan niet meer teruggaan."),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Annuleren"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        purgeDatabase();
+                      },
+                      child: const Text("Indienen"),
+                    ),
+                  ],
+                ),
+              ),
+              icon: const Icon(
+                Icons.dangerous_rounded,
+                size: 30,
+              ),
+              label:
+                  const Text("DELTE EVERYTHING", style: TextStyle(fontSize: 24)),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50),
+              ),
+            ),
           ],
         ),
       ),
