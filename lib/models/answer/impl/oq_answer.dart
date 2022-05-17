@@ -11,5 +11,6 @@ class OQAnswer extends Answer {
         'type': type,
         'points': points,
         'answer': answer,
+        'graded': false
       };
 }

@@ -1,57 +1,90 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class GradeExam extends StatelessWidget {
+class GradeExam extends StatefulWidget {
   final sNummer;
   final answers;
-  GradeExam(this.sNummer, this.answers, {Key? key}) : super(key: key);
+  const GradeExam(this.sNummer, this.answers, {Key? key}) : super(key: key);
+  @override
+  State<GradeExam> createState() => _GradeExamState(this.sNummer);
+}
+
+class _GradeExamState extends State<GradeExam> {
   CollectionReference resultsCollection =
       FirebaseFirestore.instance.collection('results');
-  List<Widget> Answers() {
-    List<Widget> list = [];
-    for (var i = 0; i < answers.length; i++) {
-      if (answers[i]['type'] == 'OQ') {
-        list.add(
-          Column(
-            children: [
-              ListTile(
-                title: Text(answers[i]['question']),
-                subtitle: Text(answers[i]['answer']),
-              ),
-              TextField(
-                onSubmitted: (text) async {
-                  resultsCollection.doc(sNummer).update({
-                    'score':
-                        await resultsCollection.doc(sNummer).get().then((doc) {
-                      return doc.get("score") + int.parse(text);
-                    }),
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: "Score op ${answers[i]['points']} ",
-                ),
-              ),
-            ],
-          ),
-        );
-      }
-    }
-    return list;
-  }
-
+  var punten = "";
+  final sNummer;
+  _GradeExamState(this.sNummer);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Beoordelen'),
+        title: const Text('ExamAp'),
       ),
       body: Column(
         children: [
           const Text("Nog te beoordelen vragen"),
-          ListView(
-            children: Answers(),
-            shrinkWrap: true,
+          StreamBuilder(
+            stream: resultsCollection.doc(sNummer).snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return const Text('Loading...');
+              } else {
+                final answers = snapshot.data!['answers'];
+                for (var i = 0; i < answers.length; i++) {
+                  if (answers[i]['type'] == 'OQ' &&
+                      answers[i]['graded'] == false) {
+                    var value;
+                    return Column(
+                      children: [
+                        ListTile(
+                          title: Text(answers[i]['question']),
+                          subtitle: Text(answers[i]['answer']),
+                        ),
+                        TextField(
+                          onChanged: (text) async {
+                            value = text;
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Score op ${answers[i]['points']} ",
+                          ),
+                        ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              resultsCollection.doc(sNummer).update({
+                                'needGrading': await resultsCollection
+                                    .doc(sNummer)
+                                    .get()
+                                    .then((doc) {
+                                  return doc.get("needGrading") - 1;
+                                }),
+                                'score': await resultsCollection
+                                    .doc(sNummer)
+                                    .get()
+                                    .then((doc) {
+                                  return doc.get("score") + int.parse(value);
+                                }),
+                                "answers": await resultsCollection
+                                    .doc(sNummer)
+                                    .get()
+                                    .then((doc) {
+                                  var x = doc.get("answers");
+                                  x[i]['graded'] = true;
+                                  return x;
+                                })
+                              });
+                            },
+                            child: Text("Examen verbeteren"))
+                      ],
+                    );
+                  }
+                }
+              }
+              return Container(
+                child: Text("Alle vragen zijn verbeterd"),
+              );
+            },
           ),
           StreamBuilder(
             stream: resultsCollection.doc(sNummer).snapshots(),
@@ -60,19 +93,25 @@ class GradeExam extends StatelessWidget {
                 return const Text('Loading...');
               }
               final document = snapshot.data;
-              return Text(
-                'Score: ${document!['score']}',
-                style: const TextStyle(fontSize: 20),
-              );
+              return Column(children: [
+                TextFormField(
+                  initialValue: document!['score'].toString(),
+                  onChanged: (text) {
+                    punten = text;
+                  },
+                  decoration: InputDecoration(
+                    labelText: "totalescore op ${document['maxScore']}",
+                  ),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      resultsCollection
+                          .doc(sNummer)
+                          .update({"score": int.parse(punten)});
+                    },
+                    child: Text("Geef punten"))
+              ]);
             },
-          ),
-          TextField(
-            onSubmitted: (text) async {
-              resultsCollection.doc(sNummer).update({'score': int.parse(text)});
-            },
-            decoration: InputDecoration(
-              labelText: "zet de totalescore",
-            ),
           ),
         ],
       ),

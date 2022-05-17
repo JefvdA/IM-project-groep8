@@ -27,46 +27,52 @@ class GradeExamTab extends StatelessWidget {
                       return Card(
                         color: Colors.white,
                         child: ListTile(
-                          trailing: Column(
-                            children: [
-                              ElevatedButton.icon(
-                                icon: const Icon(Icons.grading_rounded),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              GradeExam(
-                                        data['student'],
-                                        data['answers'],
+                          trailing: Container(
+                            width: 250,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton.icon(
+                                  icon: const Icon(Icons.grading_rounded),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                GradeExam(
+                                          data['student'],
+                                          data['answers'],
+                                        ),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
                                       ),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
-                                    ),
-                                  );
-                                },
-                                label: const Text("Beoordelen"),
-                              ),
-                              ElevatedButton.icon(
-                                icon: const Icon(Icons.location_on_rounded),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              StudentLocationScreen(
-                                                  data['location']['lat'],
-                                                  data['location']['lon']),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
-                                    ),
-                                  );
-                                },
-                                label: const Text("Locatie"),
-                              ),
-                            ],
+                                    );
+                                  },
+                                  label: const Text("Beoordelen"),
+                                ),
+                                ElevatedButton.icon(
+                                  icon: const Icon(Icons.location_on_rounded),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                StudentLocationScreen(
+                                                    data['location']['lat'],
+                                                    data['location']['lon']),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
+                                  },
+                                  label: const Text("Locatie"),
+                                ),
+                              ],
+                            ),
                           ),
                           title: Center(
                             child: Column(

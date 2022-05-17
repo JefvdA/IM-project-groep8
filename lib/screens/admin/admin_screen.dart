@@ -16,7 +16,6 @@ class AdminScreen extends StatefulWidget {
 }
 
 class AdminScreenState extends State<AdminScreen> {
-
   bool doesExamExist = false;
 
   final CollectionReference examsCollection =
@@ -69,19 +68,16 @@ class AdminScreenState extends State<AdminScreen> {
             label: 'Wachtwoord wijzigen',
           ),
           doesExamExist
-          ?
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Vragen teoevoegen',
-            )
-          :
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Examen aanmaken',
-            ),
+              ? const BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: 'Vragen teoevoegen',
+                )
+              : const BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: 'Examen aanmaken',
+                ),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.grade_outlined), 
-              label: 'Beoordelen'),
+              icon: Icon(Icons.grading_rounded), label: 'Beoordelen'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onTap,

@@ -68,7 +68,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
     addSteps();
 
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
     startTimer();
     reset();
@@ -112,7 +112,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     timer?.cancel();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 

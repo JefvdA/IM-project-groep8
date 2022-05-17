@@ -12,10 +12,8 @@ class StudentLocationScreen extends StatelessWidget {
   final double longitude;
 
   Future<String> address() async {
-    String url =
-        "http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=";
-    var response = await http.get(Uri.parse(url));
-    var address = json.decode(response.body)["address"];
+    var response = await http.get(Uri.parse(
+        "http://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails="));
     var displayname = json.decode(response.body)["display_name"];
     return displayname;
   }
@@ -23,7 +21,7 @@ class StudentLocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Appbar")),
+      appBar: AppBar(title: const Text("ExamAp")),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 100),
         child: FlutterMap(
@@ -37,8 +35,8 @@ class StudentLocationScreen extends StatelessWidget {
             MarkerLayerOptions(
               markers: [
                 Marker(
-                  width: 100.0,
-                  height: 100.0,
+                  width: 50.0,
+                  height: 50.0,
                   point: ll.LatLng(latitude, longitude),
                   builder: (context) => Container(
                     child: IconButton(
