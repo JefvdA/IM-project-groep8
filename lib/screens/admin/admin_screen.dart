@@ -35,6 +35,7 @@ class AdminScreenState extends State<AdminScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
@@ -49,7 +50,8 @@ class AdminScreenState extends State<AdminScreen> {
             label: 'Examen toevoegen',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.grade_outlined), label: 'Beoordelen'),
+              icon: Icon(Icons.grade_outlined), 
+              label: 'Beoordelen'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onTap,
