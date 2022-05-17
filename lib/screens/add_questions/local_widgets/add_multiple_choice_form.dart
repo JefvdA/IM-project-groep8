@@ -155,13 +155,13 @@ class _AddMultipleChoiceFormState extends State<AddMultipleChoiceForm> {
 
   void addQuestion() async {
     int id = await examsCollection
-      .doc(widget.exam)
+        .doc("exam")
       .collection('questions')
       .get()
       .then((value) {
       return value.docs.length + 1;
     });
-    examsCollection.doc(widget.exam).collection('questions').doc("question $id").set({
+    examsCollection.doc("exam").collection('questions').doc("question $id").set({
       "type": "MC",
       "question": _questionController.text,
       "options": _optionsController.text.split(","),

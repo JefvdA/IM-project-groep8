@@ -1,12 +1,13 @@
+import 'package:examap/main.dart';
 import 'package:examap/screens/edit_questions/edit_questions_tab.dart';
+import 'package:examap/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:examap/widgets/global_app_bar.dart';
 
 import 'package:examap/screens/add_questions/local_widgets/add_code_correction_form.dart';
 import 'package:examap/screens/add_questions/local_widgets/add_multiple_choice_form.dart';
 import 'package:examap/screens/add_questions/local_widgets/add_open_question_form.dart';
+import 'package:provider/provider.dart';
 
 class AddQuestionsScreen extends StatefulWidget {
   final String exam;
@@ -17,10 +18,45 @@ class AddQuestionsScreen extends StatefulWidget {
 }
 
 class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
+  
   final CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
 
+  final CollectionReference studentsCollection =
+      FirebaseFirestore.instance.collection('students');
+    
+  final CollectionReference resultsCollection =
+      FirebaseFirestore.instance.collection('results');
+
   String _selectedValue = "OQ";
+
+  void purgeDatabase() {
+    examsCollection.get().then((snapshot) {
+      for(DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+    studentsCollection.get().then((snapshot) {
+      for(DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+    resultsCollection.get().then((snapshot) {
+      for(DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+
+    final AuthenticationService auth = context.read<AuthenticationService>();
+    auth.signOut();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MyApp(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +94,6 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
     ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: globalAppBar,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -128,7 +163,39 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
             else if (_selectedValue == "MC")
               AddMultipleChoiceForm(widget.exam)
             else if (_selectedValue == "CC")
-              AddCodeCorrectionForm(widget.exam)
+              AddCodeCorrectionForm(widget.exam),
+            ElevatedButton.icon(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text("Database leegmaken"),
+                  content: const Text(
+                      "Weet u zeker dat u alles uit het systeem wilt verwijderen? U kan niet meer teruggaan!"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("ANNULEREN"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        purgeDatabase();
+                      },
+                      child: const Text("DOEN"),
+                    ),
+                  ],
+                ),
+              ),
+              icon: const Icon(
+                Icons.dangerous_rounded,
+                size: 30,
+              ),
+              label:
+                  const Text("ALLES VERWIJDEREN", style: TextStyle(fontSize: 24)),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50),
+              ),
+            ),
           ],
         ),
       ),
