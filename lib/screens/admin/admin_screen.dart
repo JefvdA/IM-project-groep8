@@ -1,8 +1,9 @@
 // ignore_for_file: file_names
 
-import 'package:examap/screens/admin/local_widgets/add_exam_tab.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/screens/admin/local_widgets/add_student_tab.dart';
 import 'package:examap/screens/admin/local_widgets/change_password_tab.dart';
+import 'package:examap/screens/admin/local_widgets/exam_tab.dart/exam_tab.dart';
 import 'package:examap/screens/admin/local_widgets/grade_exam_tab.dart';
 import 'package:examap/widgets/global_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,30 @@ class AdminScreen extends StatefulWidget {
 }
 
 class AdminScreenState extends State<AdminScreen> {
+
+  bool doesExamExist = false;
+
+  final CollectionReference examsCollection =
+      FirebaseFirestore.instance.collection('exams');
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkExamExists();
+  }
+
+  void checkExamExists() async {
+    QuerySnapshot examSnapshot = await examsCollection.get();
+    setState(() {
+      doesExamExist = examSnapshot.docs.isNotEmpty;
+    });
+  }
+
   final List<Widget> _items = [
     const AddStudentsTab(),
     const ChangePasswordTab(),
-    const AddExamTab(),
+    const ExamTab(),
     const GradeExamTab()
   ];
   int _selectedIndex = 0;
@@ -36,20 +57,27 @@ class AdminScreenState extends State<AdminScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Studenten toevoegen',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.key),
             label: 'Wachtwoord wijzigen',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Examen toevoegen',
-          ),
-          BottomNavigationBarItem(
+          doesExamExist
+          ?
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: 'Vragen teoevoegen',
+            )
+          :
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: 'Examen aanmaken',
+            ),
+          const BottomNavigationBarItem(
               icon: Icon(Icons.grade_outlined), 
               label: 'Beoordelen'),
         ],

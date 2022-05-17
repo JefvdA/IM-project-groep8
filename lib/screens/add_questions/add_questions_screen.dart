@@ -2,8 +2,6 @@ import 'package:examap/screens/edit_questions/edit_questions_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:examap/widgets/global_app_bar.dart';
-
 import 'package:examap/screens/add_questions/local_widgets/add_code_correction_form.dart';
 import 'package:examap/screens/add_questions/local_widgets/add_multiple_choice_form.dart';
 import 'package:examap/screens/add_questions/local_widgets/add_open_question_form.dart';
@@ -17,6 +15,7 @@ class AddQuestionsScreen extends StatefulWidget {
 }
 
 class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
+  
   final CollectionReference examsCollection =
       FirebaseFirestore.instance.collection('exams');
 
@@ -58,7 +57,6 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
     ];
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: globalAppBar,
       body: SingleChildScrollView(
         child: Column(
           children: [

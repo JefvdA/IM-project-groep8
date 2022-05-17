@@ -5,18 +5,21 @@ import 'package:examap/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddExamTab extends StatefulWidget {
-  const AddExamTab({Key? key}) : super(key: key);
+class AddExamScreen extends StatefulWidget {
+  const AddExamScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddExamTab> createState() => _AddExamTabState();
+  State<AddExamScreen> createState() => _AddExamScreenState();
 }
 
-class _AddExamTabState extends State<AddExamTab> {
+class _AddExamScreenState extends State<AddExamScreen> {
+
+  final CollectionReference examCollection =
+    FirebaseFirestore.instance.collection('exams');
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  CollectionReference examsCollection =
-      FirebaseFirestore.instance.collection('exams');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +49,7 @@ class _AddExamTabState extends State<AddExamTab> {
               ),
             ),
             StreamBuilder(
-              stream: examsCollection.snapshots(),
+              stream: examCollection.snapshots(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -107,7 +110,7 @@ class _AddExamTabState extends State<AddExamTab> {
   }
 
   void addExam() {
-    examsCollection.doc(_nameController.text).set(
+    examCollection.doc(_nameController.text).set(
       {
         'name': _nameController.text,
         'description': _descriptionController.text,
