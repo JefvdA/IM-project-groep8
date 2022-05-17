@@ -7,25 +7,6 @@ class GradeExam extends StatelessWidget {
   GradeExam(this.sNummer, this.answers, {Key? key}) : super(key: key);
   CollectionReference resultsCollection =
       FirebaseFirestore.instance.collection('results');
-
-  // getAnswers() async {
-  //   await resultsCollection
-  //       .doc(sNummer)
-  //       .get()
-  //       .then((DocumentSnapshot snapshot) {
-  //     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
-  //     for (var i = 0; i < data['answers'].length; i++) {
-  //       if (data['answers'][i]['type'] == 'MC') {
-  //         if (data['answers'][i]['correctOption'].trim() ==
-  //             data['answers'][i]['answer'].trim()) {}
-  //       } else if (data['answers'][i]['type'] == 'CC') {
-  //         if (data['answers'][i]['answer'].toLowerCase().trim() ==
-  //             data['answers'][i]['correctCode'].toLowerCase().trim()) {}
-  //       }
-  //     }
-  //   });
-  // }
-
   List<Widget> Answers() {
     List<Widget> list = [];
     for (var i = 0; i < answers.length; i++) {
@@ -33,23 +14,22 @@ class GradeExam extends StatelessWidget {
         list.add(
           Column(
             children: [
-              Text(
-                answers[i]['question'],
-                style: const TextStyle(fontSize: 20),
-              ),
-              Text(
-                answers[i]['answer'],
-                style: const TextStyle(fontSize: 20),
+              ListTile(
+                title: Text(answers[i]['question']),
+                subtitle: Text(answers[i]['answer']),
               ),
               TextField(
+                onSubmitted: (text) async {
+                  resultsCollection.doc(sNummer).update({
+                    'score':
+                        await resultsCollection.doc(sNummer).get().then((doc) {
+                      return doc.get("score") + int.parse(text);
+                    }),
+                  });
+                },
                 decoration: InputDecoration(
                   labelText: "Score op ${answers[i]['points']} ",
                 ),
-                onChanged: (value) {
-                  answers[i]['score'] = int.parse(value);
-                  answers[i]['needGrading']--;
-                  print(value);
-                },
               ),
             ],
           ),
@@ -61,7 +41,6 @@ class GradeExam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // getAnswers();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -69,8 +48,31 @@ class GradeExam extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(
-            child: ListView(children: Answers()),
+          const Text("Nog te beoordelen vragen"),
+          ListView(
+            children: Answers(),
+            shrinkWrap: true,
+          ),
+          StreamBuilder(
+            stream: resultsCollection.doc(sNummer).snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return const Text('Loading...');
+              }
+              final document = snapshot.data;
+              return Text(
+                'Score: ${document!['score']}',
+                style: const TextStyle(fontSize: 20),
+              );
+            },
+          ),
+          TextField(
+            onSubmitted: (text) async {
+              resultsCollection.doc(sNummer).update({'score': int.parse(text)});
+            },
+            decoration: InputDecoration(
+              labelText: "zet de totalescore",
+            ),
           ),
         ],
       ),

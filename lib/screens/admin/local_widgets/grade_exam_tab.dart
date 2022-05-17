@@ -49,7 +49,7 @@ class GradeExamTab extends StatelessWidget {
                                 label: const Text("Beoordelen"),
                               ),
                               ElevatedButton.icon(
-                                icon: const Icon(Icons.grading_rounded),
+                                icon: const Icon(Icons.location_on_rounded),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -64,7 +64,7 @@ class GradeExamTab extends StatelessWidget {
                                     ),
                                   );
                                 },
-                                label: const Text("Beoordelen"),
+                                label: const Text("Locatie"),
                               ),
                             ],
                           ),
@@ -88,12 +88,21 @@ class GradeExamTab extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                    "${data['needGrading']} vraag/vragen moeten nog verbeterd worden",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black,
-                                    )),
+                                  "${data['needGrading']} vraag/vragen moeten nog verbeterd worden",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Roboto',
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  "de student heeft de apllicatie ${data['leftApplicationCount']} keer verlaten",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Roboto',
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
