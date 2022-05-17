@@ -49,6 +49,7 @@ class _ExamTabState extends State<ExamTab> {
       isExamLoaded = false;
     });
     loadExam();
+    widget.onExamAddedCallback();
   }
 
   Future<bool> checkExamExists() async {

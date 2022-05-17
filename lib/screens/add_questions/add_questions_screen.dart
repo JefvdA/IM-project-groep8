@@ -1,11 +1,13 @@
 import 'package:examap/main.dart';
 import 'package:examap/screens/edit_questions/edit_questions_tab.dart';
+import 'package:examap/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:examap/screens/add_questions/local_widgets/add_code_correction_form.dart';
 import 'package:examap/screens/add_questions/local_widgets/add_multiple_choice_form.dart';
 import 'package:examap/screens/add_questions/local_widgets/add_open_question_form.dart';
+import 'package:provider/provider.dart';
 
 class AddQuestionsScreen extends StatefulWidget {
   final String exam;
@@ -44,7 +46,10 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
         doc.reference.delete();
       }
     });
-  
+
+    final AuthenticationService auth = context.read<AuthenticationService>();
+    auth.signOut();
+
     Navigator.push(
       context,
       MaterialPageRoute(
