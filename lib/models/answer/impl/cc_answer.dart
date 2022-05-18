@@ -27,7 +27,7 @@ class CCAnswer extends Answer {
         return 0;
       }
     } else {
-      if (givenCode.trim() == correctCode.trim()) {
+      if (givenCode.trim().toLowerCase() == correctCode.trim().toLowerCase()) {
         return points;
       } else {
         return 0;

@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as ll;
 import 'package:http/http.dart' as http;
 
 class StudentLocationScreen extends StatelessWidget {
-  StudentLocationScreen(this.latitude, this.longitude);
+  const StudentLocationScreen(this.latitude, this.longitude);
   final double latitude;
   final double longitude;
 

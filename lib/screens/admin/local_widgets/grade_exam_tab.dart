@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examap/screens/student/student_loaction_page.dart';
+import 'package:examap/screens/student/student_location_page.dart';
 import 'package:flutter/material.dart';
 
 import '../grade_exam.dart';
