@@ -70,6 +70,8 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
     WidgetsBinding.instance!.addObserver(this);
 
+    askPermission();
+
     startTimer();
     reset();
   }
@@ -158,10 +160,32 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
   }
 
   void askPermission() async {
-    await Geolocator.requestPermission();
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled){
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied){
+      permission = await Geolocator.requestPermission();
+      if(permission == LocationPermission.denied){
+        return;
+      }
+    }
+
+    if(permission == LocationPermission.deniedForever){
+      return;
+    }
+
     Position position = await Geolocator.getCurrentPosition();
-    latitude = position.latitude;
-    longitude = position.longitude;
+    setState(() {
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
   }
 
   void getAnswers() {
@@ -233,7 +257,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    askPermission();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: globalAppBar,
