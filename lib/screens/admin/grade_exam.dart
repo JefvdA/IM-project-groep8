@@ -52,6 +52,7 @@ class _GradeExamState extends State<GradeExam> {
                         ),
                         ElevatedButton(
                             onPressed: () async {
+                              if(answers[i]['points'] >= int.parse(value)){}
                               resultsCollection.doc(sNummer).update({
                                 'needGrading': await resultsCollection
                                     .doc(sNummer)
@@ -94,8 +95,10 @@ class _GradeExamState extends State<GradeExam> {
               }
               final document = snapshot.data;
               return Column(children: [
+                Text("De huidige score is ${document!["score"]}"),
+                Text("De student heeft de app ${document["leftApplicationCount"]} keer verlaten"),
                 TextFormField(
-                  initialValue: document!['score'].toString(),
+                  initialValue: document['score'].toString(),
                   onChanged: (text) {
                     punten = text;
                   },
@@ -105,9 +108,11 @@ class _GradeExamState extends State<GradeExam> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      resultsCollection
+                      if(int.parse(punten) <= document['maxScore']){
+                        resultsCollection
                           .doc(sNummer)
                           .update({"score": int.parse(punten)});
+                      }
                     },
                     child: Text("Geef punten"))
               ]);
