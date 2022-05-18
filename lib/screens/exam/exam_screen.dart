@@ -157,12 +157,12 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
   }
 
-  // void askPermission() async {
-  //   await Geolocator.requestPermission();
-  //   Position position = await Geolocator.getCurrentPosition();
-  //   latitude = position.latitude;
-  //   longitude = position.longitude;
-  // }
+  void askPermission() async {
+    await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition();
+    latitude = position.latitude;
+    longitude = position.longitude;
+  }
 
   void getAnswers() {
     for (int i = 0; i < formKeys.length; i++) {
@@ -184,31 +184,31 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     getAnswers();
 
     // Save results to firestore
-    // answers.map((e) => jsonDecode(jsonEncode(e)));
-    // for (var i = 0; i < answers.length; i++) {
-    //   totalQuestions++;
-    //   if (answers[i].type == "OQ") {
-    //     needGrading++;
-    //     maxScore += answers[i].points;
-    //   }
-    //   if (answers[i].type == "MC") {
-    //     var x = answers[i] as MCAnswer;
-    //     totalScore += x.automaticCodeCorrection();
-    //     maxScore += answers[i].points;
-    //   }
-    //   if (answers[i].type == "CC") {
-    //     var x = answers[i] as CCAnswer;
-    //     totalScore += x.automaticCodeCorrection();
-    //     maxScore += answers[i].points;
-    //   }
-    // }
+    answers.map((e) => jsonDecode(jsonEncode(e)));
+    for (var i = 0; i < answers.length; i++) {
+      totalQuestions++;
+      if (answers[i].type == "OQ") {
+        needGrading++;
+        maxScore += answers[i].points;
+      }
+      if (answers[i].type == "MC") {
+        var x = answers[i] as MCAnswer;
+        totalScore += x.automaticCodeCorrection();
+        maxScore += answers[i].points;
+      }
+      if (answers[i].type == "CC") {
+        var x = answers[i] as CCAnswer;
+        totalScore += x.automaticCodeCorrection();
+        maxScore += answers[i].points;
+      }
+    }
     restultsCollection.doc(user).set({
       "student": user,
       "score": totalScore,
-      // "location": {
-      //   "lat": latitude,
-      //   "lon": longitude,
-      // },
+      "location": {
+        "lat": latitude,
+        "lon": longitude,
+      },
       "maxScore": maxScore,
       "totalQuestions": totalQuestions,
       "needGrading": needGrading,
@@ -233,7 +233,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-      // askPermission();
+    askPermission();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: globalAppBar,
