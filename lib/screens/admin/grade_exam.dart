@@ -52,7 +52,7 @@ class _GradeExamState extends State<GradeExam> {
                         ),
                         ElevatedButton(
                             onPressed: () async {
-                              if(answers[i]['points'] >= int.parse(value)){}
+                              if(answers[i]['points'] >= int.parse(value)){
                               resultsCollection.doc(sNummer).update({
                                 'needGrading': await resultsCollection
                                     .doc(sNummer)
@@ -75,6 +75,7 @@ class _GradeExamState extends State<GradeExam> {
                                   return x;
                                 })
                               });
+                              }
                             },
                             child: Text("Examen verbeteren"))
                       ],
@@ -98,7 +99,6 @@ class _GradeExamState extends State<GradeExam> {
                 Text("De huidige score is ${document!["score"]}"),
                 Text("De student heeft de app ${document["leftApplicationCount"]} keer verlaten"),
                 TextFormField(
-                  initialValue: document['score'].toString(),
                   onChanged: (text) {
                     punten = text;
                   },
