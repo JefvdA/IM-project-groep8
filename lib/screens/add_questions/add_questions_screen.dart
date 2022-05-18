@@ -33,6 +33,12 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
   void purgeDatabase() {
     examsCollection.get().then((snapshot) {
       for(DocumentSnapshot doc in snapshot.docs) {
+        CollectionReference questionsCollection = doc.reference.collection("questions");
+        questionsCollection.get().then((snapshot) {
+          for(DocumentSnapshot doc in snapshot.docs) {
+            doc.reference.delete();
+          }
+        });
         doc.reference.delete();
       }
     });
