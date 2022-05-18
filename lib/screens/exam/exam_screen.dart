@@ -105,10 +105,6 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     });
   }
 
-  void addAnswer(Answer answer) {
-    answers.add(answer);
-  }
-
   @override
   void dispose() {
     timer?.cancel();
@@ -175,6 +171,10 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
     }
   }
 
+  void addAnswer(Answer answer) {
+    answers.add(answer);
+  }
+
   void endExam() {
     var totalScore = 0;
     var maxScore = 0;
@@ -212,7 +212,7 @@ class _ExamScreenState extends State<ExamScreen> with WidgetsBindingObserver {
       "maxScore": maxScore,
       "totalQuestions": totalQuestions,
       "needGrading": needGrading,
-      "answers": answers.map((e) => jsonDecode(jsonEncode(e))),
+      "answers": answers.map((e) => jsonDecode(jsonEncode(e))).toList(),
       "leftApplicationCount": leftApplicationCount,
     });
 

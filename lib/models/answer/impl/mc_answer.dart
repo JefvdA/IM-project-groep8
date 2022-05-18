@@ -9,14 +9,14 @@ class MCAnswer extends Answer {
       this.correctOption, this.answer)
       : super(question, type, points);
 
-  Map toJson() => {
-        'question': question,
-        'type': type,
-        'points': points,
-        'options': options,
-        'correctOption': correctOption,
-        'answer': answer,
-      };
+  Map<String, dynamic> toJson() => {
+    'question': question,
+    'type': type,
+    'points': points,
+    'options': options,
+    'correctOption': correctOption,
+    'answer': answer,
+  };
   int automaticCodeCorrection() {
     if (answer.toLowerCase().trim() == correctOption.toLowerCase().trim()) {
       return points;

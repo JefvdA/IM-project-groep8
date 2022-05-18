@@ -6,11 +6,11 @@ class OQAnswer extends Answer {
   OQAnswer(String question, String type, int points, this.answer)
       : super(question, type, points);
 
-  Map toJson() => {
-        'question': question,
-        'type': type,
-        'points': points,
-        'answer': answer,
-        'graded': false
-      };
+  Map<String, dynamic> toJson() => {
+    'question': question,
+    'type': type,
+    'points': points,
+    'answer': answer,
+    'graded': false
+  };
 }
