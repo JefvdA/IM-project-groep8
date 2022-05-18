@@ -19,14 +19,6 @@ class _MultipleChoiceQuestionState extends State<MultipleChoiceQuestion> {
   Widget build(BuildContext context){
     return Column(
       children: [
-        Text(
-          widget.questionDoc.get('question'),
-          style: const TextStyle(
-            fontSize: 26,
-            fontFamily: 'Roboto',
-            color: Colors.black,
-          ),
-        ),
         FormField(
           builder: (FormFieldState<dynamic> field) { 
             return _choiceBuild(

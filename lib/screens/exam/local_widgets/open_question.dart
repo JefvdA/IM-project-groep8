@@ -18,14 +18,6 @@ class _OpenQuestionState extends State<OpenQuestion> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          widget.questionDoc.get('question'),
-          style: const TextStyle(
-            fontSize: 26,
-            fontFamily: 'Roboto',
-            color: Colors.black,
-          ),
-        ),
         TextFormField(
           keyboardType: TextInputType.multiline,
           maxLines: 1,
