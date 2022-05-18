@@ -21,13 +21,13 @@ class CCAnswer extends Answer {
   };
   int automaticCodeCorrection() {
     if (caseSensitive) {
-      if (givenCode.trim() == correctCode.trim()) {
+      if (answer.trim() == correctCode.trim()) {
         return points;
       } else {
         return 0;
       }
     } else {
-      if (givenCode.trim().toLowerCase() == correctCode.trim().toLowerCase()) {
+      if (answer.trim().toLowerCase() == correctCode.trim().toLowerCase()) {
         return points;
       } else {
         return 0;
